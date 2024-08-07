@@ -5,6 +5,7 @@ class ColorConstants {
   // Can't instantiate this class. Use it directly.
   const ColorConstants._();
 
+  static const Color transparent = Colors.transparent;
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color primaryColor = Color(0xFF8E97FD);
 
@@ -15,6 +16,11 @@ class ColorConstants {
   static const Color buttonBlueBackground = Color(0xFF8E97FD);
   static const Color buttonBlueTextColor = Color(0xFFF6F1FB);
 
+    // Outlined Button
+  static const Color outlinedButtonColor = Colors.transparent;
+  static const Color outlinedButtonTextColor = Color(0xFF3F414E);
+  static const Color outlinedButtonBorderColor = Color(0xFFEBEAEC);
+
   // Welcome screen colors
   static const Color welcomeScreenBackgroundColor = Color(0xFF8E97FD);
   static const Color welcomeScreenTitleTextColor = Color(0xFFFFECCC);
@@ -23,7 +29,8 @@ class ColorConstants {
   // Login screen colors
   static const Color loginScreenTitleColor = Color(0xFF3F414E);
   static const Color loginScreenOrTextColor = Color(0xFFA1A4B2);
-  static const Color loginScreenInputFieldBackgroundColor = Color(0xFFA1A4B2);
-  static const Color loginScreenInputFieldTextColor = Color(0xFFA1A4B2);
+  static const Color loginScreenInputFieldBackgroundColor = Color(0xFFF2F3F7);
+  static const Color loginScreenInputFieldHintColor = Color(0xFFA1A4B2);
+  static const Color loginScreenInputFieldTextColor = Color(0xFF3F414E);
   static const Color loginScreenForgotPasswordTextColor = Color(0xFF3F414E);
 }

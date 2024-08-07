@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
+import 'package:goodplace_habbit_tracker/widgets/StadiumSideWhiteButton.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../constants/string_constants.dart';
-import '../../widgets/StadiumSideButton.dart';
-
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -62,7 +61,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 // */*/*/* Subtitle End */*/*/*
                 const Spacer(flex: 9),
-                StadiumSideButton(
+                StadiumSideWhiteButton(
                   onPressed: () {  },
                   text: StringConstants.welcomeScreenButton,
                 ),

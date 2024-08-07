@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
-import 'package:goodplace_habbit_tracker/pages/welcome/welcome_page.dart';
+import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +15,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: StringConstants.appName,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: ColorConstants.transparent,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+        ),
         useMaterial3: true,
       ),
-      home: const WelcomePage(),
+      home: const LoginPage(),
     );
   }
 }

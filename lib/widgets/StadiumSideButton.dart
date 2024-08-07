@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
 
-import '../../constants/color_constants.dart';
-
 class StadiumSideButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  const StadiumSideButton({super.key, required this.onPressed, required this.text});
+  final Color backgroundColor;
+  final Color textColor;
+  const StadiumSideButton({super.key, required this.onPressed, required this.text, required this.backgroundColor, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class StadiumSideButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: ColorConstants.buttonWhiteBackground,
+          backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(context.sized.dynamicHeight(0.06)),
           ),
@@ -24,7 +24,7 @@ class StadiumSideButton extends StatelessWidget {
         child: Text(
           text.toUpperCase(),
           style: context.general.textTheme.titleSmall?.copyWith(
-              color: ColorConstants.buttonWhiteTextColor,
+              color: textColor,
               fontWeight: FontWeight.w500
           ),
         ),
