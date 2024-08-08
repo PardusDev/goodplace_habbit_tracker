@@ -6,6 +6,7 @@ class ImageConstants {
   const ImageConstants._();
 
   static final String googleLogo= 'googleLogo'.imageToPng;
+  static final String notFound = 'not_found_asset'.imageToPng;
 }
 
 extension _StringPath on String {

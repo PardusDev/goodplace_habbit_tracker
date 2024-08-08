@@ -7,6 +7,10 @@ class StringConstants {
 
   static const String appName = 'GoodPlace';
 
+  // Error screen strings
+  static const String notFound = "We couldn't find the page you were looking for. :(";
+  static const String notFoundSub = "Something went wrong. Try again later 👉👈";
+
   // Welcome screen strings
   static const String welcomeScreenStrongTitle = 'Hi, Welcome';
   static const String welcomeScreenTitle = "to $appName";
