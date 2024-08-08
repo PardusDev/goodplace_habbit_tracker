@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
+import 'package:goodplace_habbit_tracker/pages/register/register_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputFieldValidable.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/color_constants.dart';
 import '../../constants/image_constants.dart';
@@ -22,6 +24,10 @@ class RegisterPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            Image.asset(
+                width: context.sized.dynamicWidth(2),
+                ImageConstants.authPageShapeBg
+            ),
             Padding(
               padding: context.padding.normal,
               child: Column(
@@ -30,11 +36,14 @@ class RegisterPage extends StatelessWidget {
                     flex: 8,
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        // TODO: IconButton will change according to the design
-                        child: BackButtonWithBorder(
-                          onPressed: () {
-                            print("Back button pressed");
-                          },
+                        child: Consumer<RegisterPageViewModel>(
+                          builder: (context, viewModel, child) {
+                            return BackButtonWithBorder(
+                              onPressed: () {
+                                viewModel.navigateToBack();
+                              },
+                            );
+                          }
                         ),
                     ),
                   ),
@@ -80,72 +89,100 @@ class RegisterPage extends StatelessWidget {
                   // */*/*/ Or Text End */*/*/*
 
                   // */*/*/ Form */*/*/*
-                  OneLineInputFieldValidable(
-                    hintText: StringConstants.registerScreenEmailHint,
-                    validator: (text) {
-                      // TODO: This method will change according to state management
-                      if (text.isEmpty) {
-                        return false;
-                      }
-                      else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(text)) {
-                        return false;
-                      }
-                      else if (!RegExp(r'^\S+$').hasMatch(text)) {
-                        return false;
-                      }
-                      else {
-                        return true;
-                      }
+                  Consumer<RegisterPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return OneLineInputFieldValidable(
+                        hintText: StringConstants.registerScreenEmailHint,
+                        onChanged: viewModel.onEmailChanged,
+                        controller: viewModel.emailController,
+
+                      );
                     }
                   ),
 
-                  const Spacer(),
-
-                  OneLinePasswordInputFieldValidable(
-                    hintText: StringConstants.registerScreenPasswordHint,
-                    validator: (passwd) {
-                      if (passwd.isEmpty) {
-                        return false;
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.emailErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.emailErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                    color: ColorConstants.loginScreenErrorTextColor,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              )
+                          ),
+                        );
                       }
-                      else if (passwd.length < 8) {
-                        return false;
-                      }
-                      // Password contain space
-                      else if (!RegExp(r'^\S+$').hasMatch(passwd)) {
-                        return false;
-                      }
-                      // Password should contain at least one letter
-                      else if (!RegExp(r'[a-zA-Z]').hasMatch(passwd)) {
-                        return false;
-                      }
-                      // Password should contain at least one digit
-                      else if (!RegExp(r'\d').hasMatch(passwd)) {
-                        return false;
-                      }
-                      else {
-                        return true;
-                      }
-                    },
-                    // TODO: controller will change.
-                    controller: TextEditingController(),
                   ),
 
                   const Spacer(),
 
-                  OneLinePasswordInputFieldValidable(
-                    hintText: StringConstants.registerScreenRetypePasswordHint,
-                    validator: (passwd) {
-                      // TODO: Check if the password is equal to the previous password
-                        return true;
-                    },
-                    // TODO: controller will change.
-                    controller: TextEditingController(),
+                  Consumer<RegisterPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return OneLinePasswordInputFieldValidable(
+                        hintText: StringConstants.registerScreenPasswordHint,
+                        onChanged: viewModel.onPasswordChanged,
+                        controller: viewModel.passwordController,
+                      );
+                    }
+                  ),
+
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.passwordErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.passwordErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                    color: ColorConstants.loginScreenErrorTextColor,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              )
+                          ),
+                        );
+                      }
+                  ),
+
+                  const Spacer(),
+
+                  Consumer<RegisterPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return OneLinePasswordInputFieldValidable(
+                        hintText: StringConstants.registerScreenRetypePasswordHint,
+                        controller: viewModel.confirmPasswordController,
+                        onChanged: viewModel.onConfirmPasswordChanged,
+                      );
+                    }
+                  ),
+
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.rePasswordErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.rePasswordErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                    color: ColorConstants.loginScreenErrorTextColor,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              )
+                          ),
+                        );
+                      }
                   ),
                   // */*/*/ Form End */*/*/*
 
                   const Spacer(flex: 4,),
 
                   // */*/*/ Privacy Policy */*/*/*
+                  // TODO: Add a checkbox for privacy policy
                   Flexible(
                     flex: 4,
                     child: Row(
@@ -212,7 +249,6 @@ class RegisterPage extends StatelessWidget {
                 ],
               ),
             ),
-            // TODO: Add background shapes.
           ],
         ),
       ),

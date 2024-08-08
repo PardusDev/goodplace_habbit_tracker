@@ -15,6 +15,8 @@ class WelcomePage extends StatelessWidget {
     viewModel.setContext(context);
 
     return Scaffold(
+      // We need to set resizeToAvoidBottomInset to false to prevent the keyboard from resizing the screen.
+      resizeToAvoidBottomInset: false,
       backgroundColor: ColorConstants.welcomeScreenBackgroundColor,
       body: Stack(
         children: [

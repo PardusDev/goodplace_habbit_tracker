@@ -23,7 +23,6 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _obscureText = widget.obscureText;
   }

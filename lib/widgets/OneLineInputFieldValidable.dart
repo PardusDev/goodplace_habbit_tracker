@@ -6,8 +6,9 @@ import 'OneLineInputField.dart';
 
 class OneLineInputFieldValidable extends StatefulWidget {
   final String hintText;
-  final bool Function(String) validator;
-  const OneLineInputFieldValidable({super.key, required this.hintText, required this.validator});
+  final bool Function(String) onChanged;
+  final TextEditingController controller;
+  const OneLineInputFieldValidable({super.key, required this.hintText, required this.onChanged, required this.controller});
 
   @override
   State<OneLineInputFieldValidable> createState() => _OneLineInputFieldValidableState();
@@ -19,7 +20,7 @@ class _OneLineInputFieldValidableState extends State<OneLineInputFieldValidable>
   void _handleTextChanged(String text) {
     // TODO: This method will change according to state management
     setState(() {
-      _isValid = widget.validator(text);
+      _isValid = widget.onChanged(text);
     });
   }
 
@@ -28,12 +29,15 @@ class _OneLineInputFieldValidableState extends State<OneLineInputFieldValidable>
     return OneLineInputField(
       hintText: widget.hintText,
       suffixIcon: Icon(
-          // TODO: Icon will change according to the design
           _isValid ? IconConstants.checkIcon : IconConstants.exclamationIcon,
           color: _isValid ? ColorConstants.validColor : ColorConstants.errorColor,
         ),
       obscureText: false,
-      onChanged: _handleTextChanged,
+      onChanged: (String value) {
+        _handleTextChanged(value);
+        widget.onChanged;
+      },
+      controller: widget.controller,
     );
   }
 }

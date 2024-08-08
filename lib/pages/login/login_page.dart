@@ -5,6 +5,7 @@ import 'package:goodplace_habbit_tracker/pages/login/login_page_view_model.dart'
 import 'package:goodplace_habbit_tracker/widgets/OneLinePasswordInputField.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/string_constants.dart';
 import '../../widgets/BackButtonWithBorder.dart';
@@ -17,31 +18,38 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginPageViewModel viewModel = LoginPageViewModel();
-    viewModel.setContext(context);
-
     return Scaffold(
       backgroundColor: ColorConstants.backgroundColor,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
           children: [
+            Image.asset(
+                width: context.sized.dynamicWidth(1),
+                ImageConstants.authPageShapeBg
+            ),
             Padding(
               padding: context.padding.normal,
               child: Column(
                 children: [
+
+                  // */*/*/* Back Button */*/*/*
                   Expanded(
                     flex: 8,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      // TODO: IconButton will change according to the design
-                      child: BackButtonWithBorder(
-                        onPressed: () {
-                          viewModel.navigateToBack();
-                        },
+                      child: Consumer<LoginPageViewModel>(
+                        builder: (context, viewModel, child) {
+                          return BackButtonWithBorder(
+                            onPressed: () {
+                              viewModel.navigateToBack();
+                            },
+                          );
+                        }
                       ),
                     ),
                   ),
+                  // */*/*/* Back Button End */*/*/*
 
                   const Spacer(),
 
@@ -59,13 +67,17 @@ class LoginPage extends StatelessWidget {
 
                   // */*/*/* Other Login Options */*/*/*
                   Flexible(
-                    flex: 4,
-                    child: OutlinedButtonWithImage(
-                      onPressed: () {
-                        viewModel.loginWithGoogle(context);
-                      },
-                      text: StringConstants.loginWithGoogle,
-                      imagePath: ImageConstants.googleLogo,
+                    flex: 8,
+                    child: Consumer<LoginPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OutlinedButtonWithImage(
+                          onPressed: () {
+                            viewModel.loginWithGoogle(context);
+                          },
+                          text: StringConstants.loginWithGoogle,
+                          imagePath: ImageConstants.googleLogo,
+                        );
+                      }
                     ),
                   ),
                   // */*/*/* Other Login Options End */*/*/*
@@ -83,34 +95,69 @@ class LoginPage extends StatelessWidget {
                   // */*/*/* OR TEXT End */*/*/*
 
                   // */*/*/* Form */*/*/*
-                  OneLineInputField(
-                    hintText: StringConstants.loginScreenEmailHint,
-                    obscureText: false,
-                    controller: viewModel.emailController,
+                  Consumer<LoginPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OneLineInputField(
+                          hintText: StringConstants.loginScreenEmailHint,
+                          obscureText: false,
+                          controller: viewModel.emailController,
+                        );
+                      }
                   ),
 
                   const Spacer(),
 
-                  // TODO: If obscureText property is true, password visibility icon will be added
-                  OneLinePasswordInputField(
-                    hintText: StringConstants.loginScreenPasswordHint,
-                    obscureText: true,
-                    controller: viewModel.passwordController,
+                  Consumer<LoginPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OneLinePasswordInputField(
+                          hintText: StringConstants.loginScreenPasswordHint,
+                          obscureText: true,
+                          controller: viewModel.passwordController,
+                          onChanged: viewModel.onPasswordChanged,
+                        );
+                      }
                   ),
                   // */*/*/* Form End */*/*/*
+
+                  const Spacer(),
+
+                  // */*/*/* Error Text */*/*/*
+                  Consumer<LoginPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return Visibility(
+                        visible: viewModel.errorText.isNotEmpty,
+                        child: Flexible(
+                          flex: 2,
+                          child: Text(
+                            viewModel.errorText,
+                            style: context.general.textTheme.titleSmall!.copyWith(
+                                color: ColorConstants.loginScreenErrorTextColor,
+                                fontWeight: FontWeight.w500
+                            ),
+                          )
+                        ),
+                      );
+                    }
+                  ),
+                  // */*/*/* Error Text End */*/*/*
 
                   const Spacer(flex: 4,),
 
                   // */*/*/* Login Button */*/*/*
                   Flexible(
-                    flex: 4,
-                    child: StadiumSideBlueButton(
-                      onPressed: () {
-                        viewModel.login(context);
-                      },
-                      text: StringConstants.loginScreenLoginButton,
+                    flex: 6,
+                    child: Consumer<LoginPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return StadiumSideBlueButton(
+                          onPressed: () {
+                            viewModel.login(context);
+                          },
+                          text: StringConstants.loginScreenLoginButton,
+                        );
+                      }
                     ),
                   ),
+
                   // */*/*/* Login Button End */*/*/*
 
                   const Spacer(),
@@ -118,15 +165,19 @@ class LoginPage extends StatelessWidget {
                   // */*/*/* Forgot Password */*/*/*
                   Flexible(
                     flex: 2,
-                    child: TappableText(
-                      onPressed: () {
-                        viewModel.navigateToForgotPassword();
-                      },
-                      text: StringConstants.loginScreenForgotPassword,
-                      textStyle: context.general.textTheme.titleSmall!.copyWith(
-                        color: ColorConstants.loginScreenForgotPasswordTextColor,
-                        fontWeight: FontWeight.w500
-                      )
+                    child: Consumer<LoginPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return TappableText(
+                            onPressed: () {
+                              viewModel.navigateToForgotPassword();
+                            },
+                            text: StringConstants.loginScreenForgotPassword,
+                            textStyle: context.general.textTheme.titleSmall!.copyWith(
+                                color: ColorConstants.loginScreenForgotPasswordTextColor,
+                                fontWeight: FontWeight.w500
+                            )
+                        );
+                      }
                     ),
                   ),
                   // */*/*/* Forgot Password End */*/*/*
@@ -146,16 +197,20 @@ class LoginPage extends StatelessWidget {
                               fontWeight: FontWeight.w500
                           ),
                         ),
-                        TappableText(
-                            onPressed: () {
-                              viewModel.navigateToRegister();
-                            },
-                            text: StringConstants.signUp.toUpperCase(),
-                            textStyle: context.general.textTheme.labelLarge!.copyWith(
-                                color: ColorConstants.primaryColor,
-                                fontWeight: FontWeight.w500
-                            )
-                        )
+                        Consumer<LoginPageViewModel>(
+                            builder: (context, viewModel, child) {
+                              return TappableText(
+                                  onPressed: () {
+                                    viewModel.navigateToRegister();
+                                  },
+                                  text: StringConstants.signUp.toUpperCase(),
+                                  textStyle: context.general.textTheme.labelLarge!.copyWith(
+                                      color: ColorConstants.primaryColor,
+                                      fontWeight: FontWeight.w500
+                                  )
+                              );
+                            }
+                        ),
                       ],
                     ),
                   ),
@@ -165,7 +220,6 @@ class LoginPage extends StatelessWidget {
                 ]
               ),
             ),
-            // TODO: Add background shapes.
           ],
         ),
       ),

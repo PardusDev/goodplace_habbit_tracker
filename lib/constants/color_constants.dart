@@ -24,7 +24,7 @@ class ColorConstants {
   static const Color backButtonBorderColor = Color(0xFFEBEAEC);
 
     // Outlined Button
-  static const Color outlinedButtonColor = Colors.transparent;
+  static const Color outlinedButtonColor = Colors.white;
   static const Color outlinedButtonTextColor = Color(0xFF3F414E);
   static const Color outlinedButtonBorderColor = Color(0xFFEBEAEC);
 
@@ -40,6 +40,7 @@ class ColorConstants {
   static const Color loginScreenInputFieldHintColor = Color(0xFFA1A4B2);
   static const Color loginScreenInputFieldTextColor = Color(0xFF3F414E);
   static const Color loginScreenForgotPasswordTextColor = Color(0xFF3F414E);
+  static const Color loginScreenErrorTextColor = Color(0xFFE57373);
 
   // Register screen colors
   static const Color registerScreenTitleColor = Color(0xFF3F414E);

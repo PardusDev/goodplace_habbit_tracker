@@ -19,6 +19,7 @@ class OutlinedButtonWithImage extends StatelessWidget {
           width: double.infinity,
           height: context.sized.dynamicHeight(0.06),
           decoration: BoxDecoration(
+            color: ColorConstants.outlinedButtonColor,
             border: Border.all(color: ColorConstants.outlinedButtonBorderColor),
             borderRadius: BorderRadius.circular(context.sized.dynamicHeight(0.06)),
           ),

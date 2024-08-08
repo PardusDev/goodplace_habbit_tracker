@@ -7,9 +7,9 @@ import '../constants/color_constants.dart';
 
 class OneLinePasswordInputFieldValidable extends StatefulWidget {
   final String hintText;
-  final bool Function(String) validator;
   final TextEditingController controller;
-  const OneLinePasswordInputFieldValidable({super.key, required this.hintText, required this.validator, required this.controller});
+  final bool Function(String) onChanged;
+  const OneLinePasswordInputFieldValidable({super.key, required this.hintText, required this.controller, required this.onChanged});
 
   @override
   State<OneLinePasswordInputFieldValidable> createState() => _OneLinePasswordInputFieldValidableState();
@@ -21,7 +21,7 @@ class _OneLinePasswordInputFieldValidableState extends State<OneLinePasswordInpu
   void _handleTextChanged(String text) {
     // TODO: This method will change according to state management
     setState(() {
-      _isValid = widget.validator(text);
+      _isValid = widget.onChanged(text);
     });
   }
 
@@ -30,12 +30,14 @@ class _OneLinePasswordInputFieldValidableState extends State<OneLinePasswordInpu
     return OneLinePasswordInputField(
       hintText: StringConstants.registerScreenPasswordHint,
       suffixIcon: Icon(
-        // TODO: Icon will change according to the design
         _isValid ? IconConstants.checkIcon : IconConstants.exclamationIcon,
         color: _isValid ? ColorConstants.validColor : ColorConstants.errorColor,
       ),
       obscureText: true,
-      onChanged: _handleTextChanged,
+      onChanged: (value) {
+        _handleTextChanged(value);
+        widget.onChanged(value);
+      },
       controller: widget.controller,
     );
   }
