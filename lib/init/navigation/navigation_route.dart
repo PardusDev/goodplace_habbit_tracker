@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
 import 'package:goodplace_habbit_tracker/widgets/NotFound.dart';
 
+import '../../animations/right_transition.dart';
 import '../../constants/navigator_constants.dart';
 import '../../pages/register/register_page.dart';
 import '../../pages/welcome/welcome_page.dart';
@@ -16,21 +17,30 @@ class NavigationRoute {
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
       case NavigatorConstants.WELCOME_PAGE:
-        return nonAnimatedRoute(const WelcomePage());
+        return slideAnimatedRoute(const WelcomePage());
       case NavigatorConstants.LOGIN_PAGE:
-        return nonAnimatedRoute(const LoginPage());
+        return slideAnimatedRoute(const LoginPage());
       case NavigatorConstants.REGISTER_PAGE:
-        return nonAnimatedRoute(const RegisterPage());
+        return slideAnimatedRoute(const RegisterPage());
       case NavigatorConstants.NOT_FOUND:
-        return nonAnimatedRoute(const NotFound());
+        return slideAnimatedRoute(const NotFound());
       default:
-        return nonAnimatedRoute(const NotFound());
+        return slideAnimatedRoute(const NotFound());
     }
   }
 
   MaterialPageRoute nonAnimatedRoute(Widget widget) {
     return MaterialPageRoute(
       builder: (context) => widget,
+      settings: RouteSettings(name: widget.toString()),
+    );
+  }
+
+  PageRouteBuilder slideAnimatedRoute(Widget widget) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondayAnimation) => widget,
+        settings: RouteSettings(name: widget.toString()),
+        transitionsBuilder: RightTransition
     );
   }
 }

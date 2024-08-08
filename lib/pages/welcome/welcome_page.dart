@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
-import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
+import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
+import 'package:goodplace_habbit_tracker/pages/welcome/welcome_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideWhiteButton.dart';
 import 'package:kartal/kartal.dart';
 
@@ -10,11 +11,14 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = WelcomePageViewModel();
+    viewModel.setContext(context);
+
     return Scaffold(
       backgroundColor: ColorConstants.welcomeScreenBackgroundColor,
       body: Stack(
         children: [
-          Align(alignment: Alignment.bottomCenter,child: Image.asset("assets/images/welcome_background.png")),
+          Align(alignment: Alignment.bottomCenter,child: Image.asset(ImageConstants.welcomeBackground)),
           Padding(
             padding: context.padding.normal,
             child: Column(
@@ -64,8 +68,7 @@ class WelcomePage extends StatelessWidget {
                 const Spacer(flex: 9),
                 StadiumSideWhiteButton(
                   onPressed: () {
-                    // TODO: This code will move to the state management
-                    NavigationService.instance.navigateToPage('/login', null);
+                    viewModel.navigateToLogin();
                   },
                   text: StringConstants.welcomeScreenButton,
                 ),

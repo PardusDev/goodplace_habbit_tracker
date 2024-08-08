@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
+import 'package:goodplace_habbit_tracker/pages/login/login_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLinePasswordInputField.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
@@ -16,6 +17,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginPageViewModel viewModel = LoginPageViewModel();
+    viewModel.setContext(context);
+
     return Scaffold(
       backgroundColor: ColorConstants.backgroundColor,
       resizeToAvoidBottomInset: false,
@@ -33,7 +37,7 @@ class LoginPage extends StatelessWidget {
                       // TODO: IconButton will change according to the design
                       child: BackButtonWithBorder(
                         onPressed: () {
-                          print("Back button pressed");
+                          viewModel.navigateToBack();
                         },
                       ),
                     ),
@@ -57,7 +61,9 @@ class LoginPage extends StatelessWidget {
                   Flexible(
                     flex: 4,
                     child: OutlinedButtonWithImage(
-                      onPressed: () {},
+                      onPressed: () {
+                        viewModel.loginWithGoogle(context);
+                      },
                       text: StringConstants.loginWithGoogle,
                       imagePath: ImageConstants.googleLogo,
                     ),
@@ -77,12 +83,20 @@ class LoginPage extends StatelessWidget {
                   // */*/*/* OR TEXT End */*/*/*
 
                   // */*/*/* Form */*/*/*
-                  const OneLineInputField(hintText: StringConstants.loginScreenEmailHint, obscureText: false,),
+                  OneLineInputField(
+                    hintText: StringConstants.loginScreenEmailHint,
+                    obscureText: false,
+                    controller: viewModel.emailController,
+                  ),
 
                   const Spacer(),
 
                   // TODO: If obscureText property is true, password visibility icon will be added
-                  const OneLinePasswordInputField(hintText: StringConstants.loginScreenPasswordHint, obscureText: true, ),
+                  OneLinePasswordInputField(
+                    hintText: StringConstants.loginScreenPasswordHint,
+                    obscureText: true,
+                    controller: viewModel.passwordController,
+                  ),
                   // */*/*/* Form End */*/*/*
 
                   const Spacer(flex: 4,),
@@ -91,7 +105,9 @@ class LoginPage extends StatelessWidget {
                   Flexible(
                     flex: 4,
                     child: StadiumSideBlueButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        viewModel.login(context);
+                      },
                       text: StringConstants.loginScreenLoginButton,
                     ),
                   ),
@@ -103,7 +119,9 @@ class LoginPage extends StatelessWidget {
                   Flexible(
                     flex: 2,
                     child: TappableText(
-                      onPressed: () {},
+                      onPressed: () {
+                        viewModel.navigateToForgotPassword();
+                      },
                       text: StringConstants.loginScreenForgotPassword,
                       textStyle: context.general.textTheme.titleSmall!.copyWith(
                         color: ColorConstants.loginScreenForgotPasswordTextColor,
@@ -118,28 +136,28 @@ class LoginPage extends StatelessWidget {
                   // */*/*/* Sign Up */*/*/*
                   Flexible(
                     flex: 2,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: StringConstants.dontHaveAnAccount.toUpperCase(),
-                            style: context.general.textTheme.labelLarge!.copyWith(
-                                color: ColorConstants.loginScreenOrTextColor,
-                                fontWeight: FontWeight.w500
-                            ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          StringConstants.dontHaveAnAccount.toUpperCase(),
+                          style: context.general.textTheme.labelLarge!.copyWith(
+                              color: ColorConstants.loginScreenOrTextColor,
+                              fontWeight: FontWeight.w500
                           ),
-                          // TODO: SIGN UP text little bit different from the other
-                          WidgetSpan(child: TappableText(
-                              onPressed: () {},
-                              text: StringConstants.signUp.toUpperCase(),
-                              textStyle: context.general.textTheme.labelLarge!.copyWith(
-                                  color: ColorConstants.primaryColor,
-                                  fontWeight: FontWeight.w500
-                              )
-                          ))
-                        ]
+                        ),
+                        TappableText(
+                            onPressed: () {
+                              viewModel.navigateToRegister();
+                            },
+                            text: StringConstants.signUp.toUpperCase(),
+                            textStyle: context.general.textTheme.labelLarge!.copyWith(
+                                color: ColorConstants.primaryColor,
+                                fontWeight: FontWeight.w500
+                            )
+                        )
+                      ],
                     ),
-                  ),
                   ),
                   // */*/*/* Sign Up End */*/*/*
 

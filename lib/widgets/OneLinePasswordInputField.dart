@@ -10,7 +10,8 @@ class OneLinePasswordInputField extends StatefulWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final Function(String)? onChanged;
-  const OneLinePasswordInputField({super.key, this.hintText = StringConstants.registerScreenPasswordHint, this.obscureText = true, this.suffixIcon = null, this.onChanged = null});
+  final TextEditingController controller;
+  const OneLinePasswordInputField({super.key, this.hintText = StringConstants.registerScreenPasswordHint, this.obscureText = true, this.suffixIcon = null, this.onChanged = null, required this.controller});
 
 
   @override
@@ -40,6 +41,7 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
         hintText: widget.hintText,
         obscureText: _obscureText,
         onChanged: widget.onChanged,
+        controller: widget.controller,
         suffixIcon:
         widget.suffixIcon != null ?
         Row(

@@ -126,6 +126,8 @@ class RegisterPage extends StatelessWidget {
                         return true;
                       }
                     },
+                    // TODO: controller will change.
+                    controller: TextEditingController(),
                   ),
 
                   const Spacer(),
@@ -136,6 +138,8 @@ class RegisterPage extends StatelessWidget {
                       // TODO: Check if the password is equal to the previous password
                         return true;
                     },
+                    // TODO: controller will change.
+                    controller: TextEditingController(),
                   ),
                   // */*/*/ Form End */*/*/*
 
