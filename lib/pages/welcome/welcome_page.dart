@@ -15,7 +15,7 @@ class WelcomePage extends StatelessWidget {
         children: [
           Align(alignment: Alignment.bottomCenter,child: Image.asset("assets/images/welcome_background.png")),
           Padding(
-            padding: context.padding.medium,
+            padding: context.padding.normal,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

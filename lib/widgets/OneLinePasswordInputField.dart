@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputField.dart';
+import 'package:kartal/kartal.dart';
+
+import '../constants/icon_constants.dart';
+import '../constants/string_constants.dart';
 
 class OneLinePasswordInputField extends StatefulWidget {
   final String hintText;
   final bool obscureText;
-  const OneLinePasswordInputField({super.key, this.hintText = "Password", this.obscureText = true});
+  final Widget? suffixIcon;
+  final Function(String)? onChanged;
+  const OneLinePasswordInputField({super.key, this.hintText = StringConstants.registerScreenPasswordHint, this.obscureText = true, this.suffixIcon = null, this.onChanged = null});
 
 
   @override
@@ -33,12 +39,29 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
     return OneLineInputField(
         hintText: widget.hintText,
         obscureText: _obscureText,
-        suffixIcon: IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: _toggleObscureText,
-        ),
+        onChanged: widget.onChanged,
+        suffixIcon:
+        widget.suffixIcon != null ?
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            widget.suffixIcon!,
+            context.sized.emptySizedWidthBoxLow,
+            visibilityIcon(),
+          ],
+        )
+        :
+        visibilityIcon(),
+    );
+  }
+
+  Widget visibilityIcon() {
+    return IconButton(
+      icon: Icon(
+        // TODO: Icon will change according to the design
+        _obscureText ? IconConstants.visibilityIcon : IconConstants.notVisibilityIcon,
+      ),
+      onPressed: _toggleObscureText,
     );
   }
 }

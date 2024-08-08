@@ -23,4 +23,16 @@ class StringConstants {
   static const String loginScreenForgotPassword = 'Forgot Password?';
   static const String dontHaveAnAccount = "Don't have an account? ";
   static const String signUp = 'Sign Up';
+
+  // Register screen strings
+  static const String registerScreenTitle = 'Create your account';
+  static const String registerScreenOrText = 'OR SIGN UP WITH EMAIL';
+  static const String registerScreenEmailHint = "Email address";
+  static const String registerScreenPasswordHint = "Password";
+  static const String registerScreenRetypePasswordHint = "Retype Password";
+  static const String registerScreenPrivacyPolicyText = "I have read the ";
+  static const String registerScreenPrivacyPolicyLink = "Privacy Policy";
+  static const String registerScreenGetStartedButton = 'Get Started';
+  static const String registerScreenAlreadyHaveAnAccount = 'ALREADY HAVE AN ACCOUNT? ';
+  static const String registerScreenSignIn = "SIGN IN";
 }

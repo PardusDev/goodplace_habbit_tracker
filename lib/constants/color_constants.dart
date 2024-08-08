@@ -9,12 +9,19 @@ class ColorConstants {
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color primaryColor = Color(0xFF8E97FD);
 
+  static const Color validColor = Color(0xFF6CB28E);
+  static const Color errorColor = Color(0xFFE57373);
+
+
   // Button colors
   static const Color buttonWhiteBackground = Color(0xFFEBEAEC);
   static const Color buttonWhiteTextColor = Color(0xFF3F414E);
 
   static const Color buttonBlueBackground = Color(0xFF8E97FD);
   static const Color buttonBlueTextColor = Color(0xFFF6F1FB);
+
+  static const Color backButtonIconColor = Color(0xFF3F414E);
+  static const Color backButtonBorderColor = Color(0xFFEBEAEC);
 
     // Outlined Button
   static const Color outlinedButtonColor = Colors.transparent;
@@ -33,4 +40,12 @@ class ColorConstants {
   static const Color loginScreenInputFieldHintColor = Color(0xFFA1A4B2);
   static const Color loginScreenInputFieldTextColor = Color(0xFF3F414E);
   static const Color loginScreenForgotPasswordTextColor = Color(0xFF3F414E);
+
+  // Register screen colors
+  static const Color registerScreenTitleColor = Color(0xFF3F414E);
+  static const Color registerScreenOrTextColor = Color(0xFFA1A4B2);
+  static const Color registerScreenPrivacyPolicyTextColor = Color(0xFFA1A4B2);
+  static const Color registerScreenPrivacyPolicyLinkColor = Color(0xFF7583CA);
+  static const Color registerScreenAlreadyHaveAnAccountColor = Color(0xFFA1A4B2);
+  static const Color registerScreenSignInColor = Color(0xFF8E97FD);
 }

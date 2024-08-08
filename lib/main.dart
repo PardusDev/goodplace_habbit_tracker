@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
+import 'package:goodplace_habbit_tracker/pages/register/register_page.dart';
 
 void main() {
   runApp(const MyApp());

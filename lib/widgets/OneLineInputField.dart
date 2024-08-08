@@ -6,14 +6,16 @@ class OneLineInputField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final bool obscureText;
-  final IconButton? suffixIcon;
-  const OneLineInputField({super.key, required this.hintText, this.controller, required this.obscureText, this.suffixIcon = null});
+  final Widget? suffixIcon;
+  final Function(String)? onChanged;
+  const OneLineInputField({super.key, required this.hintText, this.controller, this.obscureText = false, this.suffixIcon = null, this.onChanged = null});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       obscureText: obscureText,
       controller: controller,
+      onChanged: onChanged,
       style: context.general.textTheme.titleMedium!.copyWith(
           color: ColorConstants.loginScreenInputFieldTextColor,
           fontWeight: FontWeight.w300

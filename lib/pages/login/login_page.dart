@@ -6,6 +6,7 @@ import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../constants/string_constants.dart';
+import '../../widgets/BackButtonWithBorder.dart';
 import '../../widgets/OneLineInputField.dart';
 import '../../widgets/OutlinedButtonWithImage.dart';
 import '../../widgets/TappableText.dart';
@@ -18,29 +19,34 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorConstants.backgroundColor,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: ColorConstants.transparent,
-        elevation: 0,
-        // TODO: IconButton will change according to the design
-        leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.close),
-          ),
-      ),
       body: SafeArea(
         child: Stack(
           children: [
             Padding(
-              padding: context.padding.medium,
+              padding: context.padding.normal,
               child: Column(
                 children: [
+                  Expanded(
+                    flex: 8,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      // TODO: IconButton will change according to the design
+                      child: BackButtonWithBorder(
+                        onPressed: () {
+                          print("Back button pressed");
+                        },
+                      ),
+                    ),
+                  ),
+
                   const Spacer(),
 
                   // */*/*/* Title */*/*/*
                   Expanded(
                     flex: 4,
                     child: Text(StringConstants.loginScreenTitle, style: context.general.textTheme.headlineMedium!.copyWith(
-                      fontWeight: FontWeight.w700
+                        color: ColorConstants.loginScreenTitleColor,
+                        fontWeight: FontWeight.w700
                     ),),
                   ),
                   // */*/*/* Title End */*/*/*
@@ -71,7 +77,7 @@ class LoginPage extends StatelessWidget {
                   // */*/*/* OR TEXT End */*/*/*
 
                   // */*/*/* Form */*/*/*
-                  const OneLineInputField(hintText: StringConstants.loginScreenEmailHint, obscureText: false, ),
+                  const OneLineInputField(hintText: StringConstants.loginScreenEmailHint, obscureText: false,),
 
                   const Spacer(),
 
@@ -141,6 +147,7 @@ class LoginPage extends StatelessWidget {
                 ]
               ),
             ),
+            // TODO: Add background shapes.
           ],
         ),
       ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "42325381046",
+    "project_id": "goodplace-habbit-tracker",
+    "storage_bucket": "goodplace-habbit-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42325381046:android:bf57bc64d453b85d1abb17",
+        "android_client_info": {
+          "package_name": "com.miluni.goodplace_habbit_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt-mSKV4BAZVm-y3kMG0342ChRvEHqnX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
