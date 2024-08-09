@@ -211,6 +211,11 @@ class RegisterPage extends StatelessWidget {
                                 builder: (BuildContext context) {
                                   return const CollapsableBottomSheet(
                                       title: StringConstants.privacyPolicy,
+                                      /*
+                                      TODO: In production, this value cannot be constant.
+                                        It needs to be fetched from the API.
+                                        Currently, since we are in developer mode, it is a fixed value for demo purposes.
+                                      */
                                       text: StringConstants.privacyPolicyText
                                   );
                                 }
@@ -279,13 +284,19 @@ class RegisterPage extends StatelessWidget {
                             fontWeight: FontWeight.w500
                           ),
                         ),
-                        TappableText(
-                          onPressed: () {},
-                          text: StringConstants.registerScreenSignIn,
-                          textStyle: context.general.textTheme.labelLarge!.copyWith(
-                            color: ColorConstants.registerScreenSignInColor,
-                            fontWeight: FontWeight.w500
-                          ),
+                        Consumer<RegisterPageViewModel>(
+                          builder: (context, viewModel, child) {
+                            return TappableText(
+                              onPressed: () {
+                                viewModel.navigateToLogin();
+                              },
+                              text: StringConstants.registerScreenSignIn,
+                              textStyle: context.general.textTheme.labelLarge!.copyWith(
+                                color: ColorConstants.registerScreenSignInColor,
+                                fontWeight: FontWeight.w500
+                              ),
+                            );
+                          }
                         ),
                       ],
                     ),
