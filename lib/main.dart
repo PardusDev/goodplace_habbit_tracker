@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           splashFactory: NoSplash.splashFactory,
           highlightColor: ColorConstants.transparent,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
+              seedColor: ColorConstants.primaryColor,
           ),
           useMaterial3: true,
         ),

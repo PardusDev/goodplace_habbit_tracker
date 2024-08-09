@@ -54,4 +54,9 @@ class ColorConstants {
   static const Color collapsableBottomSheetBackgroundColor = Color(0xFFFFFFFF);
   static const Color collapsableBottomSheetTitleColor = Color(0xFF7583CA);
   static const Color collapsableBottomSheetTextColor = Color(0xFFA1A4B2);
+
+  // Checkbox
+  static const Color checkboxBorderColor = Color(0xFFA1A4B2);
+  static const Color checkboxCheckedColor = Color(0xFF8E97FD);
+  static const Color checkboxBackgroundColor = Color(0xFFEFEFEF);
 }

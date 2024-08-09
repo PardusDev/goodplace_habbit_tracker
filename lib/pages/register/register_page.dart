@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/register/register_page_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/CheckboxWithWidget.dart';
 import 'package:goodplace_habbit_tracker/widgets/CollapsableBottomSheet.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputFieldValidable.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
@@ -104,7 +105,7 @@ class RegisterPage extends StatelessWidget {
                         hintText: StringConstants.registerScreenEmailHint,
                         onChanged: viewModel.onEmailChanged,
                         controller: viewModel.emailController,
-
+                        isValid: viewModel.emailValid,
                       );
                     }
                   ),
@@ -133,8 +134,12 @@ class RegisterPage extends StatelessWidget {
                     builder: (context, viewModel, child) {
                       return OneLinePasswordInputFieldValidable(
                         hintText: StringConstants.registerScreenPasswordHint,
-                        onChanged: viewModel.onPasswordChanged,
+                        onChanged: (String value) {
+                          viewModel.onConfirmPasswordChanged(viewModel.confirmPassword);
+                          viewModel.onPasswordChanged(value);
+                        },
                         controller: viewModel.passwordController,
+                        isValid: viewModel.passwordValid,
                       );
                     }
                   ),
@@ -165,6 +170,7 @@ class RegisterPage extends StatelessWidget {
                         hintText: StringConstants.registerScreenRetypePasswordHint,
                         controller: viewModel.confirmPasswordController,
                         onChanged: viewModel.onConfirmPasswordChanged,
+                        isValid: viewModel.confirmPasswordValid,
                       );
                     }
                   ),
@@ -191,42 +197,46 @@ class RegisterPage extends StatelessWidget {
                   const Spacer(flex: 4,),
 
                   //region */*/*/ Privacy Policy */*/*/*
-                  // TODO: Add a checkbox for privacy policy
                   Flexible(
                     flex: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          StringConstants.registerScreenPrivacyPolicyText,
-                          style: context.general.textTheme.labelLarge!.copyWith(
-                            color: ColorConstants.registerScreenPrivacyPolicyTextColor,
-                          ),),
-                        TappableText(
-                          onPressed: () {
-                            showModalBottomSheet(
-                                context: context,
-                                useSafeArea: true,
-                                isScrollControlled: true,
-                                builder: (BuildContext context) {
-                                  return const CollapsableBottomSheet(
-                                      title: StringConstants.privacyPolicy,
-                                      /*
-                                      TODO: In production, this value cannot be constant.
-                                        It needs to be fetched from the API.
-                                        Currently, since we are in developer mode, it is a fixed value for demo purposes.
-                                      */
-                                      text: StringConstants.privacyPolicyText
-                                  );
-                                }
-                            );
-                          },
-                          text: StringConstants.registerScreenPrivacyPolicyLink,
-                          textStyle: context.general.textTheme.labelLarge!.copyWith(
-                            color: ColorConstants.registerScreenPrivacyPolicyLinkColor,
+                    child: CheckboxWithWidget(
+                      onChanged: (bool value) {
+                        context.read<RegisterPageViewModel>().updatePrivacyPolicyChecked(value);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            StringConstants.registerScreenPrivacyPolicyText,
+                            style: context.general.textTheme.labelLarge!.copyWith(
+                              color: ColorConstants.registerScreenPrivacyPolicyTextColor,
+                            ),),
+                          TappableText(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  useSafeArea: true,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return const CollapsableBottomSheet(
+                                        title: StringConstants.privacyPolicy,
+                                        /*
+                                        TODO: In production, this value cannot be constant.
+                                          It needs to be fetched from the API.
+                                          Currently, since we are in developer mode, it is a fixed value for demo purposes.
+                                        */
+                                        text: StringConstants.privacyPolicyText
+                                    );
+                                  }
+                              );
+                            },
+                            text: StringConstants.registerScreenPrivacyPolicyLink,
+                            textStyle: context.general.textTheme.labelLarge!.copyWith(
+                              color: ColorConstants.registerScreenPrivacyPolicyLinkColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   //endregion */*/*/ Privacy Policy End */*/*/*
@@ -262,7 +272,9 @@ class RegisterPage extends StatelessWidget {
                           onPressed: () {
                             viewModel.register();
                           },
-                          text: StringConstants.registerScreenGetStartedButton,
+                          text: (viewModel.registering ?
+                          StringConstants.pleaseWait :
+                          StringConstants.registerScreenGetStartedButton),
                         );
                       }
                     ),

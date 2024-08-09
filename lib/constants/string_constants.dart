@@ -47,6 +47,8 @@ class StringConstants {
   static const String registerScreenGetStartedButton = 'Get Started';
   static const String registerScreenAlreadyHaveAnAccount = 'ALREADY HAVE AN ACCOUNT? ';
   static const String registerScreenSignIn = "SIGN IN";
+  static const String pleaseWait = "Please wait...";
+
   static const String registerScreenEmailCantBeEmpty = "Email can't be empty.";
   static const String registerScreenEmailNotValid = "Email is not valid.";
 
@@ -55,6 +57,7 @@ class StringConstants {
   static const String registerScreenPasswordShouldContainNumber = "Password should contain at least one number.";
   static const String registerScreenPasswordShouldContainLetter = "Password should contain at least one letter.";
   static const String registerScreenCannotContainSpace = "Password cannot contain space.";
+  static const String registerScreenPrivacyPolicyNotChecked = "Please accept the Privacy Policy.";
 
   static const String registerScreenPasswordNotMatch = "Passwords do not match.";
   //endregion
@@ -63,6 +66,7 @@ class StringConstants {
   static const String invalidEmail = "The email address is badly formatted.";
   static const String wrongPassword = "The password is incorrect. Please try again.";
   static const String userDisabled = "This user account has been disabled. Please contact support.";
+  static const String emailAlreadyInUse = "The email address is already in use by another account.";
   static const String userNotFound = "No user found with this email. Please check the email address and try again.";
   static const String tooManyRequests = "Too many requests. Please try again later.";
   static const String operationNotAllowed = "Operation not allowed. Please contact support.";

@@ -12,6 +12,8 @@ T handleFirebaseAuthException<T>(FirebaseAuthException e) {
       throw(StringConstants.tooManyRequests);
     case 'account-exists-with-different-credential':
       throw StringConstants.accountExists;
+    case 'email-already-in-use':
+      throw StringConstants.emailAlreadyInUse;
     case 'invalid-credential':
       throw StringConstants.invalidCredential;
     case 'operation-not-allowed':

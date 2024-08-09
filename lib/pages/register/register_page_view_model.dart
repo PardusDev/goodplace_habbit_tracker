@@ -12,11 +12,17 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   User? user;
+  bool _privacyPolicyChecked = false;
 
   String _emailErrorText = '';
   String _passwordErrorText = '';
   String _rePasswordErrorText = '';
   String _generalErrorText = '';
+
+  bool _emailValid = false;
+  bool _passwordValid = false;
+  bool _confirmPasswordValid = false;
+  bool _registering = false;
 
   RegisterPageViewModel();
 
@@ -24,6 +30,18 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   String get passwordErrorText => _passwordErrorText;
   String get rePasswordErrorText => _rePasswordErrorText;
   String get generalErrorText => _generalErrorText;
+
+  String get email => emailController.text;
+  String get password => passwordController.text;
+  String get confirmPassword => confirmPasswordController.text;
+
+  bool get emailValid => _emailValid;
+  bool get passwordValid => _passwordValid;
+  bool get confirmPasswordValid => _confirmPasswordValid;
+
+  bool get privacyPolicyChecked => _privacyPolicyChecked;
+
+  bool get registering => _registering;
 
   void navigateToBack() {
     navigationService.navigateToBack();
@@ -34,22 +52,24 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   }
 
   // EMAIL *************************************
-  bool onEmailChanged(String value) {
+  void onEmailChanged(String value) {
+    final result = _validateEmail(value);
+    _emailValid = result['isValid'];
+    setEmailErrorText(result['errorText']);
+  }
+
+  Map<String, dynamic> _validateEmail(String value) {
     if (value.isEmpty) {
-      setEmailErrorText(StringConstants.registerScreenEmailCantBeEmpty);
-      return false;
+      return {'errorText': StringConstants.registerScreenEmailCantBeEmpty, 'isValid': false};
     }
     else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-      setEmailErrorText(StringConstants.registerScreenEmailNotValid);
-      return false;
+      return {'errorText': StringConstants.registerScreenEmailNotValid, 'isValid': false};
     }
     else if (!RegExp(r'^\S+$').hasMatch(value)) {
-      setEmailErrorText(StringConstants.registerScreenEmailNotValid);
-      return false;
+      return {'errorText': StringConstants.registerScreenEmailNotValid, 'isValid': false};
     }
     else {
-      setEmailErrorText('');
-      return true;
+      return {'errorText': '', 'isValid': true};
     }
   }
 
@@ -61,33 +81,33 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
 
   // PASSWD *************************************
-  bool onPasswordChanged(String value) {
+  void onPasswordChanged(String value) {
+    final result = _validatePassword(value);
+    _passwordValid = result['isValid'];
+    setPasswordErrorText(result['errorText']);
+  }
+
+  Map<String, dynamic> _validatePassword(String value) {
     if (value.isEmpty) {
-      setPasswordErrorText(StringConstants.registerScreenPasswordCantBeEmpty);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordCantBeEmpty, 'isValid': false};
     }
     else if (value.length < 6) {
-      setPasswordErrorText(StringConstants.registerScreenPasswordShouldBeAtLeast6Chars);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordShouldBeAtLeast6Chars, 'isValid': false};
     }
     // Password contain space
     else if (!RegExp(r'^\S+$').hasMatch(value)) {
-      setPasswordErrorText(StringConstants.registerScreenCannotContainSpace);
-      return false;
+      return {'errorText': StringConstants.registerScreenCannotContainSpace, 'isValid': false};
     }
     // Password should contain at least one letter
     else if (!RegExp(r'[a-zA-Z]').hasMatch(value)) {
-      setPasswordErrorText(StringConstants.registerScreenPasswordShouldContainLetter);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordShouldContainLetter, 'isValid': false};
     }
     // Password should contain at least one digit
     else if (!RegExp(r'\d').hasMatch(value)) {
-      setPasswordErrorText(StringConstants.registerScreenPasswordShouldContainNumber);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordShouldContainNumber, 'isValid': false};
     }
     else {
-      setPasswordErrorText('');
-      return true;
+      return {'errorText': '', 'isValid': true};
     }
   }
 
@@ -98,48 +118,65 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   // PASSWD END *************************************
 
   // CONFIRM PASSWD *************************************
-  bool onConfirmPasswordChanged(String value) {
+  void onConfirmPasswordChanged(String value) {
+    final result = _validateConfirmPassword(value);
+    _confirmPasswordValid = result['isValid'];
+    setConfirmPasswordErrorText(result['errorText']);
+  }
+
+  Map<String, dynamic> _validateConfirmPassword(String value) {
     if (value.isEmpty) {
-      setRePasswordErrorText(StringConstants.registerScreenPasswordCantBeEmpty);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordCantBeEmpty, 'isValid': false};
     }
     else if (value != passwordController.text) {
-      setRePasswordErrorText(StringConstants.registerScreenPasswordNotMatch);
-      return false;
+      return {'errorText': StringConstants.registerScreenPasswordNotMatch, 'isValid': false};
     }
     else {
-      setRePasswordErrorText('');
-      return true;
+      return {'errorText': '', 'isValid': true};
     }
   }
 
-  void setRePasswordErrorText(String error) {
+  void setConfirmPasswordErrorText(String error) {
     _rePasswordErrorText = error;
     notifyListeners();
   }
   // CONFIRM PASSWD END *************************************
-
+  void updatePrivacyPolicyChecked(bool isChecked) {
+    _privacyPolicyChecked = isChecked;
+    if (generalErrorText == StringConstants.registerScreenPrivacyPolicyNotChecked && isChecked) {
+      setGeneralErrorText('');
+    }
+    notifyListeners();
+  }
 
   Future<void> register() async {
-    final email = emailController.text;
-    final passwd = passwordController.text;
-    final confirmPasswd = confirmPasswordController.text;
-
+    if (_registering) {
+      return;
+    }
     /*
-    print(!onEmailChanged(email));
-    print(!onEmailChanged(passwd));
-    print(!onEmailChanged(confirmPasswd));
+    print(!emailValid));
+    print(!passwordValid);
+    print(confirmPasswordValid);
     */
 
     // Check if the email, password and confirm password is valid
-    if (!onEmailChanged(email) || !onPasswordChanged(passwd) || !onConfirmPasswordChanged(confirmPasswd)){
+    if (!emailValid || !passwordValid || !confirmPasswordValid) {
       return;
     }
 
+    // Check if the privacy policy is checked
+    if (!_privacyPolicyChecked) {
+      setGeneralErrorText(StringConstants.registerScreenPrivacyPolicyNotChecked);
+      return;
+    }
+
+    setRegistering(true);
+
     try {
-      user = await _authService.registerWithEmailAndPassword(email, passwd);
+      user = await _authService.registerWithEmailAndPassword(email, password);
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
+        setRegistering(false);
         return;
       }
       // Navigate to home screen.
@@ -148,6 +185,8 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       navigationService.navigateToPageClear('/welcome', null);
     } catch (e) {
       setGeneralErrorText(e.toString());
+    } finally {
+      setRegistering(false);
     }
   }
 
@@ -164,6 +203,11 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   void setGeneralErrorText(String error) {
     _generalErrorText = error;
+    notifyListeners();
+  }
+
+  void setRegistering(bool value) {
+    _registering = value;
     notifyListeners();
   }
 }

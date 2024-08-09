@@ -1,43 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/icon_constants.dart';
-import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLinePasswordInputField.dart';
 
 import '../constants/color_constants.dart';
 
-class OneLinePasswordInputFieldValidable extends StatefulWidget {
+class OneLinePasswordInputFieldValidable extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
-  final bool Function(String) onChanged;
-  const OneLinePasswordInputFieldValidable({super.key, required this.hintText, required this.controller, required this.onChanged});
+  final Function(String) onChanged;
+  final bool isValid;
 
-  @override
-  State<OneLinePasswordInputFieldValidable> createState() => _OneLinePasswordInputFieldValidableState();
-}
-
-class _OneLinePasswordInputFieldValidableState extends State<OneLinePasswordInputFieldValidable> {
-  bool _isValid = false;
-
-  void _handleTextChanged(String text) {
-    setState(() {
-      _isValid = widget.onChanged(text);
-    });
-  }
+  const OneLinePasswordInputFieldValidable({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    required this.onChanged,
+    required this.isValid,
+  });
 
   @override
   Widget build(BuildContext context) {
     return OneLinePasswordInputField(
-      hintText: StringConstants.registerScreenPasswordHint,
+      hintText: hintText,
       suffixIcon: Icon(
-        _isValid ? IconConstants.checkIcon : IconConstants.exclamationIcon,
-        color: _isValid ? ColorConstants.validColor : ColorConstants.errorColor,
+        isValid ? IconConstants.checkIcon : IconConstants.exclamationIcon,
+        color: isValid ? ColorConstants.validColor : ColorConstants.errorColor,
       ),
       obscureText: true,
-      onChanged: (value) {
-        _handleTextChanged(value);
-        widget.onChanged(value);
-      },
-      controller: widget.controller,
+      onChanged: onChanged,
+      controller: controller,
     );
   }
 }
