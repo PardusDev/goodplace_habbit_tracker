@@ -1,23 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
+import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 
 import '../../constants/string_constants.dart';
 
 class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
+  final AuthService _authService = AuthService();
   late final BuildContext viewModelContext;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  User? user;
 
   String _emailErrorText = '';
   String _passwordErrorText = '';
   String _rePasswordErrorText = '';
+  String _generalErrorText = '';
 
   RegisterPageViewModel();
 
   String get emailErrorText => _emailErrorText;
   String get passwordErrorText => _passwordErrorText;
   String get rePasswordErrorText => _rePasswordErrorText;
+  String get generalErrorText => _generalErrorText;
 
   void navigateToBack() {
     navigationService.navigateToBack();
@@ -114,9 +120,50 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   // CONFIRM PASSWD END *************************************
 
 
-  Future<void> register(BuildContext context) async {
+  Future<void> register() async {
     final email = emailController.text;
     final passwd = passwordController.text;
     final confirmPasswd = confirmPasswordController.text;
+
+    /*
+    print(!onEmailChanged(email));
+    print(!onEmailChanged(passwd));
+    print(!onEmailChanged(confirmPasswd));
+    */
+
+    // Check if the email, password and confirm password is valid
+    if (!onEmailChanged(email) || !onPasswordChanged(passwd) || !onConfirmPasswordChanged(confirmPasswd)){
+      return;
+    }
+
+    try {
+      user = await _authService.registerWithEmailAndPassword(email, passwd);
+      if (user == null) {
+        setGeneralErrorText(StringConstants.anErrorOccured);
+        return;
+      }
+      // Navigate to home screen.
+      // The home screen not implemented yet.
+      // Therefore navigate to welcome screen.
+      navigationService.navigateToPageClear('/welcome', null);
+    } catch (e) {
+      setGeneralErrorText(e.toString());
+    }
+  }
+
+  Future<void> continueWithGoogle() async {
+    try {
+      user = await _authService.signInWithGoogle();
+      if (user == null) {
+        setGeneralErrorText(StringConstants.anErrorOccured);
+      }
+    } catch (e) {
+      setGeneralErrorText(e.toString());
+    }
+  }
+
+  void setGeneralErrorText(String error) {
+    _generalErrorText = error;
+    notifyListeners();
   }
 }

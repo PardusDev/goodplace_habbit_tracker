@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputField.dart';
 import 'package:kartal/kartal.dart';
 
-import '../constants/icon_constants.dart';
 import '../constants/string_constants.dart';
 
 class OneLinePasswordInputField extends StatefulWidget {
@@ -28,7 +28,6 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
   }
 
   void _toggleObscureText() {
-    // TODO: This method will change according to state management
     setState(() {
       _obscureText = !_obscureText;
     });
@@ -49,6 +48,7 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
             widget.suffixIcon!,
             context.sized.emptySizedWidthBoxLow,
             visibilityIcon(),
+            context.sized.emptySizedWidthBoxLow3x
           ],
         )
         :
@@ -57,12 +57,13 @@ class _OneLinePasswordInputFieldState extends State<OneLinePasswordInputField> {
   }
 
   Widget visibilityIcon() {
-    return IconButton(
-      icon: Icon(
-        // TODO: Icon will change according to the design
-        _obscureText ? IconConstants.visibilityIcon : IconConstants.notVisibilityIcon,
+    return InkWell(
+      onTap: _toggleObscureText,
+      child: Image.asset(
+        _obscureText ? ImageConstants.passwordHide : ImageConstants.passwordShown,
+        width: context.sized.dynamicWidth(0.05),
+        height: context.sized.dynamicHeight(0.05),
       ),
-      onPressed: _toggleObscureText,
     );
   }
 }

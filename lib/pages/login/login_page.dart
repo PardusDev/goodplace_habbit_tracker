@@ -72,7 +72,7 @@ class LoginPage extends StatelessWidget {
                       builder: (context, viewModel, child) {
                         return OutlinedButtonWithImage(
                           onPressed: () {
-                            viewModel.loginWithGoogle(context);
+                            viewModel.loginWithGoogle();
                           },
                           text: StringConstants.loginWithGoogle,
                           imagePath: ImageConstants.googleLogo,

@@ -68,10 +68,16 @@ class RegisterPage extends StatelessWidget {
                   // */*/*/* Other Login Options */*/*/*
                   Flexible(
                     flex: 6,
-                    child: OutlinedButtonWithImage(
-                      onPressed: () {},
-                      text: StringConstants.loginWithGoogle,
-                      imagePath: ImageConstants.googleLogo,
+                    child: Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OutlinedButtonWithImage(
+                          onPressed: () {
+                            viewModel.continueWithGoogle();
+                          },
+                          text: StringConstants.loginWithGoogle,
+                          imagePath: ImageConstants.googleLogo,
+                        );
+                      }
                     ),
                   ),
                   // */*/*/* Other Login Options End */*/*/*
@@ -205,14 +211,38 @@ class RegisterPage extends StatelessWidget {
                   ),
                   // */*/*/ Privacy Policy End */*/*/*
 
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.generalErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.generalErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                    color: ColorConstants.loginScreenErrorTextColor,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              )
+                          ),
+                        );
+                      }
+                  ),
+
                   const Spacer(flex: 14,),
 
                   // */*/*/ GET STARTED BUTTON */*/*/*
                   Flexible(
                     flex: 6,
-                    child: StadiumSideBlueButton(
-                      onPressed: () {},
-                      text: StringConstants.registerScreenGetStartedButton,
+                    child: Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return StadiumSideBlueButton(
+                          onPressed: () {
+                            viewModel.register();
+                          },
+                          text: StringConstants.registerScreenGetStartedButton,
+                        );
+                      }
                     ),
                   ),
                   // */*/*/ GET STARTED BUTTON End */*/*/*

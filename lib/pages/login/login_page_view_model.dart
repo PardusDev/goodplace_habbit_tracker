@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
+import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 
 import '../../constants/string_constants.dart';
 
 class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
+  final AuthService _authService = AuthService();
   late final BuildContext viewModelContext;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  User? user;
 
   String _errorText = '';
 
@@ -28,19 +32,29 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> login(BuildContext context) async {
     final email = emailController.text;
-    final passwd = passwordController.text;
+    final password = passwordController.text;
 
-    // TODO: Implement login logic
-    if (email == 'test@example.com' && passwd == 'password') {
-      print("Login successful");
-    } else {
-      setErrorText(StringConstants.loginScreenEmailOrPasswdNotRight);
+    try {
+      user = await _authService.signInWithEmailAndPassword(email, password);
+      if (user == null) {
+        setErrorText(StringConstants.loginScreenEmailOrPasswdNotRight);
+      }
+    } catch (e) {
+      setErrorText(e.toString());
+      return;
     }
+
   }
 
-  Future<void> loginWithGoogle(BuildContext context) async {
-    // TODO: Implement login with Google logic
-    print("Login with Google");
+  Future<void> loginWithGoogle() async {
+    try {
+      user = await _authService.signInWithGoogle();
+      if (user == null) {
+        setErrorText(StringConstants.anErrorOccured);
+      }
+    } catch (e) {
+      setErrorText(e.toString());
+    }
   }
 
   void onPasswordChanged(String value) {

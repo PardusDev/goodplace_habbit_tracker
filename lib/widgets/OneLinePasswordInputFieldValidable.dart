@@ -19,7 +19,6 @@ class _OneLinePasswordInputFieldValidableState extends State<OneLinePasswordInpu
   bool _isValid = false;
 
   void _handleTextChanged(String text) {
-    // TODO: This method will change according to state management
     setState(() {
       _isValid = widget.onChanged(text);
     });
