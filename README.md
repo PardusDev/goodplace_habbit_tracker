@@ -38,10 +38,12 @@ To get a local copy up and running follow these simple steps.
 <br><br>
 
 ### Onboarding Page
-<img src="/screenshots/OnboardingPageScreenshot-1.png" alt="Screenshot from App" width="300" />
-<img src="/screenshots/OnboardingPageScreenshot-2.png" alt="Screenshot from App" width="300" />
-<img src="/screenshots/OnboardingPageScreenshot-3.png" alt="Screenshot from App" width="300" />
-<img src="/screenshots/OnboardingPageScreenshot-4.png" alt="Screenshot from App" width="300" />
+<div style="display: flex; justify-content: space-between;">
+    <img src="/screenshots/OnboardingPageScreenshot-1.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/OnboardingPageScreenshot-2.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/OnboardingPageScreenshot-3.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/OnboardingPageScreenshot-4.png" alt="Screenshot from App" width="300" />
+</div>
 
 ### Home Page
 <img src="/screenshots/HomePageScreenshot.png" alt="Screenshot from App" width="300" />
