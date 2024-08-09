@@ -49,4 +49,9 @@ class ColorConstants {
   static const Color registerScreenPrivacyPolicyLinkColor = Color(0xFF7583CA);
   static const Color registerScreenAlreadyHaveAnAccountColor = Color(0xFFA1A4B2);
   static const Color registerScreenSignInColor = Color(0xFF8E97FD);
+
+  // Collapsable Bottom Sheet
+  static const Color collapsableBottomSheetBackgroundColor = Color(0xFFFFFFFF);
+  static const Color collapsableBottomSheetTitleColor = Color(0xFF7583CA);
+  static const Color collapsableBottomSheetTextColor = Color(0xFFA1A4B2);
 }

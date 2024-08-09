@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/register/register_page_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/CollapsableBottomSheet.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputFieldValidable.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
@@ -202,7 +203,19 @@ class RegisterPage extends StatelessWidget {
                             color: ColorConstants.registerScreenPrivacyPolicyTextColor,
                           ),),
                         TappableText(
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                useSafeArea: true,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return const CollapsableBottomSheet(
+                                      title: StringConstants.privacyPolicy,
+                                      text: StringConstants.privacyPolicyText
+                                  );
+                                }
+                            );
+                          },
                           text: StringConstants.registerScreenPrivacyPolicyLink,
                           textStyle: context.general.textTheme.labelLarge!.copyWith(
                             color: ColorConstants.registerScreenPrivacyPolicyLinkColor,
