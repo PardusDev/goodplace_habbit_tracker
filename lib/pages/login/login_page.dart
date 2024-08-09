@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 children: [
 
-                  // */*/*/* Back Button */*/*/*
+                  //region */*/*/* Back Button */*/*/*
                   Expanded(
                     flex: 8,
                     child: Align(
@@ -49,11 +49,11 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // */*/*/* Back Button End */*/*/*
+                  //endregion */*/*/* Back Button End */*/*/*
 
                   const Spacer(),
 
-                  // */*/*/* Title */*/*/*
+                  //region */*/*/* Title */*/*/*
                   Expanded(
                     flex: 4,
                     child: Text(StringConstants.loginScreenTitle, style: context.general.textTheme.headlineMedium!.copyWith(
@@ -61,11 +61,11 @@ class LoginPage extends StatelessWidget {
                         fontWeight: FontWeight.w700
                     ),),
                   ),
-                  // */*/*/* Title End */*/*/*
+                  //endregion */*/*/* Title End */*/*/*
 
                   const Spacer(flex: 8,),
 
-                  // */*/*/* Other Login Options */*/*/*
+                  //region */*/*/* Other Login Options */*/*/*
                   Flexible(
                     flex: 8,
                     child: Consumer<LoginPageViewModel>(
@@ -80,11 +80,11 @@ class LoginPage extends StatelessWidget {
                       }
                     ),
                   ),
-                  // */*/*/* Other Login Options End */*/*/*
+                  //endregion */*/*/* Other Login Options End */*/*/*
 
                   const Spacer(flex: 2),
 
-                  // */*/*/* OR TEXT */*/*/*
+                  //region */*/*/* OR TEXT */*/*/*
                   Expanded(
                     flex: 4,
                     child: Text(StringConstants.loginScreenOrText, style: context.general.textTheme.labelMedium!.copyWith(
@@ -92,9 +92,9 @@ class LoginPage extends StatelessWidget {
                       color: ColorConstants.loginScreenOrTextColor
                     ),),
                   ),
-                  // */*/*/* OR TEXT End */*/*/*
+                  //endregion */*/*/* OR TEXT End */*/*/*
 
-                  // */*/*/* Form */*/*/*
+                  //region */*/*/* Form */*/*/*
                   Consumer<LoginPageViewModel>(
                       builder: (context, viewModel, child) {
                         return OneLineInputField(
@@ -117,11 +117,11 @@ class LoginPage extends StatelessWidget {
                         );
                       }
                   ),
-                  // */*/*/* Form End */*/*/*
+                  //endregion */*/*/* Form End */*/*/*
 
                   const Spacer(),
 
-                  // */*/*/* Error Text */*/*/*
+                  //region */*/*/* Error Text */*/*/*
                   Consumer<LoginPageViewModel>(
                     builder: (context, viewModel, child) {
                       return Visibility(
@@ -139,11 +139,11 @@ class LoginPage extends StatelessWidget {
                       );
                     }
                   ),
-                  // */*/*/* Error Text End */*/*/*
+                  //endregion */*/*/* Error Text End */*/*/*
 
                   const Spacer(flex: 4,),
 
-                  // */*/*/* Login Button */*/*/*
+                  //region */*/*/* Login Button */*/*/*
                   Flexible(
                     flex: 6,
                     child: Consumer<LoginPageViewModel>(
@@ -157,12 +157,11 @@ class LoginPage extends StatelessWidget {
                       }
                     ),
                   ),
-
-                  // */*/*/* Login Button End */*/*/*
+                  //endregion */*/*/* Login Button End */*/*/*
 
                   const Spacer(),
 
-                  // */*/*/* Forgot Password */*/*/*
+                  //region */*/*/* Forgot Password */*/*/*
                   Flexible(
                     flex: 2,
                     child: Consumer<LoginPageViewModel>(
@@ -180,11 +179,11 @@ class LoginPage extends StatelessWidget {
                       }
                     ),
                   ),
-                  // */*/*/* Forgot Password End */*/*/*
+                  //endregion */*/*/* Forgot Password End */*/*/*
 
                   const Spacer(flex: 14),
 
-                  // */*/*/* Sign Up */*/*/*
+                  //region */*/*/* Sign Up */*/*/*
                   Flexible(
                     flex: 2,
                     child: Row(
@@ -214,7 +213,7 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // */*/*/* Sign Up End */*/*/*
+                  //endregion */*/*/* Sign Up End */*/*/*
 
                   const Spacer(),
                 ]

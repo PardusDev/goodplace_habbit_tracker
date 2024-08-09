@@ -9,7 +9,7 @@ import '../../pages/welcome/welcome_page.dart';
 
 @immutable
 class NavigationRoute {
-  static const NavigationRoute _instance = const NavigationRoute._();
+  static const NavigationRoute _instance = NavigationRoute._();
   static NavigationRoute get instance => _instance;
 
   const NavigationRoute._();

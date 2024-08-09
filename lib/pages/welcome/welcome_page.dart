@@ -28,7 +28,7 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Spacer(flex: 4),
-                // */*/*/* Title */*/*/*
+                //region */*/*/* Title */*/*/*
                 Expanded(
                   flex: 1,
                   child: Text(
@@ -49,8 +49,9 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // */*/*/* Title End */*/*/*
-                // */*/*/* Subtitle */*/*/*
+                //endregion */*/*/* Title End */*/*/*
+
+                //region */*/*/* Subtitle */*/*/*
                 Expanded(
                   flex: 8,
                   child: SizedBox(
@@ -66,14 +67,19 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // */*/*/* Subtitle End */*/*/*
+                //endregion */*/*/* Subtitle End */*/*/*
+
                 const Spacer(flex: 9),
+
+                //region */*/*/* Button */*/*/*
                 StadiumSideWhiteButton(
                   onPressed: () {
                     viewModel.navigateToLogin();
                   },
                   text: StringConstants.welcomeScreenButton,
                 ),
+                //endregion */*/*/* Button End */*/*/*
+
                 const Spacer(flex: 1),
               ],
             ),

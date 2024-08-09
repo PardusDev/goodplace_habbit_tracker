@@ -32,6 +32,7 @@ class RegisterPage extends StatelessWidget {
               padding: context.padding.normal,
               child: Column(
                 children: [
+                  //region */*/*/* Back Button */*/*/*
                   Expanded(
                     flex: 8,
                     child: Align(
@@ -47,10 +48,11 @@ class RegisterPage extends StatelessWidget {
                         ),
                     ),
                   ),
+                  //endregion */*/*/* Back Button End */*/*/*
 
                   const Spacer(),
 
-                  // */*/*/* Title */*/*/*
+                  //region */*/*/* Title */*/*/*
                   Expanded(
                     flex: 4,
                     child: Text(
@@ -61,11 +63,11 @@ class RegisterPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // */*/*/* Title End */*/*/*
+                  //endregion */*/*/* Title End */*/*/*
 
                   const Spacer(flex: 8,),
 
-                  // */*/*/* Other Login Options */*/*/*
+                  //region */*/*/* Other Login Options */*/*/*
                   Flexible(
                     flex: 6,
                     child: Consumer<RegisterPageViewModel>(
@@ -80,11 +82,11 @@ class RegisterPage extends StatelessWidget {
                       }
                     ),
                   ),
-                  // */*/*/* Other Login Options End */*/*/*
+                  //endregion */*/*/* Other Login Options End */*/*/*
 
                   const Spacer(flex: 2,),
 
-                  // */*/*/ Or Text */*/*/*
+                  //region */*/*/ Or Text */*/*/*
                   Expanded(
                     flex: 4,
                     child: Text(StringConstants.registerScreenOrText, style: context.general.textTheme.labelMedium!.copyWith(
@@ -92,9 +94,9 @@ class RegisterPage extends StatelessWidget {
                         color: ColorConstants.registerScreenOrTextColor
                     ),),
                   ),
-                  // */*/*/ Or Text End */*/*/*
+                  //endregion */*/*/ Or Text End */*/*/*
 
-                  // */*/*/ Form */*/*/*
+                  //region */*/*/ Form */*/*/*
                   Consumer<RegisterPageViewModel>(
                     builder: (context, viewModel, child) {
                       return OneLineInputFieldValidable(
@@ -183,11 +185,11 @@ class RegisterPage extends StatelessWidget {
                         );
                       }
                   ),
-                  // */*/*/ Form End */*/*/*
+                  //endregion */*/*/ Form End */*/*/*
 
                   const Spacer(flex: 4,),
 
-                  // */*/*/ Privacy Policy */*/*/*
+                  //region */*/*/ Privacy Policy */*/*/*
                   // TODO: Add a checkbox for privacy policy
                   Flexible(
                     flex: 4,
@@ -209,8 +211,9 @@ class RegisterPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // */*/*/ Privacy Policy End */*/*/*
+                  //endregion */*/*/ Privacy Policy End */*/*/*
 
+                  //region */*/*/ General Error Text */*/*/*
                   Consumer<RegisterPageViewModel>(
                       builder: (context, viewModel, child) {
                         return Visibility(
@@ -228,10 +231,11 @@ class RegisterPage extends StatelessWidget {
                         );
                       }
                   ),
+                  //endregion */*/*/ General Error Text End */*/*/*
 
                   const Spacer(flex: 14,),
 
-                  // */*/*/ GET STARTED BUTTON */*/*/*
+                  //region */*/*/ GET STARTED BUTTON */*/*/*
                   Flexible(
                     flex: 6,
                     child: Consumer<RegisterPageViewModel>(
@@ -245,11 +249,11 @@ class RegisterPage extends StatelessWidget {
                       }
                     ),
                   ),
-                  // */*/*/ GET STARTED BUTTON End */*/*/*
+                  //endregion */*/*/ GET STARTED BUTTON End */*/*/*
 
                   const Spacer(),
 
-                  // */*/*/ Already have an account? */*/*/*
+                  //region */*/*/ Already have an account? */*/*/*
                   Flexible(
                     flex: 2,
                     child: Row(
@@ -273,6 +277,7 @@ class RegisterPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  //endregion */*/*/ Already have an account? End */*/*/*
 
 
                   const Spacer()
