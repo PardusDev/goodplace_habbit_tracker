@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
+        debugShowCheckedModeBanner: false,
         home: const WelcomePage(),
         onGenerateRoute: NavigationRoute.instance.generateRoute,
         navigatorKey: NavigationService.instance.navigatorKey,
