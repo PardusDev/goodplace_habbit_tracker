@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/init/start/application_start.dart';
-import 'package:goodplace_habbit_tracker/pages/welcome/welcome_page.dart';
+import 'package:goodplace_habbit_tracker/pages/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
 import 'init/navigation/navigation_route.dart';
 import 'init/navigation/navigation_service.dart';
 import 'init/notifier/provider_list.dart';
 
-void main() {
-  ApplicationStart.init();
+void main() async {
+  await ApplicationStart.init();
   runApp(const MyApp());
 }
 
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: const WelcomePage(),
+        home: const SplashPage(),
         onGenerateRoute: NavigationRoute.instance.generateRoute,
         navigatorKey: NavigationService.instance.navigatorKey,
       ),

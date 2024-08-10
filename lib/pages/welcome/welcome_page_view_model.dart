@@ -1,8 +1,9 @@
-import 'package:flutter/src/widgets/framework.dart';
+
+import 'package:flutter/material.dart';
 
 import '../../core/base/base_view_model.dart';
 
-class WelcomePageViewModel with BaseViewModel {
+class WelcomePageViewModel extends ChangeNotifier with BaseViewModel {
   late final BuildContext viewModelContext;
 
   WelcomePageViewModel();

@@ -16,6 +16,8 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
+      case NavigatorConstants.SPLASH_PAGE:
+        return slideAnimatedRoute(const WelcomePage());
       case NavigatorConstants.WELCOME_PAGE:
         return slideAnimatedRoute(const WelcomePage());
       case NavigatorConstants.LOGIN_PAGE:

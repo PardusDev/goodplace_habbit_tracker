@@ -8,6 +8,7 @@ class ColorConstants {
   static const Color transparent = Colors.transparent;
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color primaryColor = Color(0xFF8E97FD);
+  static const Color secondaryColor = Color(0xFFA1A4B2);
 
   static const Color validColor = Color(0xFF6CB28E);
   static const Color errorColor = Color(0xFFE57373);
