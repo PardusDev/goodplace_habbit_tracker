@@ -22,6 +22,8 @@ To get a local copy up and running follow these simple steps.
 - [provider](https://pub.dev/packages/provider) for state management
 - [dio](https://pub.dev/packages/dio) for API tasks
 - [kartal](https://pub.dev/packages/kartal) for consistent UI
+- [animated_text_kit](https://pub.dev/packages/animated_text_kit) for animated text
+- [package_info_plus](https://pub.dev/packages/package_info_plus) for getting package info
 
 ## Screenshots
 

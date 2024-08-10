@@ -46,11 +46,14 @@ dependencies:
   # Animated text package
   animated_text_kit: ^4.2.2
 
+  # For package info (version, build number, etc)
+  package_info_plus: ^6.0.0
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  package_info_plus: ^6.0.0
+
 
 
 
