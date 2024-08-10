@@ -58,7 +58,8 @@ class LoginPage extends StatelessWidget {
                     flex: 4,
                     child: Text(StringConstants.loginScreenTitle, style: context.general.textTheme.headlineMedium!.copyWith(
                         color: ColorConstants.loginScreenTitleColor,
-                        fontWeight: FontWeight.w700
+                        fontWeight: FontWeight.w700,
+                        overflow: TextOverflow.visible,
                     ),),
                   ),
                   //endregion */*/*/* Title End */*/*/*
@@ -89,7 +90,8 @@ class LoginPage extends StatelessWidget {
                     flex: 4,
                     child: Text(StringConstants.loginScreenOrText, style: context.general.textTheme.labelMedium!.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: ColorConstants.loginScreenOrTextColor
+                      color: ColorConstants.loginScreenOrTextColor,
+                      overflow: TextOverflow.visible,
                     ),),
                   ),
                   //endregion */*/*/* OR TEXT End */*/*/*
@@ -126,13 +128,14 @@ class LoginPage extends StatelessWidget {
                     builder: (context, viewModel, child) {
                       return Visibility(
                         visible: viewModel.errorText.isNotEmpty,
-                        child: Flexible(
+                        child: Expanded(
                           flex: 2,
                           child: Text(
                             viewModel.errorText,
                             style: context.general.textTheme.titleSmall!.copyWith(
                                 color: ColorConstants.loginScreenErrorTextColor,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.visible,
                             ),
                           )
                         ),
@@ -150,7 +153,7 @@ class LoginPage extends StatelessWidget {
                       builder: (context, viewModel, child) {
                         return StadiumSideBlueButton(
                           onPressed: () {
-                            viewModel.login(context);
+                            viewModel.login();
                           },
                           text: StringConstants.loginScreenLoginButton,
                         );
@@ -173,7 +176,8 @@ class LoginPage extends StatelessWidget {
                             text: StringConstants.loginScreenForgotPassword,
                             textStyle: context.general.textTheme.titleSmall!.copyWith(
                                 color: ColorConstants.loginScreenForgotPasswordTextColor,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.visible,
                             )
                         );
                       }
@@ -193,7 +197,8 @@ class LoginPage extends StatelessWidget {
                           StringConstants.dontHaveAnAccount.toUpperCase(),
                           style: context.general.textTheme.labelLarge!.copyWith(
                               color: ColorConstants.loginScreenOrTextColor,
-                              fontWeight: FontWeight.w500
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.visible,
                           ),
                         ),
                         Consumer<LoginPageViewModel>(
@@ -205,7 +210,8 @@ class LoginPage extends StatelessWidget {
                                   text: StringConstants.signUp.toUpperCase(),
                                   textStyle: context.general.textTheme.labelLarge!.copyWith(
                                       color: ColorConstants.primaryColor,
-                                      fontWeight: FontWeight.w500
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.visible,
                                   )
                               );
                             }

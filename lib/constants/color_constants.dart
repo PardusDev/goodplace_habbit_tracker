@@ -60,4 +60,18 @@ class ColorConstants {
   static const Color checkboxBorderColor = Color(0xFFA1A4B2);
   static const Color checkboxCheckedColor = Color(0xFF8E97FD);
   static const Color checkboxBackgroundColor = Color(0xFFEFEFEF);
+
+  // region Settings screen
+  static const Color settingsScreenItemTextColor = Color(0xFF3F414E);
+  static const Color settingsScreenItemIconColor = Color(0xFFA1A4B2);
+  static const Color deleteAccountButtonColor = Color(0xFFE57373);
+  // endregion
+
+  // region Snackbar colors
+  static const Color errorSnackBarColor = Color(0xFFE57373);
+  static const Color warningSnackBarColor = Color(0xFFfffc7f);
+  static const Color successSnackBarColor = Color(0xFF6CB28E);
+  // endregion
+
+
 }

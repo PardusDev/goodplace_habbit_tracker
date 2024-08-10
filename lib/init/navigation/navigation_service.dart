@@ -9,7 +9,7 @@ class NavigationService implements INavigationService {
 
   // This key for all navigation operations
   // With that we can manage all navigation operations
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final removeAllOldRoutes = (Route<dynamic> route) => false;
 

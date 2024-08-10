@@ -136,4 +136,22 @@ class AuthService {
       throw StringConstants.anErrorOccured;
     }
   }
+
+  // Delete user account
+  // With that, delete the user from the 'users' collection
+  Future<void> deleteAccountPermanently() async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).delete();
+        await user.delete();
+      }
+    } on FirebaseAuthException catch (e) {
+      handleFirebaseAuthException(e);
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+      throw StringConstants.anErrorOccured;
+    }
+  }
 }

@@ -31,7 +31,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
     navigationService.navigateToPage('/register', null);
   }
 
-  Future<void> login(BuildContext context) async {
+  Future<void> login() async {
     final email = emailController.text;
     final password = passwordController.text;
 

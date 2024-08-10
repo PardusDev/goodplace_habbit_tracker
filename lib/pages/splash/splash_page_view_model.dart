@@ -24,9 +24,8 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
       return;
     }
     // Fake delay to simulate a network request.
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 750));
     if (user != null) {
-      // TODO: Navigate to home page.
       navigationService.navigateToPageClear(("/home"), null);
     } else {
       navigationService.navigateToPageClear("/welcome", null);

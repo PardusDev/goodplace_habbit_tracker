@@ -35,7 +35,8 @@ class WelcomePage extends StatelessWidget {
                     StringConstants.welcomeScreenStrongTitle,
                     style: context.general.textTheme.headlineLarge!.copyWith(
                           color: ColorConstants.welcomeScreenTitleTextColor,
-                          fontWeight: FontWeight.w500
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.visible,
                         ),
                   ),
                 ),
@@ -45,7 +46,8 @@ class WelcomePage extends StatelessWidget {
                     StringConstants.welcomeScreenTitle,
                     style: context.general.textTheme.headlineLarge!.copyWith(
                       color: ColorConstants.welcomeScreenTitleTextColor,
-                      fontWeight: FontWeight.w300
+                      fontWeight: FontWeight.w300,
+                      overflow: TextOverflow.visible,
                     ),
                   ),
                 ),
@@ -62,7 +64,8 @@ class WelcomePage extends StatelessWidget {
                       style: context.general.textTheme.titleMedium!.copyWith(
                         color: ColorConstants.welcomeScreenSubtitleTextColor,
                         fontWeight: FontWeight.w300,
-                        fontSize: 18
+                        fontSize: 18,
+                        overflow: TextOverflow.visible,
                       ),
                     ),
                   ),

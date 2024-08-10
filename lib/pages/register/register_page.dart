@@ -62,6 +62,7 @@ class RegisterPage extends StatelessWidget {
                       style: context.general.textTheme.headlineMedium?.copyWith(
                         color: ColorConstants.registerScreenTitleColor,
                         fontWeight: FontWeight.w700,
+                        overflow: TextOverflow.visible,
                       ),
                     ),
                   ),
@@ -93,7 +94,8 @@ class RegisterPage extends StatelessWidget {
                     flex: 4,
                     child: Text(StringConstants.registerScreenOrText, style: context.general.textTheme.labelMedium!.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: ColorConstants.registerScreenOrTextColor
+                        color: ColorConstants.registerScreenOrTextColor,
+                        overflow: TextOverflow.visible,
                     ),),
                   ),
                   //endregion */*/*/ Or Text End */*/*/*
@@ -120,7 +122,8 @@ class RegisterPage extends StatelessWidget {
                                 viewModel.emailErrorText,
                                 style: context.general.textTheme.titleSmall!.copyWith(
                                     color: ColorConstants.loginScreenErrorTextColor,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.visible,
                                 ),
                               )
                           ),
@@ -154,7 +157,8 @@ class RegisterPage extends StatelessWidget {
                                 viewModel.passwordErrorText,
                                 style: context.general.textTheme.titleSmall!.copyWith(
                                     color: ColorConstants.loginScreenErrorTextColor,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.visible,
                                 ),
                               )
                           ),
@@ -185,7 +189,8 @@ class RegisterPage extends StatelessWidget {
                                 viewModel.rePasswordErrorText,
                                 style: context.general.textTheme.titleSmall!.copyWith(
                                     color: ColorConstants.loginScreenErrorTextColor,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.visible,
                                 ),
                               )
                           ),
@@ -210,6 +215,7 @@ class RegisterPage extends StatelessWidget {
                             StringConstants.registerScreenPrivacyPolicyText,
                             style: context.general.textTheme.labelLarge!.copyWith(
                               color: ColorConstants.registerScreenPrivacyPolicyTextColor,
+                              overflow: TextOverflow.visible,
                             ),),
                           TappableText(
                             onPressed: () {
@@ -233,6 +239,7 @@ class RegisterPage extends StatelessWidget {
                             text: StringConstants.registerScreenPrivacyPolicyLink,
                             textStyle: context.general.textTheme.labelLarge!.copyWith(
                               color: ColorConstants.registerScreenPrivacyPolicyLinkColor,
+                              overflow: TextOverflow.visible,
                             ),
                           ),
                         ],
@@ -252,7 +259,8 @@ class RegisterPage extends StatelessWidget {
                                 viewModel.generalErrorText,
                                 style: context.general.textTheme.titleSmall!.copyWith(
                                     color: ColorConstants.loginScreenErrorTextColor,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.visible,
                                 ),
                               )
                           ),
@@ -293,7 +301,8 @@ class RegisterPage extends StatelessWidget {
                           StringConstants.registerScreenAlreadyHaveAnAccount,
                           style: context.general.textTheme.labelLarge!.copyWith(
                             color: ColorConstants.registerScreenAlreadyHaveAnAccountColor,
-                            fontWeight: FontWeight.w500
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.visible,
                           ),
                         ),
                         Consumer<RegisterPageViewModel>(
@@ -305,7 +314,8 @@ class RegisterPage extends StatelessWidget {
                               text: StringConstants.registerScreenSignIn,
                               textStyle: context.general.textTheme.labelLarge!.copyWith(
                                 color: ColorConstants.registerScreenSignInColor,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.visible,
                               ),
                             );
                           }

@@ -8,6 +8,10 @@ class IconConstants {
   static const IconData arrowBack = Icons.arrow_back;
   static const IconData checkIcon = Icons.check;
   static const IconData exclamationIcon = Icons.error_outline;
-  static const IconData visibilityIcon = Icons.visibility;
-  static const IconData notVisibilityIcon = Icons.visibility_off;
+
+  static const IconData deleteAccountIcon = Icons.delete;
+
+  static const IconData snackErrorIcon = Icons.error;
+  static const IconData snackWarningIcon = Icons.warning;
+  static const IconData snackSuccessIcon = Icons.check_circle;
 }

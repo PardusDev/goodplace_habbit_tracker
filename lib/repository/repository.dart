@@ -7,5 +7,4 @@ class Repository {
   getMotivasyon() async{
    return await _apiService.getMotivation();
   }
-
 }

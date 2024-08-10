@@ -62,6 +62,20 @@ class StringConstants {
   static const String registerScreenPasswordNotMatch = "Passwords do not match.";
   //endregion
 
+  //region Onboarding screen strings
+  static const String onboardingPage1Title = 'Track Your Habit';
+  static const String onboardingPage1Subtitle = "Don't worry if you have trouble determining your goals, We can help you determine your goals and track your goals";
+
+  static const String onboardingPage2Title = 'Get Burn';
+  static const String onboardingPage2Subtitle = "Let's keep burning, to achive yours goals, it hurts only temporarily, if you give up now you will be in pain forever";
+
+  static const String onboardingPage3Title = 'Eat Well';
+  static const String onboardingPage3Subtitle = "Let's start a healthy lifestyle with us, we can determine your diet every day. healthy eating is fun";
+
+  static const String onboardingPage4Title = 'Morning Yoga';
+  static const String onboardingPage4Subtitle = "Let's start a healthy lifestyle with us, we can determine your diet every day. healthy eating is fun";
+  //endregion
+
   //region Firebase Auth Exceptions
   static const String invalidEmail = "The email address is badly formatted.";
   static const String wrongPassword = "The password is incorrect. Please try again.";
@@ -96,6 +110,20 @@ class StringConstants {
   static const String unauthenticated = 'You are not authenticated. Please log in and try again.';
   //endregion
 
+  // region Dio Exceptions
+  static const String requestCancelled = "Request to the server was cancelled.";
+  static const String connectionTimeout = "Connection timeout with the server.";
+  static const String sendTimeout = "Send timeout in connection with the server.";
+  static const String receiveTimeout = "Receive timeout in connection with the server.";
+  static const String badRequest = "Bad request.";
+  static const String unauthorized = "Unauthorized request.";
+  static const String forbidden = "Forbidden request.";
+  static const String dioNotFound = "Requested resource not found.";
+  static const String internalServerError = "Internal server error.";
+  static const String badCertificate = "Bad SSL certificate.";
+  static const String connectionError = "Connection error occurred.";
+  // endregion Dio Exceptions END
+
   //region Privacy Policy
   static const String privacyPolicy = 'Privacy Policy';
   static const String privacyPolicyText = 'This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from goodplace.com (the “Site”). ';
@@ -104,4 +132,16 @@ class StringConstants {
   //region Collapsable Bottom Sheet
   static const String collapsableBottomSheetClose = 'Close';
   //endregion
+
+  // region Settings screen strings
+  static const String settingsScreenTitle = "Settings";
+  static const String deleteAccount = "Delete Account";
+
+  // Delete Account Confirmation
+  static const String areYouSure = "Are you sure?";
+  static const String deleteAccountConfirmationText = "Are you sure you want to delete your account? This action cannot be undone.";
+  // endregion Settings screen strings END
+
+
+
 }

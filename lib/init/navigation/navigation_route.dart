@@ -7,6 +7,7 @@ import 'package:goodplace_habbit_tracker/widgets/NotFound.dart';
 import '../../animations/right_transition.dart';
 import '../../constants/navigator_constants.dart';
 import '../../pages/register/register_page.dart';
+import '../../pages/settings/settings_page.dart';
 import '../../pages/welcome/welcome_page.dart';
 
 @immutable
@@ -30,6 +31,8 @@ class NavigationRoute {
         return slideAnimatedRoute(const OnBoardingPage());
       case NavigatorConstants.HOME_PAGE:
         return slideAnimatedRoute(const HomePage());
+      case NavigatorConstants.SETTINGS_PAGE:
+        return slideAnimatedRoute(const SettingsPage());
       case NavigatorConstants.NOT_FOUND:
         return slideAnimatedRoute(const NotFound());
       default:

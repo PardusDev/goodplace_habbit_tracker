@@ -63,11 +63,32 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              // Handle settings tap
+              _mainModel.navigateToSettings();
             },
           ),
         ),
       ),
+      const SizedBox(height: 24,),
+      ListTile(
+        title: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF4d57c8),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ListTile(
+            leading: const Icon(Icons.logout, color: Colors.white),
+            title: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              if (mounted) {
+                _mainModel.signOut(context);
+              }
+            },
+          ),
+        ),
+      )
     ],
   ),
 ),

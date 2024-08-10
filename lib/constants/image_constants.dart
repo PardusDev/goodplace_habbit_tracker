@@ -13,9 +13,18 @@ class ImageConstants {
 
   static final String passwordHide = 'ic_password_hide'.iconToPng;
   static final String passwordShown = 'ic_password_shown'.iconToPng;
+
+  //region Onboarding
+  static final String onboardingButtonAsset = 'Button'.onboardingToPng;
+  static final String onboardingPage1 = 'page1'.onboardingToPng;
+  static final String onboardingPage2 = 'page2'.onboardingToPng;
+  static final String onboardingPage3 = 'page3'.onboardingToPng;
+  static final String onboardingPage4 = 'page4'.onboardingToPng;
+  //endregion
 }
 
 extension _StringPath on String {
   String get imageToPng => 'assets/images/$this.png';
   String get iconToPng => 'assets/icons/$this.png';
+  String get onboardingToPng => 'assets/onboarding/$this.png';
 }
