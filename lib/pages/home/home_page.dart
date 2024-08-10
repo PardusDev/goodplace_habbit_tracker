@@ -36,9 +36,41 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
         toolbarHeight: 100,
       ),
-      drawer: const Drawer(
-        backgroundColor: Color.fromARGB(255, 77, 87, 200),
+      drawer: Drawer(
+  backgroundColor: Colors.white,
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: [
+   const   DrawerHeader(
+        decoration: BoxDecoration(
+          color:  Color.fromARGB(255, 77, 87, 200),
+        ),
+        child:  Text(
+          'GoodPlace',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
       ),
+      ListTile(
+        title: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF4d57c8),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ListTile(
+            leading: const Icon(Icons.settings, color: Colors.white),
+            title: const Text(
+              'Settings',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              // Handle settings tap
+            },
+          ),
+        ),
+      ),
+    ],
+  ),
+),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -47,7 +79,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               _buildCalendar(size),
               const SizedBox(height: 30),
-              _buildCard(size, 120, _mainModel),
+              _buildCard(size, _mainModel),
               const SizedBox(height: 30),
               _buildStreakInfo(size),
               const SizedBox(height: 30),
@@ -110,10 +142,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCard(Size size, double height, HomePageViewModel _mainModel) {
+ Widget _buildCard(Size size, HomePageViewModel _mainModel) {
   return Container(
     width: size.width * 0.9,
-    height: height,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
@@ -121,23 +152,26 @@ class _HomePageState extends State<HomePage> {
     child: Center(
       child: _mainModel.motivasyon.isNotEmpty
           ? Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
               child: Text(
                 _mainModel.motivasyon,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    color: Color(0xFF4d57c8), fontWeight: FontWeight.bold),
+                    color: Color(0xFF4d57c8), fontWeight: FontWeight.bold, fontSize: 15),
               ),
             )
           : Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
-              child: Container(
-                width: size.width * 0.9, // Match the width of the outer container
-                height: height, // Match the height of the outer container
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), // Match the border radius
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 20.0,  // Adjust this height to match the expected size of the text
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
             ),
@@ -146,96 +180,123 @@ class _HomePageState extends State<HomePage> {
 }
 
 
-  Widget _buildStreakInfo(Size size) {
-    return Container(
-      width: size.width * 0.9,
-      height: 170,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "1 Day",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Your current streak",
-              style: TextStyle(
-                  color: Color.fromARGB(255, 80, 80, 80),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "1 Day",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Your longest streak",
-              style: TextStyle(
-                  color: Color.fromARGB(255, 80, 80, 80),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildIconCards(Size size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildIconCard(
-            size, Icons.calendar_today, '1 Day', Color.fromARGB(255, 255, 184, 184)),
-        const SizedBox(width: 20),
-        _buildIconCard(
-            size, Icons.check, '1 Day', Color.fromARGB(255, 220, 241, 153)),
-      ],
-    );
-  }
+ Widget _buildStreakInfo(Size size) {
+  return Container(
+    width: size.width * 0.9,
+    height: 170,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      image: const DecorationImage(
+        image: AssetImage("assets/images/Dots.png"), // Replace with your image asset
+        fit: BoxFit.cover,
+        alignment: Alignment(0, 0.5), // Move the image slightly downwards
+      ),
+    ),
+    child: const Padding(
+      padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "1 Day",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 35,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Your current streak",
+            style: TextStyle(
+                color: Color.fromARGB(255, 80, 80, 80),
+                fontSize: 12,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          Text(
+            "1 Day",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Your longest streak",
+            style: TextStyle(
+                color: Color.fromARGB(255, 80, 80, 80),
+                fontSize: 12,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
-  Widget _buildIconCard(Size size, IconData icon, String text, Color iconColor) {
-    return Container(
-      width: (size.width * 0.9 - 20) / 2,
-      height: 170,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+
+ Widget _buildIconCards(Size size) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildImageCard(size, 'assets/icons/calendar.png', '1 Day', "Total perfect days"),
+          const SizedBox(width: 20),
+          _buildImageCard(size, 'assets/icons/check.png', '1 Day', "Total complete days"),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: iconColor, size: 35),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(
-                  color: Color(0xFF4d57c8),
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
+      const SizedBox(height: 20),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildImageCard(size, 'assets/icons/hype.png', '%100', "Habit completion rate"),
+          const SizedBox(width: 20),
+          _buildImageCard(size, 'assets/icons/stats.png', '1.01', "Average per daily"),
+        ],
       ),
-    );
-  }
+    ],
+  );
+}
+
+Widget _buildImageCard(Size size, String imagePath, String text, String textdesc) {
+  return Container(
+    width: (size.width * 0.9 - 20) / 2,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(imagePath, height: 25, width: 25, fit: BoxFit.contain,),
+          const SizedBox(height: 10),
+          Text(
+            text,
+            style: const TextStyle(
+                color: Color(0xFF4d57c8),
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            textdesc,
+            style: const TextStyle(
+                color: Color(0xFF575757),
+                fontSize: 11,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
+    ),
+  );
+}
 }
 
 class _LegendItem extends StatelessWidget {
