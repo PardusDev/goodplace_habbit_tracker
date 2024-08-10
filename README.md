@@ -25,6 +25,9 @@ To get a local copy up and running follow these simple steps.
 
 ## Screenshots
 
+### Splash Page
+<img src="/screenshots/SplashPageScreenshot.png" alt="Screenshot from App" width="300" />
+
 ### Welcome Page
 <img src="/screenshots/WelcomePageScreenshot.png" alt="Screenshot from App" width="300" />
 <br><br>
@@ -47,6 +50,12 @@ To get a local copy up and running follow these simple steps.
 
 ### Home Page
 <img src="/screenshots/HomePageScreenshot.png" alt="Screenshot from App" width="300" />
+
+### Some Minor Pages
+<div style="display: flex; justify-content: space-between;">
+    <img src="/screenshots/NotFoundPageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/BottomModalScreenshot.png" alt="Screenshot from App" width="300" />
+</div>
 
 ## Contributors
 
