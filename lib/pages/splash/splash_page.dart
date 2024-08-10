@@ -31,31 +31,29 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.backgroundColor,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Image.asset(
-              width: context.sized.dynamicWidth(1),
-              height: context.sized.dynamicHeight(1),
-              ImageConstants.splashPageBg,
-              fit: BoxFit.fill,
-            ),
-            Center(
-              child: DefaultTextStyle(
-                style: context.general.textTheme.headlineMedium!.copyWith(
-                  color: ColorConstants.secondaryColor,
-                  fontWeight: FontWeight.w500,
-                ),
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    WavyAnimatedText(StringConstants.appName),
-                  ],
-                  isRepeatingAnimation: true,
-                ),
+      body: Stack(
+        children: [
+          Image.asset(
+            width: context.sized.dynamicWidth(1),
+            height: context.sized.dynamicHeight(1),
+            ImageConstants.splashPageBg,
+            fit: BoxFit.fill,
+          ),
+          Center(
+            child: DefaultTextStyle(
+              style: context.general.textTheme.headlineMedium!.copyWith(
+                color: ColorConstants.secondaryColor,
+                fontWeight: FontWeight.w500,
+              ),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  WavyAnimatedText(StringConstants.appName),
+                ],
+                isRepeatingAnimation: true,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
