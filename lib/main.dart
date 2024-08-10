@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:goodplace_habbit_tracker/locator.dart';
-import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
-import 'package:goodplace_habbit_tracker/route_generator.dart';
-import 'package:goodplace_habbit_tracker/viewmodels/main_viewmodel.dart';
+import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
+import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
+import 'package:goodplace_habbit_tracker/init/start/application_start.dart';
+import 'package:goodplace_habbit_tracker/pages/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
+import 'init/navigation/navigation_route.dart';
+import 'init/navigation/navigation_service.dart';
+import 'init/notifier/provider_list.dart';
+
 void main() async {
- WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => MainViewModel()),
-  ], child: const MyApp()));
+  await ApplicationStart.init();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key,});
+  const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GoodPlace',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [... ProviderList.instance.dependItems],
+      child: MaterialApp(
+        title: StringConstants.appName,
+        theme: ThemeData(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: ColorConstants.transparent,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: ColorConstants.primaryColor,
+          ),
+          useMaterial3: true,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const SplashPage(),
+        onGenerateRoute: NavigationRoute.instance.generateRoute,
+        navigatorKey: NavigationService.instance.navigatorKey,
       ),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: RouteGenerator.rotaOlustur,
-     home: const LoginPage(),
     );
   }
 }
-
