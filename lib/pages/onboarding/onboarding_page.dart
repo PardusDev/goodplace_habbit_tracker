@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OnBoarding extends StatefulWidget {
-  const OnBoarding({super.key});
+import '../../init/navigation/navigation_service.dart';
+
+class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({super.key});
 
   @override
-  State<OnBoarding> createState() => _OnBoardingState();
+  State<OnBoardingPage> createState() => _OnBoardingPageState();
 }
 
-class _OnBoardingState extends State<OnBoarding> {
+class _OnBoardingPageState extends State<OnBoardingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  NavigationService navigationService = NavigationService.instance;
 
   final List<Widget> _pages = [];
 
@@ -95,7 +98,7 @@ class _OnBoardingState extends State<OnBoarding> {
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding', true);
-      Navigator.pushReplacementNamed(context, '/home'); // Assuming you have a route named '/home'
+      navigationService.navigateToPageClear("/home", null);
     }
   }
 

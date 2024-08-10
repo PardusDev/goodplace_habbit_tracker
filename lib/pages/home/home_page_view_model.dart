@@ -4,7 +4,7 @@ import 'package:goodplace_habbit_tracker/repository/repository.dart';
 
 enum ViewState { geliyor, geldi, hata }
 
-class MainViewModel with ChangeNotifier {
+class HomePageViewModel with ChangeNotifier {
   final Repository _repository = locator<Repository>();
   ViewState _state = ViewState.geliyor;
   ViewState get state => _state;
@@ -15,10 +15,8 @@ class MainViewModel with ChangeNotifier {
   }
 
 
-getMotivasyon()async{
-  motivasyon = await _repository.getMotivasyon();
-    notifyListeners();
-}
-
-  
+  getMotivasyon()async{
+    motivasyon = await _repository.getMotivasyon();
+      notifyListeners();
+  }
 }

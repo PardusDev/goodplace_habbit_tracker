@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../firebase_options.dart';
+import '../../locator.dart';
 
 @immutable
 class ApplicationStart {
@@ -10,6 +11,7 @@ class ApplicationStart {
 
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
+    setupLocator();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

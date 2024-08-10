@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/pages/home/home_page.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
+import 'package:goodplace_habbit_tracker/pages/onboarding/onboarding_page.dart';
 import 'package:goodplace_habbit_tracker/widgets/NotFound.dart';
 
 import '../../animations/right_transition.dart';
@@ -24,6 +26,10 @@ class NavigationRoute {
         return slideAnimatedRoute(const LoginPage());
       case NavigatorConstants.REGISTER_PAGE:
         return slideAnimatedRoute(const RegisterPage());
+      case NavigatorConstants.ONBOARDING_PAGE:
+        return slideAnimatedRoute(const OnBoardingPage());
+      case NavigatorConstants.HOME_PAGE:
+        return slideAnimatedRoute(const HomePage());
       case NavigatorConstants.NOT_FOUND:
         return slideAnimatedRoute(const NotFound());
       default:

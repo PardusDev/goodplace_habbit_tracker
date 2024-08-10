@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goodplace_habbit_tracker/viewmodels/main_viewmodel.dart';
+import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -12,12 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late MainViewModel _mainModel;
+  late HomePageViewModel _mainModel;
 
   @override
   void initState() {
     super.initState();
-    _mainModel = Provider.of<MainViewModel>(context, listen: false);
+    _mainModel = Provider.of<HomePageViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _mainModel.getMotivasyon();
     });
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _mainModel = Provider.of<MainViewModel>(context, listen: true);
+    _mainModel = Provider.of<HomePageViewModel>(context, listen: true);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 77, 87, 200),
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCard(Size size, double height, MainViewModel _mainModel) {
+  Widget _buildCard(Size size, double height, HomePageViewModel _mainModel) {
   return Container(
     width: size.width * 0.9,
     height: height,

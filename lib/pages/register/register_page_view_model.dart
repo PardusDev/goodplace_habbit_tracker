@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/string_constants.dart';
 
@@ -179,10 +180,7 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
         setRegistering(false);
         return;
       }
-      // Navigate to home screen.
-      // The home screen not implemented yet.
-      // Therefore navigate to welcome screen.
-      navigationService.navigateToPageClear('/welcome', null);
+      goToTheOnboardingIfNecessary();
     } catch (e) {
       setGeneralErrorText(e.toString());
     } finally {
@@ -196,8 +194,20 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       }
+      goToTheOnboardingIfNecessary();
     } catch (e) {
       setGeneralErrorText(e.toString());
+    }
+  }
+
+  void goToTheOnboardingIfNecessary() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seenOnboarding = prefs.getBool('onboarding') ?? false;
+
+    if (seenOnboarding) {
+      navigationService.navigateToPageClear("/home", null);
+    } else {
+      navigationService.navigateToPageClear("/onboarding", null);
     }
   }
 

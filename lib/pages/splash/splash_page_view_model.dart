@@ -27,7 +27,7 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 2500));
     if (user != null) {
       // TODO: Navigate to home page.
-      navigationService.navigateToPageClear(("/not_found"), null);
+      navigationService.navigateToPageClear(("/home"), null);
     } else {
       navigationService.navigateToPageClear("/welcome", null);
     }

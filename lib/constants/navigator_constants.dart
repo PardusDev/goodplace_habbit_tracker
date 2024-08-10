@@ -9,5 +9,7 @@ class NavigatorConstants {
   static const WELCOME_PAGE = "/welcome";
   static const LOGIN_PAGE = "/login";
   static const REGISTER_PAGE = "/register";
+  static const ONBOARDING_PAGE = "/onboarding";
   static const NOT_FOUND = "/not_found";
+  static const HOME_PAGE = "/home";
 }

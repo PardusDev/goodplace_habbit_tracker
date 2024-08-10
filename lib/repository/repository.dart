@@ -5,7 +5,7 @@ class Repository {
   final ApiService _apiService = locator<ApiService>();
 
   getMotivasyon() async{
-   return await _apiService.getMotivasyon();
+   return await _apiService.getMotivation();
   }
 
 }
