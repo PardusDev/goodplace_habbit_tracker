@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "42325381046",
+    "project_id": "goodplace-habbit-tracker",
+    "storage_bucket": "goodplace-habbit-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42325381046:android:bf57bc64d453b85d1abb17",
+        "android_client_info": {
+          "package_name": "com.miluni.goodplace_habbit_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42325381046-jp44r7oehivr6st318rpla08be2ipmu2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miluni.goodplace_habbit_tracker",
+            "certificate_hash": "1e59b9501ffe24fbaae5a85f6cea71cdbfa61f66"
+          }
+        },
+        {
+          "client_id": "42325381046-3rpafr5vtgc6d9v061l46dv1jcf6es5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt-mSKV4BAZVm-y3kMG0342ChRvEHqnX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42325381046-3rpafr5vtgc6d9v061l46dv1jcf6es5h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "42325381046-vmn9ciifgqhvc5r5ekvpchch64kvaa2v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.miluni.goodplaceHabbitTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
