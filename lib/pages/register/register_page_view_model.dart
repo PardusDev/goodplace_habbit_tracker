@@ -193,8 +193,9 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       user = await _authService.signInWithGoogle();
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
+      } else {
+        goToTheOnboardingIfNecessary();
       }
-      goToTheOnboardingIfNecessary();
     } catch (e) {
       setGeneralErrorText(e.toString());
     }

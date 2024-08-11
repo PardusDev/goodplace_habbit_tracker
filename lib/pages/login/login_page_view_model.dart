@@ -53,8 +53,9 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
       user = await _authService.signInWithGoogle();
       if (user == null) {
         setErrorText(StringConstants.anErrorOccured);
+      } else {
+        goToTheOnboardingIfNecessary();
       }
-      goToTheOnboardingIfNecessary();
     } catch (e) {
       setErrorText(e.toString());
     }
