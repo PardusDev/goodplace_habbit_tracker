@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 
 class ConfirmAlertDialog extends StatelessWidget {
   final String title;
@@ -15,13 +16,13 @@ class ConfirmAlertDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: const Text('Cancel'),
+          child: const Text(StringConstants.alertDialogCancel),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: const Text('Confirm'),
+          child: const Text(StringConstants.alertDialogConfirm),
         ),
       ],
     );

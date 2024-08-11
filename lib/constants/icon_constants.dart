@@ -9,6 +9,8 @@ class IconConstants {
   static const IconData checkIcon = Icons.check;
   static const IconData exclamationIcon = Icons.error_outline;
 
+  static const IconData continueButtonIcon = Icons.chevron_right;
+
   static const IconData deleteAccountIcon = Icons.delete;
 
   static const IconData snackErrorIcon = Icons.error;

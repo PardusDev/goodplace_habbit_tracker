@@ -15,7 +15,6 @@ class ImageConstants {
   static final String passwordShown = 'ic_password_shown'.iconToPng;
 
   //region Onboarding
-  static final String onboardingButtonAsset = 'Button'.onboardingToPng;
   static final String onboardingPage1 = 'page1'.onboardingToPng;
   static final String onboardingPage2 = 'page2'.onboardingToPng;
   static final String onboardingPage3 = 'page3'.onboardingToPng;

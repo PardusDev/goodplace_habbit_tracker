@@ -133,9 +133,16 @@ class StringConstants {
   static const String collapsableBottomSheetClose = 'Close';
   //endregion
 
+  // region Alert Dialog
+  static const String alertDialogOk = 'OK';
+  static const String alertDialogConfirm = 'Confirm';
+  static const String alertDialogCancel = 'Cancel';
+  // endregion
+
   // region Settings screen strings
   static const String settingsScreenTitle = "Settings";
   static const String deleteAccount = "Delete Account";
+  // endregion
 
   // Delete Account Confirmation
   static const String areYouSure = "Are you sure?";

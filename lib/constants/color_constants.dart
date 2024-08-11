@@ -73,5 +73,14 @@ class ColorConstants {
   static const Color successSnackBarColor = Color(0xFF6CB28E);
   // endregion
 
+  // region CircularButtonGappedBorder
+  static const Color continueButtonIconColor = Color(0xFFEFEFEF);
+  static const Color continueButtonFullBorderColor = Color(0xFFF7F8F8);
+  static const List<Color> continueButtonColors = [
+    Color(0xFF9DCEFF),
+    Color(0xFF92A3FD)
+  ];
+  // endregion
+
 
 }

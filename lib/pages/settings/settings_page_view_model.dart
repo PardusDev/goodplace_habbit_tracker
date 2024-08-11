@@ -10,8 +10,16 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
   final _navigationService = NavigationService.instance;
   final _authService = AuthService();
 
+  bool _isDeleteAccountLoading = false;
+
+  bool get isDeleteAccountLoading => _isDeleteAccountLoading;
+
   void deleteAccount(BuildContext buildContext) async {
+    if (_isDeleteAccountLoading) return;
+
     try {
+      _isDeleteAccountLoading = true;
+      notifyListeners();
       await _authService.deleteAccountPermanently();
       signOut(buildContext);
     } catch (e) {
@@ -20,6 +28,9 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
               e.toString()
           )
       );
+    } finally {
+      _isDeleteAccountLoading = false;
+      notifyListeners();
     }
   }
 

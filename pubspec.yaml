@@ -49,10 +49,19 @@ dependencies:
   # For package info (version, build number, etc)
   package_info_plus: ^6.0.0
 
+  # For local storage
   shared_preferences: ^2.0.13
+
+    # For calendar in home screen
   table_calendar: ^3.0.9
+
+  # Dependency injection
   get_it: ^7.7.0
+
+  # Dio for network requests
   dio: ^5.5.0+1
+
+  # Shimmer effect
   shimmer: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.

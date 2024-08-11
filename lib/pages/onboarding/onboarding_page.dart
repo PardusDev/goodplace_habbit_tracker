@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/widgets/CircularButtonGappedBorder.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/color_constants.dart';
-import '../../constants/image_constants.dart';
 import 'onboarding_page_view_model.dart';
 
 class OnBoardingPage extends StatelessWidget {
@@ -23,18 +23,19 @@ class OnBoardingPage extends StatelessWidget {
       ),
       floatingActionButton: Consumer<OnBoardingPageViewModel>(
         builder: (context, viewModel, child) {
-          return GestureDetector(
-            onTap: viewModel.nextPage,
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: ColorConstants.transparent,
-              ),
-              child: Image.asset(ImageConstants.onboardingButtonAsset),
-            ),
+          return CircularButtonGappedBorder(
+            buttonBackground: ColorConstants.primaryColor,
+            onPressed: viewModel.nextPage,
+            padding: const EdgeInsets.all(24),
+            quarterBorderColor: ColorConstants.primaryColor,
+            quarterBorderWidth: 3,
+            quarterBorderGap: 14,
+            fullBorderColor: ColorConstants.secondaryColor,
+            fullBorderWidth: 0.05,
+            fullBorderGap: 14,
           );
-        },
-      )
+        }
+      ),
     );
   }
 }
