@@ -18,12 +18,17 @@ To get a local copy up and running follow these simple steps.
 ## Used Packages
 - [firebase_core](https://pub.dev/packages/firebase_core) for Firebase initialization
 - [firebase_auth](https://pub.dev/packages/firebase_auth) for user registration
+- [google_sign_in](https://pub.dev/packages/google_sign_in) for Google Sign In
 - [cloud_firestore](https://pub.dev/packages/cloud_firestore) for database tasks
 - [provider](https://pub.dev/packages/provider) for state management
+- [shared_preferences](https://pub.dev/packages/shared_preferences) for storing user data
 - [dio](https://pub.dev/packages/dio) for API tasks
 - [kartal](https://pub.dev/packages/kartal) for consistent UI
 - [animated_text_kit](https://pub.dev/packages/animated_text_kit) for animated text
 - [package_info_plus](https://pub.dev/packages/package_info_plus) for getting package info
+- [shimmer](https://pub.dev/packages/shimmer) for shimmer effect
+- [get_it](https://pub.dev/packages/get_it) for dependency injection
+- [table_calendar](https://pub.dev/packages/table_calendar) for calendar widget on the home page
 
 ## Screenshots
 
