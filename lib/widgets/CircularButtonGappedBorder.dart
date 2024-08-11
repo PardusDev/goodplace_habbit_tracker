@@ -55,11 +55,12 @@ class CircularButtonGappedBorder extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
-            padding: padding,
-            backgroundColor: ColorConstants.primaryColor,
+            padding: const EdgeInsets.all(0)
           ),
           child: Ink(
+            padding: padding,
             decoration: const BoxDecoration(
+              shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: ColorConstants.continueButtonColors,
                   begin: Alignment.topLeft,

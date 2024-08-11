@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 
 class QuarterBorderPainter extends CustomPainter {
   final Color borderColor;
@@ -8,12 +9,17 @@ class QuarterBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+
     final paint = Paint()
-      ..color = borderColor
+      ..shader = const LinearGradient(
+        colors: ColorConstants.continueButtonColors,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(rect)
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
     const startAngle = 3 * 3.14 / 2;
     const sweepAngle = 3.14 / 2;
 
