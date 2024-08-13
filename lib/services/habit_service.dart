@@ -67,7 +67,7 @@ class HabitService {
   //endregion
 
   //region Get user habits
-  Future<List<UserHabit>?> getUserHabits(User user) async {
+  Future<List<UserHabit>> getUserHabits(User user) async {
     try {
       final querySnapshot = await _firestore.collection("users").doc(user.uid).collection("habits").get();
       return querySnapshot.docs.map((doc) => UserHabit.fromDocument(doc)).toList();
@@ -76,7 +76,7 @@ class HabitService {
     } catch (e) {
       throw e;
     }
-    return null;
+    return [];
   }
   //endregion
 }

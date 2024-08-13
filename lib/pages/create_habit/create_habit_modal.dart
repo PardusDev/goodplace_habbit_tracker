@@ -16,7 +16,7 @@ class CreateHabitModal extends StatelessWidget {
         return CollapsableBottomSheetMultipleWidget(
             title: StringConstants.createHabitScreenTitle,
             buttonText: StringConstants.createHabitScreenCreateButton,
-            onPressed: viewModel.getUserHabits,
+            onPressed: viewModel.createHabit,
             children: const [
               OneLineInputField(hintText: StringConstants.createHabitScreenNameHint),
               OneLineInputField(hintText: StringConstants.createHabitScreenSubjectHint),

@@ -19,10 +19,10 @@ class ProviderList {
 
   List<SingleChildWidget> dependItems = [
     ChangeNotifierProvider(create: (_) => AppUserManager()),
-    ChangeNotifierProvider(create: (_) => SplashPageViewModel()),
-    ChangeNotifierProvider(create: (_) => LoginPageViewModel()),
-    ChangeNotifierProvider(create: (_) => RegisterPageViewModel()),
-    ChangeNotifierProvider(create: (_) => OnBoardingPageViewModel()),
+    ChangeNotifierProvider(create: (_) => SplashPageViewModel(), lazy: true),
+    ChangeNotifierProvider(create: (_) => LoginPageViewModel(), lazy: true),
+    ChangeNotifierProvider(create: (_) => RegisterPageViewModel(), lazy: true),
+    ChangeNotifierProvider(create: (_) => OnBoardingPageViewModel(), lazy: true),
     ChangeNotifierProvider(create: (_) => HomePageViewModel()),
     ChangeNotifierProvider(create: (_) => CreateHabitModalViewModel()),
     ChangeNotifierProvider(create: (_) => SettingsPageViewModel()),

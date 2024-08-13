@@ -28,14 +28,4 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       throw e;
     }
   }
-
-  void getUserHabits() async {
-    final user = _authService.getCurrentUser();
-    if (user != null) {
-      final test = await _habitService.getUserHabits(user);
-      print(test);
-    } else {
-      print('User not found.');
-    }
-  }
 }

@@ -88,6 +88,11 @@ class ColorConstants {
 
   static const Color homePageAddHabbitButtonBackgroundColor = Color(0xFF4D57C8);
   static const Color homePageAddHabbitButtonIconColor = Color(0xFFFFFFFF);
+  static const Color homePageHabitListTileTitleColor = Color(0xFFEFEFEF);
+  static const Color homePageHabitListTileButtonColor = Color(0xFF4D57C8);
+  static const Color homePageHabitListTileButtonTextColor = Color(0xFFFFFFFF);
+  static const Color homePageCompletedHabitListTileButton = Color(0xFFA1A4B2);
+  static const Color homePageCompletedHabitListTileButtonTextColor = Color(0xFF3F414E);
   // endregion
 
 
