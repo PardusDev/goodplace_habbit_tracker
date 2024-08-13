@@ -5,18 +5,16 @@ import 'package:goodplace_habbit_tracker/models/DoneHabit.dart';
 import 'package:goodplace_habbit_tracker/models/UserHabit.dart';
 
 class HabitService {
-  final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
 
   HabitService({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore})
-  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-    _firestore = firestore ?? FirebaseFirestore.instance;
+  : _firestore = firestore ?? FirebaseFirestore.instance;
 
   //region Check habit and doneHabit collections
-  Future<bool> checkIfDoneHabitExists(String userId, DoneHabit doneHabit) async {
+  Future<bool> checkIfDoneHabitExists(User user, DoneHabit doneHabit) async {
     try {
       final querySnapshot = await _firestore
-          .collection("users").doc(userId)
+          .collection("users").doc(user.uid)
           .collection("habits").doc(doneHabit.habitId)
           .collection("doneHabits").doc(doneHabit.id)
           .get();
@@ -34,10 +32,10 @@ class HabitService {
     }
   }
 
-  Future<bool> checkIfHabitExists(String userId, UserHabit userHabit) async {
+  Future<bool> checkIfHabitExists(User user, UserHabit userHabit) async {
     try {
       final habitsCollection = await _firestore
-          .collection("users").doc(userId)
+          .collection("users").doc(user.uid)
           .collection("habit").doc(userHabit.habitId)
           .get();
       if (habitsCollection.exists) {
@@ -56,9 +54,9 @@ class HabitService {
   //endregion
 
   //region Create a habit
-  Future<void> addNewHabit(String uid, UserHabit userHabit) async {
+  Future<void> addNewHabit(User user, UserHabit userHabit) async {
     try {
-      final habitRef = _firestore.collection("users").doc(uid).collection("habits").doc();
+      final habitRef = _firestore.collection("users").doc(user.uid).collection("habits").doc();
       await habitRef.set(userHabit.toDocument());
     } on FirebaseException catch (e) {
       handleFirebaseException(e);
@@ -66,4 +64,19 @@ class HabitService {
       throw e;
     }
   }
+  //endregion
+
+  //region Get user habits
+  Future<List<UserHabit>?> getUserHabits(User user) async {
+    try {
+      final querySnapshot = await _firestore.collection("users").doc(user.uid).collection("habits").get();
+      return querySnapshot.docs.map((doc) => UserHabit.fromDocument(doc)).toList();
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+      throw e;
+    }
+    return null;
+  }
+  //endregion
 }

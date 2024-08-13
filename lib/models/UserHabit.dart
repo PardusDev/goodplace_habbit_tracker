@@ -15,14 +15,14 @@ class UserHabit {
   factory UserHabit.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return UserHabit(
-      habitId: data["habitId"],
+      habitId: doc.id,
       title: data["title"],
       subject: data["subject"],
       imagePath: data["imagePath"],
       createdAt: (data["createdAt"] as Timestamp).toDate(),
-      doneHabits: (data["doneHabits"] as List)
-          .map((item) => DoneHabit.fromMap(item))
-          .toList(),
+      doneHabits: (data["doneHabits"] as List?)
+          ?.map((item) => DoneHabit.fromMap(item))
+          .toList() ?? [],
     );
   }
 

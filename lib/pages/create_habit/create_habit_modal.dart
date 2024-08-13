@@ -15,13 +15,8 @@ class CreateHabitModal extends StatelessWidget {
       builder: (context, viewModel, child) {
         return CollapsableBottomSheetMultipleWidget(
             title: StringConstants.createHabitScreenTitle,
-            /*
-                                      TODO: In production, this value cannot be constant.
-                                        It needs to be fetched from the API.
-                                        Currently, since we are in developer mode, it is a fixed value for demo purposes.
-                                      */
             buttonText: StringConstants.createHabitScreenCreateButton,
-            onPressed: viewModel.createHabit,
+            onPressed: viewModel.getUserHabits,
             children: const [
               OneLineInputField(hintText: StringConstants.createHabitScreenNameHint),
               OneLineInputField(hintText: StringConstants.createHabitScreenSubjectHint),

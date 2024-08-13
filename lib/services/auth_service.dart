@@ -17,7 +17,7 @@ class AuthService {
     _firestore = firestore ?? FirebaseFirestore.instance,
     _googleSignIn = googleSignIn ?? GoogleSignIn();
 
-  Future<User?> getCurrentUser() async {
+  User? getCurrentUser() {
     try {
       return _firebaseAuth.currentUser;
     } on FirebaseAuthException catch (e) {
@@ -88,7 +88,7 @@ class AuthService {
         AppUser newUser = AppUser(
           uid: userCredential.user!.uid,
           email: email,
-          name: name ?? '',
+          name: name,
         );
         registerUserToDocuments(newUser);
       }
