@@ -102,6 +102,38 @@ class RegisterPage extends StatelessWidget {
 
                   //region */*/*/ Form */*/*/*
                   Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OneLineInputFieldValidable(
+                          hintText: StringConstants.registerScreenNameHint,
+                          onChanged: viewModel.onNameChanged,
+                          controller: viewModel.nameController,
+                          isValid: viewModel.nameValid,
+                        );
+                      }
+                  ),
+
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.nameErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.nameErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                  color: ColorConstants.loginScreenErrorTextColor,
+                                  fontWeight: FontWeight.w500,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              )
+                          ),
+                        );
+                      }
+                  ),
+
+                  const Spacer(),
+
+                  Consumer<RegisterPageViewModel>(
                     builder: (context, viewModel, child) {
                       return OneLineInputFieldValidable(
                         hintText: StringConstants.registerScreenEmailHint,

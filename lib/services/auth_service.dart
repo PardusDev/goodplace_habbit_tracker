@@ -81,9 +81,17 @@ class AuthService {
 
 
 
-  Future<User?> registerWithEmailAndPassword(String email, String password) async {
+  Future<User?> registerWithEmailAndPassword(String name, String email, String password) async {
     try {
       UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      if (userCredential.user != null) {
+        AppUser newUser = AppUser(
+          uid: userCredential.user!.uid,
+          email: email,
+          name: name ?? '',
+        );
+        registerUserToDocuments(newUser);
+      }
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);

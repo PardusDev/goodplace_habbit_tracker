@@ -207,7 +207,7 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     setRegistering(true);
 
     try {
-      user = await _authService.registerWithEmailAndPassword(email, password);
+      user = await _authService.registerWithEmailAndPassword(name, email, password);
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
         setRegistering(false);

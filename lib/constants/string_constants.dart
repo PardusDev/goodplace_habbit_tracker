@@ -39,6 +39,7 @@ class StringConstants {
   //region Register screen strings
   static const String registerScreenTitle = 'Create your account';
   static const String registerScreenOrText = 'OR SIGN UP WITH EMAIL';
+  static const String registerScreenNameHint = 'Name';
   static const String registerScreenEmailHint = "Email address";
   static const String registerScreenPasswordHint = "Password";
   static const String registerScreenRetypePasswordHint = "Retype Password";
