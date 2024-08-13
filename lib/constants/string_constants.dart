@@ -63,8 +63,6 @@ class StringConstants {
   static const String registerScreenPasswordShouldContainLetter = "Password should contain at least one letter.";
   static const String registerScreenCannotContainSpace = "Password cannot contain space.";
   static const String registerScreenPrivacyPolicyNotChecked = "Please accept the Privacy Policy.";
-
-  static const String registerScreenPasswordNotMatch = "Passwords do not match.";
   //endregion
 
   //region Onboarding screen strings

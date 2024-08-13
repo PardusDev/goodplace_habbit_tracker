@@ -12,20 +12,17 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
   User? user;
   bool _privacyPolicyChecked = false;
 
   String _nameErrorText = '';
   String _emailErrorText = '';
   String _passwordErrorText = '';
-  String _rePasswordErrorText = '';
   String _generalErrorText = '';
 
   bool _nameValid = false;
   bool _emailValid = false;
   bool _passwordValid = false;
-  bool _confirmPasswordValid = false;
   bool _registering = false;
 
   RegisterPageViewModel();
@@ -33,18 +30,15 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   String get nameErrorText => _nameErrorText;
   String get emailErrorText => _emailErrorText;
   String get passwordErrorText => _passwordErrorText;
-  String get rePasswordErrorText => _rePasswordErrorText;
   String get generalErrorText => _generalErrorText;
 
   String get name => nameController.text;
   String get email => emailController.text;
   String get password => passwordController.text;
-  String get confirmPassword => confirmPasswordController.text;
 
   bool get nameValid => _nameValid;
   bool get emailValid => _emailValid;
   bool get passwordValid => _passwordValid;
-  bool get confirmPasswordValid => _confirmPasswordValid;
 
   bool get privacyPolicyChecked => _privacyPolicyChecked;
 
@@ -151,30 +145,6 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   }
   // PASSWD END *************************************
 
-  // CONFIRM PASSWD *************************************
-  void onConfirmPasswordChanged(String value) {
-    final result = _validateConfirmPassword(value);
-    _confirmPasswordValid = result['isValid'];
-    setConfirmPasswordErrorText(result['errorText']);
-  }
-
-  Map<String, dynamic> _validateConfirmPassword(String value) {
-    if (value.isEmpty) {
-      return {'errorText': StringConstants.registerScreenPasswordCantBeEmpty, 'isValid': false};
-    }
-    else if (value != passwordController.text) {
-      return {'errorText': StringConstants.registerScreenPasswordNotMatch, 'isValid': false};
-    }
-    else {
-      return {'errorText': '', 'isValid': true};
-    }
-  }
-
-  void setConfirmPasswordErrorText(String error) {
-    _rePasswordErrorText = error;
-    notifyListeners();
-  }
-  // CONFIRM PASSWD END *************************************
   void updatePrivacyPolicyChecked(bool isChecked) {
     _privacyPolicyChecked = isChecked;
     if (generalErrorText == StringConstants.registerScreenPrivacyPolicyNotChecked && isChecked) {
@@ -190,11 +160,9 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     /*
     print(!emailValid));
     print(!passwordValid);
-    print(confirmPasswordValid);
     */
 
-    // Check if the email, password and confirm password is valid
-    if (!emailValid || !passwordValid || !confirmPasswordValid) {
+    if (!emailValid || !passwordValid) {
       return;
     }
 
