@@ -1,3 +1,4 @@
+import 'package:goodplace_habbit_tracker/managers/AppUserManager.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/pages/onboarding/onboarding_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/pages/register/register_page_view_model.dart';
@@ -17,6 +18,7 @@ class ProviderList {
   ProviderList._();
 
   List<SingleChildWidget> dependItems = [
+    ChangeNotifierProvider(create: (_) => AppUserManager()),
     ChangeNotifierProvider(create: (_) => SplashPageViewModel()),
     ChangeNotifierProvider(create: (_) => LoginPageViewModel()),
     ChangeNotifierProvider(create: (_) => RegisterPageViewModel()),

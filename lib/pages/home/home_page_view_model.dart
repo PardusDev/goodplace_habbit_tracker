@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
 import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
+import 'package:provider/provider.dart';
 
+import '../../managers/AppUserManager.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -33,10 +36,25 @@ class HomePageViewModel with ChangeNotifier {
     }
   }
 
+  /// Get user details from Firebase and set it to AppUserManager
+  void getUserInformation(BuildContext buildContext) {
+    try {
+      User? firebaseUser = _authService.getCurrentUser();
+      _authService.getUserByUID(firebaseUser!.uid).then((value) {
+        // Set user to AppUserManager
+        Provider.of<AppUserManager>(buildContext, listen: false).setUser(value!);
+      });
+    } catch (e) {
+      // TODO: Handle this error
+      print(e);
+    }
+  }
+
   void signOut(BuildContext buildContext) async {
     try {
       await _authService.signOut();
       _navigationService.navigateToPageClear("/welcome", null);
+      Provider.of<AppUserManager>(buildContext, listen: false).clearUser();
     } catch (e) {
       ScaffoldMessenger.of(buildContext).showSnackBar(
           errorSnackBar(

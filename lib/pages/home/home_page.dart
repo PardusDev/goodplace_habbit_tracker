@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     _mainModel = Provider.of<HomePageViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _mainModel.getMotivasyon();
+      _mainModel.getUserInformation(context);
     });
   }
 
@@ -204,6 +205,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+          // TODO: Add your habit list here. (Don't forget to use Shimmer for loading state)
+          // For example: _buildHabitItem('Drink water', 'Every 2 hours', 'assets/icons/water.png'),
+          // And add a button for (I did it!)
         ],
       ),
     );

@@ -111,12 +111,13 @@ class AuthService {
     }
   }
 
-  // Get the uid of the current and search it in the 'users' collection
+  /// Don't forget: This method getting the user from the Firestore
   Future<AppUser?> getUserByUID(String uid) async {
     try {
       DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
-        return AppUser.fromDocument(doc);
+        final result = AppUser.fromDocument(doc);
+        return result;
       }
       return null;
     } on FirebaseException catch (e) {
