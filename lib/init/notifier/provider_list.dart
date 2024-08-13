@@ -5,6 +5,7 @@ import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../pages/create_habit/create_habit_modal_view_model.dart';
 import '../../pages/settings/settings_page_view_model.dart';
 import '../../pages/splash/splash_page_view_model.dart';
 
@@ -21,6 +22,7 @@ class ProviderList {
     ChangeNotifierProvider(create: (_) => RegisterPageViewModel()),
     ChangeNotifierProvider(create: (_) => OnBoardingPageViewModel()),
     ChangeNotifierProvider(create: (_) => HomePageViewModel()),
+    ChangeNotifierProvider(create: (_) => CreateHabitModalViewModel()),
     ChangeNotifierProvider(create: (_) => SettingsPageViewModel()),
   ];
 }

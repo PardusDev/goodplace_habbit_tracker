@@ -36,6 +36,13 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
         toolbarHeight: 100,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _mainModel.showCreateHabitModal(context);
+        },
+        child: const Icon(Icons.settings),
+        backgroundColor: const Color(0xFF4d57c8),
+      ),
       drawer: Drawer(
   backgroundColor: Colors.white,
   child: ListView(
