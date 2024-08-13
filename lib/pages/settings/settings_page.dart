@@ -14,76 +14,81 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<SettingsPageViewModel>();
+    return ChangeNotifierProvider(
+      create: (context) => SettingsPageViewModel(),
+      child: Scaffold(
+        backgroundColor: ColorConstants.backgroundColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Padding(
+            padding: context.padding.normal,
+            child: Column(
+              children: [
+                //region Back Button
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Consumer<SettingsPageViewModel>(
+                          builder: (context, viewModel, child) {
+                            return BackButtonWithBorder(
+                              onPressed: () {
+                                viewModel.navigateToBack();
+                              },
+                            );
+                          },
+                        ),
+                        context.sized.emptySizedWidthBoxLow3x,
+                        Text(
+                          StringConstants.settingsScreenTitle,
+                          style: context.general.textTheme.headlineMedium!.copyWith(
+                            color: ColorConstants.secondaryColor,
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+                //endregion Back Button End
 
-    return Scaffold(
-      backgroundColor: ColorConstants.backgroundColor,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Padding(
-          padding: context.padding.normal,
-          child: Column(
-            children: [
-              //region Back Button
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      Consumer<SettingsPageViewModel>(
-                        builder: (context, viewModel, child) {
-                          return BackButtonWithBorder(
-                            onPressed: () {
-                              viewModel.navigateToBack();
+                Expanded(
+                  flex: 8,
+                  child: Consumer<SettingsPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return ListView(
+                        children: [
+                          //region */*/*/* Delete Account */*/*/*
+                          ListTile(
+                            leading: const Icon(
+                              IconConstants.deleteAccountIcon,
+                              color: ColorConstants.deleteAccountButtonColor,
+                            ),
+                            title: Text(
+                              StringConstants.deleteAccount,
+                              style: context.general.textTheme.titleMedium!.copyWith(
+                                color: ColorConstants.settingsScreenItemTextColor,
+                              ),
+                            ),
+                            onTap: () async {
+                              bool confirmed = await _showConfirmationDialog(context);
+                              if (confirmed) {
+                                viewModel.deleteAccount(context);
+                              }
                             },
-                          );
-                        },
-                      ),
-                      context.sized.emptySizedWidthBoxLow3x,
-                      Text(
-                        StringConstants.settingsScreenTitle,
-                        style: context.general.textTheme.headlineMedium!.copyWith(
-                          color: ColorConstants.secondaryColor,
-                        ),
-                      ),
-                    ],
-                  )
+                          ),
+                          //endregion */*/*/* Delete Account End */*/*/*
+
+                          //region */*
+                        ]
+                      );
+                    }
+                  ),
                 ),
-              ),
-              //endregion Back Button End
 
-              Expanded(
-                flex: 8,
-                child: ListView(
-                  children: [
-                    //region */*/*/* Delete Account */*/*/*
-                    ListTile(
-                      leading: const Icon(
-                        IconConstants.deleteAccountIcon,
-                        color: ColorConstants.deleteAccountButtonColor,
-                      ),
-                      title: Text(
-                        StringConstants.deleteAccount,
-                        style: context.general.textTheme.titleMedium!.copyWith(
-                          color: ColorConstants.settingsScreenItemTextColor,
-                        ),
-                      ),
-                      onTap: () async {
-                        bool confirmed = await _showConfirmationDialog(context);
-                        if (confirmed) {
-                          viewModel.deleteAccount(context);
-                        }
-                      },
-                    ),
-                    //endregion */*/*/* Delete Account End */*/*/*
-
-                    //region */*
-                  ]
-                ),
-              ),
-
-              const Spacer(),
-            ],
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),

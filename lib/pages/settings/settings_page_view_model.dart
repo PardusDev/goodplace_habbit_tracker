@@ -16,7 +16,7 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
 
   bool get isDeleteAccountLoading => _isDeleteAccountLoading;
 
-  void deleteAccount(BuildContext buildContex) async {
+  void deleteAccount(BuildContext buildContext) async {
     if (_isDeleteAccountLoading) return;
 
     try {
