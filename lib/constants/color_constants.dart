@@ -82,5 +82,13 @@ class ColorConstants {
   ];
   // endregion
 
+  // region HomePage
+  static const Color homePageCardBackgroundColor = Color(0xFFFFFFFF);
+  static const Color homePageCardTitleColor = Color(0xFF373737);
+
+  static const Color homePageAddHabbitButtonBackgroundColor = Color(0xFF4D57C8);
+  static const Color homePageAddHabbitButtonIconColor = Color(0xFFFFFFFF);
+  // endregion
+
 
 }

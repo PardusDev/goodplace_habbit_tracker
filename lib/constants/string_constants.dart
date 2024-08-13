@@ -147,18 +147,20 @@ class StringConstants {
   static const String deleteAccount = "Delete Account";
   // endregion
 
-  // Delete Account Confirmation
+  // region Delete Account Confirmation
   static const String areYouSure = "Are you sure?";
   static const String deleteAccountConfirmationText = "Are you sure you want to delete your account? This action cannot be undone.";
   // endregion Settings screen strings END
 
   // region Habits operations
+  static const String myHabits = "My Habits";
   // region Create Habit Screen
   static const String createHabitScreenTitle = "Create Habit";
   static const String createHabitScreenNameHint = "Habit Name";
   static const String createHabitScreenSubjectHint = "What is your subject?";
   static const String createHabitScreenAddImageLabel = "Add Image";
   static const String createHabitScreenCreateButton = "Create";
+  // endregion
   // endregion Habits operations END
 
 }
