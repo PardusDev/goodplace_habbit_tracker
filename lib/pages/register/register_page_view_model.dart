@@ -9,17 +9,20 @@ import '../../constants/string_constants.dart';
 class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   final AuthService _authService = AuthService();
   late final BuildContext viewModelContext;
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   User? user;
   bool _privacyPolicyChecked = false;
 
+  String _nameErrorText = '';
   String _emailErrorText = '';
   String _passwordErrorText = '';
   String _rePasswordErrorText = '';
   String _generalErrorText = '';
 
+  bool _nameValid = false;
   bool _emailValid = false;
   bool _passwordValid = false;
   bool _confirmPasswordValid = false;
@@ -27,15 +30,18 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   RegisterPageViewModel();
 
+  String get nameErrorText => _nameErrorText;
   String get emailErrorText => _emailErrorText;
   String get passwordErrorText => _passwordErrorText;
   String get rePasswordErrorText => _rePasswordErrorText;
   String get generalErrorText => _generalErrorText;
 
+  String get name => nameController.text;
   String get email => emailController.text;
   String get password => passwordController.text;
   String get confirmPassword => confirmPasswordController.text;
 
+  bool get nameValid => _nameValid;
   bool get emailValid => _emailValid;
   bool get passwordValid => _passwordValid;
   bool get confirmPasswordValid => _confirmPasswordValid;
@@ -51,6 +57,33 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   void navigateToLogin() {
     navigationService.navigateToPage('/login', null);
   }
+  //region NAME *************************************
+  void onNameChanged(String value) {
+    final result = _validateName(value);
+    _nameValid = result['isValid'];
+    setNameErrorText(result['errorText']);
+  }
+
+  Map<String, dynamic> _validateName(String value) {
+    if (value.isEmpty) {
+      return {'errorText': StringConstants.registerScreenNameCantBeEmpty, 'isValid': false};
+    }
+    else if (!RegExp(r'^\S+$').hasMatch(value)) {
+      return {'errorText': StringConstants.registerScreenNameNotValid, 'isValid': false};
+    }
+    else if (value.length < 2) {
+      return {'errorText': StringConstants.registerScreenNameShouldBeAtLeast2Chars, 'isValid': false};
+    }
+    else {
+      return {'errorText': '', 'isValid': true};
+    }
+  }
+
+  setNameErrorText(String error) {
+    _nameErrorText = error;
+    notifyListeners();
+  }
+  //endregion NAME *************************************
 
   // EMAIL *************************************
   void onEmailChanged(String value) {
