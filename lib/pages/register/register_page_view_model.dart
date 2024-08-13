@@ -181,8 +181,8 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
         setRegistering(false);
         return;
       }
-      dispose();
       goToTheOnboardingIfNecessary();
+      reset();
     } catch (e) {
       setGeneralErrorText(e.toString());
     } finally {
@@ -196,8 +196,8 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       } else {
-        dispose();
         goToTheOnboardingIfNecessary();
+        reset();
       }
     } catch (e) {
       setGeneralErrorText(e.toString());
@@ -222,6 +222,22 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   void setRegistering(bool value) {
     _registering = value;
+    notifyListeners();
+  }
+
+  void reset() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    _nameErrorText = '';
+    _emailErrorText = '';
+    _passwordErrorText = '';
+    _generalErrorText = '';
+    _nameValid = false;
+    _emailValid = false;
+    _passwordValid = false;
+    _registering = false;
+    _privacyPolicyChecked = false;
     notifyListeners();
   }
 
