@@ -238,9 +238,9 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     _emailErrorText = '';
     _passwordErrorText = '';
     _generalErrorText = '';
-    _nameValid = false;
-    _emailValid = false;
-    _passwordValid = false;
+    _nameValid = null;
+    _emailValid = null;
+    _passwordValid = null;
     _registering = false;
     _privacyPolicyChecked = false;
     notifyListeners();
