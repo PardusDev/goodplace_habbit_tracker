@@ -17,7 +17,7 @@ class AuthService {
     _firestore = firestore ?? FirebaseFirestore.instance,
     _googleSignIn = googleSignIn ?? GoogleSignIn();
 
-  Future<User?> getCurrentUser() async {
+  User? getCurrentUser() {
     try {
       return _firebaseAuth.currentUser;
     } on FirebaseAuthException catch (e) {
@@ -61,7 +61,12 @@ class AuthService {
       if (userCredential.user != null) {
         // Check if the user is new
         if (userCredential.additionalUserInfo!.isNewUser) {
-          registerUserToDocuments(userCredential.user!.uid, userCredential.user!.email!);
+          AppUser newUser = AppUser(
+            uid: userCredential.user!.uid,
+            email: userCredential.user!.email!,
+            name: userCredential.user!.displayName ?? '',
+          );
+          registerUserToDocuments(newUser);
         }
       }
 
@@ -76,11 +81,16 @@ class AuthService {
 
 
 
-  Future<User?> registerWithEmailAndPassword(String email, String password) async {
+  Future<User?> registerWithEmailAndPassword(String name, String email, String password) async {
     try {
       UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
-        registerUserToDocuments(userCredential.user!.uid, email);
+        AppUser newUser = AppUser(
+          uid: userCredential.user!.uid,
+          email: email,
+          name: name,
+        );
+        registerUserToDocuments(newUser);
       }
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -91,11 +101,7 @@ class AuthService {
     return null;
   }
 
-  Future<void> registerUserToDocuments(String uid, String email) async {
-    AppUser newUser = AppUser(
-      uid: uid,
-      email: email,
-    );
+  Future<void> registerUserToDocuments(AppUser newUser) async {
     try {
       await _firestore.collection('users').doc(newUser.uid).set(newUser.toDocument());
     } on FirebaseException catch (e) {

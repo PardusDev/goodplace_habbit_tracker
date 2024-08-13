@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
+import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../constants/color_constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +50,7 @@ class _HomePageState extends State<HomePage> {
           color:  Color.fromARGB(255, 77, 87, 200),
         ),
         child:  Text(
-          'GoodPlace',
+          StringConstants.appName,
           style: TextStyle(color: Colors.white, fontSize: 24),
         ),
       ),
@@ -99,6 +103,8 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildCalendar(size),
+              const SizedBox(height: 30),
+              _buildMyHabits(size, _mainModel),
               const SizedBox(height: 30),
               _buildCard(size, _mainModel),
               const SizedBox(height: 30),
@@ -159,6 +165,46 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMyHabits(Size size, HomePageViewModel _mainModel) {
+    return Container(
+      width: size.width * 0.9,
+      decoration: BoxDecoration(
+        color: ColorConstants.homePageCardBackgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: context.padding.normal,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(StringConstants.myHabits, style: context.general.textTheme.headlineSmall!.copyWith(
+                color: ColorConstants.homePageCardTitleColor,
+                fontWeight: FontWeight.w500
+              )),
+              SizedBox(
+                height: 26,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _mainModel.showCreateHabitModal(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    backgroundColor: ColorConstants.homePageAddHabbitButtonBackgroundColor,
+                  ),
+                  child: const Icon(
+                      Icons.add,
+                      color: ColorConstants.homePageAddHabbitButtonIconColor
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

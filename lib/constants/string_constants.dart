@@ -39,6 +39,7 @@ class StringConstants {
   //region Register screen strings
   static const String registerScreenTitle = 'Create your account';
   static const String registerScreenOrText = 'OR SIGN UP WITH EMAIL';
+  static const String registerScreenNameHint = 'Name';
   static const String registerScreenEmailHint = "Email address";
   static const String registerScreenPasswordHint = "Password";
   static const String registerScreenRetypePasswordHint = "Retype Password";
@@ -49,6 +50,10 @@ class StringConstants {
   static const String registerScreenSignIn = "SIGN IN";
   static const String pleaseWait = "Please wait...";
 
+  static const String registerScreenNameCantBeEmpty = "Name can't be empty.";
+  static const String registerScreenNameNotValid = "Name is not valid.";
+  static const String registerScreenNameShouldBeAtLeast2Chars = "Name should be at least 2 characters.";
+
   static const String registerScreenEmailCantBeEmpty = "Email can't be empty.";
   static const String registerScreenEmailNotValid = "Email is not valid.";
 
@@ -58,8 +63,6 @@ class StringConstants {
   static const String registerScreenPasswordShouldContainLetter = "Password should contain at least one letter.";
   static const String registerScreenCannotContainSpace = "Password cannot contain space.";
   static const String registerScreenPrivacyPolicyNotChecked = "Please accept the Privacy Policy.";
-
-  static const String registerScreenPasswordNotMatch = "Passwords do not match.";
   //endregion
 
   //region Onboarding screen strings
@@ -144,11 +147,20 @@ class StringConstants {
   static const String deleteAccount = "Delete Account";
   // endregion
 
-  // Delete Account Confirmation
+  // region Delete Account Confirmation
   static const String areYouSure = "Are you sure?";
   static const String deleteAccountConfirmationText = "Are you sure you want to delete your account? This action cannot be undone.";
   // endregion Settings screen strings END
 
-
+  // region Habits operations
+  static const String myHabits = "My Habits";
+  // region Create Habit Screen
+  static const String createHabitScreenTitle = "Create Habit";
+  static const String createHabitScreenNameHint = "Habit Name";
+  static const String createHabitScreenSubjectHint = "What is your subject?";
+  static const String createHabitScreenAddImageLabel = "Add Image";
+  static const String createHabitScreenCreateButton = "Create";
+  // endregion
+  // endregion Habits operations END
 
 }

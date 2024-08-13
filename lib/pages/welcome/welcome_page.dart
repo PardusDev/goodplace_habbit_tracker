@@ -40,6 +40,9 @@ class WelcomePage extends StatelessWidget {
                         ),
                   ),
                 ),
+
+                context.sized.emptySizedHeightBoxLow,
+
                 Expanded(
                   flex: 2,
                   child: Text(

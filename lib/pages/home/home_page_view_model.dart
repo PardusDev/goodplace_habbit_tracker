@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
 import 'package:goodplace_habbit_tracker/locator.dart';
+import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 
 import '../../services/auth_service.dart';
@@ -47,5 +48,16 @@ class HomePageViewModel with ChangeNotifier {
 
   void navigateToSettings() {
     _navigationService.navigateToPage('/settings', null);
+  }
+
+  void showCreateHabitModal(BuildContext buildContext) {
+    showModalBottomSheet(
+        context: buildContext,
+        useSafeArea: true,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return const CreateHabitModal();
+        }
+    );
   }
 }

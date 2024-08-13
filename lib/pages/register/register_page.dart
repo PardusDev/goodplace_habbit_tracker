@@ -102,6 +102,38 @@ class RegisterPage extends StatelessWidget {
 
                   //region */*/*/ Form */*/*/*
                   Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return OneLineInputFieldValidable(
+                          hintText: StringConstants.registerScreenNameHint,
+                          onChanged: viewModel.onNameChanged,
+                          controller: viewModel.nameController,
+                          isValid: viewModel.nameValid,
+                        );
+                      }
+                  ),
+
+                  Consumer<RegisterPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return Visibility(
+                          visible: viewModel.nameErrorText.isNotEmpty,
+                          child: Flexible(
+                              flex: 2,
+                              child: Text(
+                                viewModel.nameErrorText,
+                                style: context.general.textTheme.titleSmall!.copyWith(
+                                  color: ColorConstants.loginScreenErrorTextColor,
+                                  fontWeight: FontWeight.w500,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              )
+                          ),
+                        );
+                      }
+                  ),
+
+                  const Spacer(),
+
+                  Consumer<RegisterPageViewModel>(
                     builder: (context, viewModel, child) {
                       return OneLineInputFieldValidable(
                         hintText: StringConstants.registerScreenEmailHint,
@@ -137,10 +169,7 @@ class RegisterPage extends StatelessWidget {
                     builder: (context, viewModel, child) {
                       return OneLinePasswordInputFieldValidable(
                         hintText: StringConstants.registerScreenPasswordHint,
-                        onChanged: (String value) {
-                          viewModel.onConfirmPasswordChanged(viewModel.confirmPassword);
-                          viewModel.onPasswordChanged(value);
-                        },
+                        onChanged: viewModel.onPasswordChanged,
                         controller: viewModel.passwordController,
                         isValid: viewModel.passwordValid,
                       );
@@ -155,38 +184,6 @@ class RegisterPage extends StatelessWidget {
                               flex: 2,
                               child: Text(
                                 viewModel.passwordErrorText,
-                                style: context.general.textTheme.titleSmall!.copyWith(
-                                    color: ColorConstants.loginScreenErrorTextColor,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.visible,
-                                ),
-                              )
-                          ),
-                        );
-                      }
-                  ),
-
-                  const Spacer(),
-
-                  Consumer<RegisterPageViewModel>(
-                    builder: (context, viewModel, child) {
-                      return OneLinePasswordInputFieldValidable(
-                        hintText: StringConstants.registerScreenRetypePasswordHint,
-                        controller: viewModel.confirmPasswordController,
-                        onChanged: viewModel.onConfirmPasswordChanged,
-                        isValid: viewModel.confirmPasswordValid,
-                      );
-                    }
-                  ),
-
-                  Consumer<RegisterPageViewModel>(
-                      builder: (context, viewModel, child) {
-                        return Visibility(
-                          visible: viewModel.rePasswordErrorText.isNotEmpty,
-                          child: Flexible(
-                              flex: 2,
-                              child: Text(
-                                viewModel.rePasswordErrorText,
                                 style: context.general.textTheme.titleSmall!.copyWith(
                                     color: ColorConstants.loginScreenErrorTextColor,
                                     fontWeight: FontWeight.w500,
