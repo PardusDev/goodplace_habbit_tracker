@@ -20,9 +20,9 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   String _passwordErrorText = '';
   String _generalErrorText = '';
 
-  bool _nameValid = false;
-  bool _emailValid = false;
-  bool _passwordValid = false;
+  bool? _nameValid = null;
+  bool? _emailValid = null;
+  bool? _passwordValid = null;
   bool _registering = false;
 
   RegisterPageViewModel();
@@ -36,9 +36,9 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   String get email => emailController.text;
   String get password => passwordController.text;
 
-  bool get nameValid => _nameValid;
-  bool get emailValid => _emailValid;
-  bool get passwordValid => _passwordValid;
+  bool? get nameValid => _nameValid;
+  bool? get emailValid => _emailValid;
+  bool? get passwordValid => _passwordValid;
 
   bool get privacyPolicyChecked => _privacyPolicyChecked;
 
@@ -157,18 +157,23 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     if (_registering) {
       return;
     }
+
     /*
     print(!emailValid));
     print(!passwordValid);
     */
 
-    if (!emailValid || !passwordValid || !nameValid) {
-      return;
-    }
-
     // Check if the privacy policy is checked
     if (!_privacyPolicyChecked) {
       setGeneralErrorText(StringConstants.registerScreenPrivacyPolicyNotChecked);
+      return;
+    }
+
+    if (emailValid != true || passwordValid != true || nameValid != true) {
+      // Check all fields
+      onNameChanged(name);
+      onEmailChanged(email);
+      onPasswordChanged(password);
       return;
     }
 
