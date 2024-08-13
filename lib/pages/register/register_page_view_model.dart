@@ -162,7 +162,7 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     print(!passwordValid);
     */
 
-    if (!emailValid || !passwordValid) {
+    if (!emailValid || !passwordValid || !nameValid) {
       return;
     }
 
