@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
+import 'package:goodplace_habbit_tracker/managers/AppUserManager.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 import 'package:goodplace_habbit_tracker/widgets/Snackbars.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/base/base_view_model.dart';
 
@@ -14,7 +16,7 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
 
   bool get isDeleteAccountLoading => _isDeleteAccountLoading;
 
-  void deleteAccount(BuildContext buildContext) async {
+  void deleteAccount(BuildContext buildContex) async {
     if (_isDeleteAccountLoading) return;
 
     try {
@@ -37,6 +39,7 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
   void signOut(BuildContext buildContext) async {
     try {
       await _authService.signOut();
+      Provider.of<AppUserManager>(buildContext, listen: false).clearUser();
       _navigationService.navigateToPageClear("/login", null);
     } catch (e) {
       ScaffoldMessenger.of(buildContext).showSnackBar(
