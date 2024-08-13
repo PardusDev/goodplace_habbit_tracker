@@ -40,6 +40,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setErrorText(StringConstants.loginScreenEmailOrPasswdNotRight);
       }
+      dispose();
       goToTheOnboardingIfNecessary();
     } catch (e) {
       setErrorText(e.toString());
@@ -54,6 +55,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setErrorText(StringConstants.anErrorOccured);
       } else {
+        dispose();
         goToTheOnboardingIfNecessary();
       }
     } catch (e) {
@@ -83,5 +85,12 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
   void setErrorText(String error) {
     _errorText = error;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
