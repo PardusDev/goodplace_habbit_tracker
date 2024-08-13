@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_firebase_exception.dart';
+import 'package:goodplace_habbit_tracker/models/DoneHabit.dart';
 import 'package:goodplace_habbit_tracker/models/UserHabit.dart';
 
 class HabitService {
@@ -12,15 +13,14 @@ class HabitService {
     _firestore = firestore ?? FirebaseFirestore.instance;
 
   //region Check habit and doneHabit collections
-  Future<bool> checkIfDoneHabitExists(String userId, String habitId) async {
+  Future<bool> checkIfDoneHabitExists(String userId, DoneHabit doneHabit) async {
     try {
       final querySnapshot = await _firestore
           .collection("users").doc(userId)
-          .collection("habits").doc(habitId)
-          .collection("doneHabits")
-          .limit(1)
+          .collection("habits").doc(doneHabit.habitId)
+          .collection("doneHabits").doc(doneHabit.id)
           .get();
-      if (querySnapshot.docs.isNotEmpty) {
+      if (querySnapshot.exists) {
         return true;
       } else {
         return false;
@@ -34,14 +34,13 @@ class HabitService {
     }
   }
 
-  Future<bool> checkIfHabitExists(String userId) async {
+  Future<bool> checkIfHabitExists(String userId, UserHabit userHabit) async {
     try {
       final habitsCollection = await _firestore
           .collection("users").doc(userId)
-          .collection("habit")
-          .limit(1)
+          .collection("habit").doc(userHabit.habitId)
           .get();
-      if (habitsCollection.docs.isNotEmpty) {
+      if (habitsCollection.exists) {
         return true;
       } else {
         return false;

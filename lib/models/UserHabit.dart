@@ -28,36 +28,10 @@ class UserHabit {
 
   Map<String, dynamic> toDocument() {
     return {
-      'habitId': habitId,
       'title': title,
       'subject': subject,
       'imagePath': imagePath,
       'createdAt': DateTime.now(),
-      'doneHabits': doneHabits.map((item) => item.toMap()).toList(),
-    };
-  }
-
-  factory UserHabit.fromMap(Map<String, dynamic> data) {
-    return UserHabit(
-      habitId: data["habitId"],
-      title: data["title"],
-      subject: data["subject"],
-      imagePath: data["imagePath"],
-      createdAt: (data["createdAt"] as Timestamp).toDate(),
-      doneHabits: (data["doneHabits"] as List)
-          .map((item) => DoneHabit.fromMap(item))
-          .toList(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'habitId': habitId,
-      'title': title,
-      'subject': subject,
-      'imagePath': imagePath,
-      'createdAt': DateTime.now(),
-      'doneHabits': doneHabits.map((item) => item.toMap()).toList(),
     };
   }
 
