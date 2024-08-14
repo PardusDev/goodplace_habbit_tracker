@@ -7,9 +7,9 @@ import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
+import '../../managers/HabitManager.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
-import '../../services/habit_service.dart';
 import '../../widgets/Snackbars.dart';
 
 enum ViewState { geliyor, geldi, hata }
@@ -21,7 +21,7 @@ class HomePageViewModel with ChangeNotifier {
   String motivasyon="";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
-  final HabitService _habitService = HabitService();
+  final HabitManager _habitManager = HabitManager();
 
   List<UserHabit> _habits = [];
   bool _habitsIsLoading = false;
@@ -46,30 +46,31 @@ class HomePageViewModel with ChangeNotifier {
   }
 
 
-    Future<void> fetchHabits(BuildContext buildContext) async {
-      try {
-        _habitsIsLoading = true;
-        notifyListeners();
-        User? firebaseUser = _authService.getCurrentUser();
-        _habits = await _habitService.getUserHabits(firebaseUser!);
-        _habitsIsLoading = false;
-        notifyListeners();
-      } catch (e) {
-        _habitsIsLoading = false;
-        notifyListeners();
-        ScaffoldMessenger.of(buildContext).showSnackBar(
-            errorSnackBar(
-                e.toString()
-            )
-        );
-      }
+  Future<void> fetchHabits(BuildContext buildContext) async {
+    try {
+      _habitsIsLoading = true;
+      notifyListeners();
+      final firebaseUser = _authService.getCurrentUser();
+      await _habitManager.loadUserHabits(firebaseUser!.uid);
+      _habits = _habitManager.habits;
+      _habitsIsLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _habitsIsLoading = false;
+      notifyListeners();
+      ScaffoldMessenger.of(buildContext).showSnackBar(
+          errorSnackBar(
+              e.toString()
+          )
+      );
     }
+  }
 
   /// Get user details from Firebase and set it to AppUserManager
-  void getUserInformation(BuildContext buildContext) {
+  Future<void> getUserInformation(BuildContext buildContext) async {
     try {
       User? firebaseUser = _authService.getCurrentUser();
-      _authService.getUserByUID(firebaseUser!.uid).then((value) {
+      await _authService.getUserByUID(firebaseUser!.uid).then((value) {
         // Set user to AppUserManager
         Provider.of<AppUserManager>(buildContext, listen: false).setUser(value!);
       });
@@ -98,6 +99,7 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void showCreateHabitModal(BuildContext buildContext) {
+    // TODO: Fetch habits after creating a new habit
     showModalBottomSheet(
         context: buildContext,
         useSafeArea: true,

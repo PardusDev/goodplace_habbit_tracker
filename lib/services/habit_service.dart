@@ -54,22 +54,25 @@ class HabitService {
   //endregion
 
   //region Create a habit
-  Future<void> addNewHabit(User user, UserHabit userHabit) async {
+  Future<String?> addNewHabit(User user, UserHabit userHabit) async {
     try {
       final habitRef = _firestore.collection("users").doc(user.uid).collection("habits").doc();
       await habitRef.set(userHabit.toDocument());
+      // Return the habitId to be used in the doneHabit collection
+      return habitRef.id;
     } on FirebaseException catch (e) {
       handleFirebaseException(e);
     } catch (e) {
       throw e;
     }
+    return null;
   }
   //endregion
 
   //region Get user habits
-  Future<List<UserHabit>> getUserHabits(User user) async {
+  Future<List<UserHabit>> getUserHabits(String uid) async {
     try {
-      final querySnapshot = await _firestore.collection("users").doc(user.uid).collection("habits").get();
+      final querySnapshot = await _firestore.collection("users").doc(uid).collection("habits").get();
       return querySnapshot.docs.map((doc) => UserHabit.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       handleFirebaseException(e);

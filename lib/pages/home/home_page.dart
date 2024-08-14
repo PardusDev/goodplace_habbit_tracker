@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
+import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../constants/color_constants.dart';
+import '../../widgets/CustomShimmer.dart';
+import '../../widgets/HabitListTile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,9 +24,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _mainModel = Provider.of<HomePageViewModel>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       _mainModel.getMotivasyon();
-      _mainModel.getUserInformation(context);
+      await _mainModel.getUserInformation(context);
+      await _mainModel.fetchHabits(context);
     });
   }
 
@@ -205,9 +208,42 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          // TODO: Add your habit list here. (Don't forget to use Shimmer for loading state)
-          // For example: _buildHabitItem('Drink water', 'Every 2 hours', 'assets/icons/water.png'),
-          // And add a button for (I did it!)
+
+          context.sized.emptySizedHeightBoxLow3x,
+
+          Consumer2<HomePageViewModel, HabitManager>(
+              builder: (context, homePageViewModel, habitManagerViewModel, child) {
+                if (homePageViewModel.habitsIsLoading) {
+                  // TODO: Change this to shimmer
+                  return const CustomShimmer(
+                    width: double.infinity,
+                    height: 24,
+                  );
+                }
+
+                if (habitManagerViewModel.habits.isEmpty) {
+                  return Center(child: Text('Oh no! Here is empty'),);
+                }
+
+                return ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: habitManagerViewModel.habits.length,
+                  shrinkWrap: true,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return context.sized.emptySizedHeightBoxLow;
+                  },
+                  // TODO: Improve image loading.
+                  itemBuilder: (BuildContext context, int index) {
+                    return HabitListTile(
+                      title: habitManagerViewModel.habits[index].title,
+                      imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
+                      onPressed: () {  },
+                      isCompleted: false,
+                    );
+                  },
+                );
+              }
+          )
         ],
       ),
     );
@@ -231,21 +267,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xFF4d57c8), fontWeight: FontWeight.bold, fontSize: 15),
               ),
             )
-          : Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 20.0,  // Adjust this height to match the expected size of the text
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-            ),
+          : CustomShimmer(width: double.infinity, height: 20),
     ),
   );
 }

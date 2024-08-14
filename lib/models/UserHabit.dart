@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'DoneHabit.dart';
 
 class UserHabit {
-  final String habitId;
+  late String habitId;
   final String title;
   final String subject;
   final String imagePath;
