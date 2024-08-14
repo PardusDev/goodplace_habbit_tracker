@@ -44,19 +44,25 @@ class HabitListTile extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  title,
-                  style: context.general.textTheme.titleLarge?.copyWith(
-                    color: ColorConstants.homePageHabitListTileTitleColor,
-                    fontWeight: FontWeight.w400,
-                    shadows: [
-                      const Shadow(
-                        color: Colors.black87,
-                        offset: Offset(1, 1),
-                        blurRadius: 30,
-                      ),
-                    ],
-                  ),
+              SizedBox(
+                // TODO: Maybe we can use AspectRatio instead of SizedBox
+                //        or we can use different thing.
+                width: context.sized.dynamicWidth(0.3),
+                child: Text(
+                    title,
+                    style: context.general.textTheme.titleLarge?.copyWith(
+                      color: ColorConstants.homePageHabitListTileTitleColor,
+                      fontWeight: FontWeight.w400,
+                      shadows: [
+                        const Shadow(
+                          color: Colors.black,
+                          offset: Offset(1, 1),
+                          blurRadius: 25,
+                        ),
+                      ],
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ),
               ),
               isCompleted
               ? HabitListTileCompletedButton(onPressed: onPressed, buttonText: StringConstants.homePageHabitListTileButtonCompleted)
