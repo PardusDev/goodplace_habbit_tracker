@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal_view_model.dart';
+import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../widgets/CollapsableBottomSheetMultipleWidget.dart';
 
@@ -15,21 +17,41 @@ class CreateHabitModal extends StatelessWidget {
         return CollapsableBottomSheetMultipleWidget(
           title: StringConstants.createHabitScreenTitle,
           buttonText: StringConstants.createHabitScreenCreateButton,
-          onPressed: viewModel.getUserHabits,
-          children: const [
+          onPressed: viewModel.createHabit,
+          children: [
             InputSection(
               title: "Habit Name",
               description: "Enter the name of the habit you want to create.",
               hintText: StringConstants.createHabitScreenNameHint,
+              controller: viewModel.titleController,
+              onChanged: viewModel.onTitleChanged,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             InputSection(
-              title: "Habit Subject",
+              title: "Habit Subject - Optional",
               description: "Describe the subject of your habit.",
               hintText: StringConstants.createHabitScreenSubjectHint,
+              controller: viewModel.subjectController,
             ),
-            SizedBox(height: 24.0),
-            ImageSelectionSection(),
+            const SizedBox(height: 24.0),
+            ImageSelectionSection(
+            ),
+            const SizedBox(height: 24.0,),
+            Consumer<CreateHabitModalViewModel>(
+                builder: (context, viewModel, child) {
+                  return Visibility(
+                    visible: viewModel.errorText.isNotEmpty,
+                    child: Text(
+                      viewModel.errorText,
+                      style: context.general.textTheme.titleSmall!.copyWith(
+                        color: ColorConstants.errorColor,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                  );
+                }
+            )
           ],
         );
       },
@@ -41,12 +63,15 @@ class InputSection extends StatelessWidget {
   final String title;
   final String description;
   final String hintText;
+  final TextEditingController controller;
+  final Function(String)? onChanged;
 
   const InputSection({
     required this.title,
     required this.description,
     required this.hintText,
-    super.key,
+    required this.controller,
+    super.key, this.onChanged,
   });
 
   @override
@@ -69,6 +94,8 @@ class InputSection extends StatelessWidget {
           ),
           const SizedBox(height: 8.0),
           TextField(
+            onChanged: onChanged,
+            controller: controller,
             decoration: InputDecoration(
               hintText: hintText,
               border: OutlineInputBorder(

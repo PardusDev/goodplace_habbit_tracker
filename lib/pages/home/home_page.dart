@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
+import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
-import 'package:goodplace_habbit_tracker/widgets/Calendar.dart';
-import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../constants/color_constants.dart';
+import '../../widgets/CustomShimmer.dart';
+import '../../widgets/HabitListTile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,21 +18,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late HomePageViewModel _homeModel;
+  late HomePageViewModel _mainModel;
 
   @override
   void initState() {
     super.initState();
-    _homeModel = Provider.of<HomePageViewModel>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _homeModel.getMotivasyon();
-      _homeModel.getUserInformation(context);
+    _mainModel = Provider.of<HomePageViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _mainModel.getMotivasyon();
+      await _mainModel.getUserInformation(context);
+      await _mainModel.fetchHabits(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _homeModel = Provider.of<HomePageViewModel>(context, listen: true);
+    _mainModel = Provider.of<HomePageViewModel>(context, listen: true);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 77, 87, 200),
@@ -42,28 +44,73 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
         toolbarHeight: 100,
       ),
-      drawer: MyDrawer(mainModel: _homeModel),
+      drawer: Drawer(
+  backgroundColor: Colors.white,
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: [
+   const   DrawerHeader(
+        decoration: BoxDecoration(
+          color:  Color.fromARGB(255, 77, 87, 200),
+        ),
+        child:  Text(
+          StringConstants.appName,
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
+      ListTile(
+        title: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF4d57c8),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ListTile(
+            leading: const Icon(Icons.settings, color: Colors.white),
+            title: const Text(
+              'Settings',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              _mainModel.navigateToSettings();
+            },
+          ),
+        ),
+      ),
+      const SizedBox(height: 24,),
+      ListTile(
+        title: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF4d57c8),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ListTile(
+            leading: const Icon(Icons.logout, color: Colors.white),
+            title: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              if (mounted) {
+                _mainModel.signOut(context);
+              }
+            },
+          ),
+        ),
+      )
+    ],
+  ),
+),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(width: size.width * 0.9,
-              child: Text(
-                _homeModel.greeting,
-                style:const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white),
-                  textAlign: TextAlign.start,
-                  )),
-              const SizedBox(height: 15),
-              CalendarWidget(),
+              _buildCalendar(size),
               const SizedBox(height: 30),
-              _buildMyHabits(size, _homeModel),
+              _buildMyHabits(size, _mainModel),
               const SizedBox(height: 30),
-              _buildCard(size, _homeModel),
+              _buildCard(size, _mainModel),
               const SizedBox(height: 30),
               _buildStreakInfo(size),
               const SizedBox(height: 30),
@@ -76,8 +123,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildCalendar(Size size) {
+    return Container(
+      width: size.width * 0.9,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30.0, left: 30, right: 30, bottom: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TableCalendar(
+              firstDay: DateTime.utc(2020, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              focusedDay: DateTime.now(),
+              headerVisible: false,
+              calendarStyle: const CalendarStyle(
+                defaultTextStyle: TextStyle(color: Color(0xFF4d57c8)),
+                weekendTextStyle: TextStyle(color: Color(0xFF4d57c8)),
+                todayTextStyle: TextStyle(color: Colors.white),
+                selectedTextStyle: TextStyle(color: Colors.white),
+              ),
+              daysOfWeekStyle: const DaysOfWeekStyle(
+                weekdayStyle: TextStyle(color: Color(0xFF4d57c8)),
+                weekendStyle: TextStyle(color: Color(0xFF4d57c8)),
+              ),
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _LegendItem(
+                  icon: Icons.circle,
+                  color: Color(0xFF4d57c8),
+                  label: 'All Complete',
+                ),
+                SizedBox(width: 20),
+                _LegendItem(
+                  icon: Icons.circle_outlined,
+                  color: Color(0xFF4d57c8),
+                  label: 'Some Complete',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  Widget _buildMyHabits(Size size, HomePageViewModel _homeModel) {
+  Widget _buildMyHabits(Size size, HomePageViewModel _mainModel) {
     return Container(
       width: size.width * 0.9,
       decoration: BoxDecoration(
@@ -98,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                 height: 26,
                 child: ElevatedButton(
                   onPressed: () {
-                    _homeModel.showCreateHabitModal(context);
+                    _mainModel.showCreateHabitModal(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -112,15 +208,48 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          // TODO: Add your habit list here. (Don't forget to use Shimmer for loading state)
-          // For example: _buildHabitItem('Drink water', 'Every 2 hours', 'assets/icons/water.png'),
-          // And add a button for (I did it!)
+
+          context.sized.emptySizedHeightBoxLow3x,
+
+          Consumer<HomePageViewModel>(
+              builder: (context, homePageViewModel, child) {
+                if (homePageViewModel.habitsIsLoading) {
+                  // TODO: Change this to shimmer
+                  return const CustomShimmer(
+                    width: double.infinity,
+                    height: 24,
+                  );
+                }
+
+                if (homePageViewModel.habits.isEmpty) {
+                  return Center(child: Text('Oh no! Here is empty'),);
+                }
+
+                return ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: homePageViewModel.habits.length,
+                  shrinkWrap: true,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return context.sized.emptySizedHeightBoxLow;
+                  },
+                  // TODO: Improve image loading.
+                  itemBuilder: (BuildContext context, int index) {
+                    return HabitListTile(
+                      title: homePageViewModel.habits[index].title,
+                      imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
+                      onPressed: () {  },
+                      isCompleted: false,
+                    );
+                  },
+                );
+              }
+          )
         ],
       ),
     );
   }
 
- Widget _buildCard(Size size, HomePageViewModel _homeModel) {
+ Widget _buildCard(Size size, HomePageViewModel _mainModel) {
   return Container(
     width: size.width * 0.9,
     decoration: BoxDecoration(
@@ -128,31 +257,17 @@ class _HomePageState extends State<HomePage> {
       borderRadius: BorderRadius.circular(20),
     ),
     child: Center(
-      child: _homeModel.motivasyon.isNotEmpty
+      child: _mainModel.motivasyon.isNotEmpty
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
               child: Text(
-                _homeModel.motivasyon,
+                _mainModel.motivasyon,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Color(0xFF4d57c8), fontWeight: FontWeight.bold, fontSize: 15),
               ),
             )
-          : Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 20.0,  // Adjust this height to match the expected size of the text
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-            ),
+          : CustomShimmer(width: double.infinity, height: 20),
     ),
   );
 }
@@ -277,4 +392,30 @@ Widget _buildImageCard(Size size, String imagePath, String text, String textdesc
 }
 }
 
+class _LegendItem extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String label;
 
+  const _LegendItem({
+    required this.icon,
+    required this.color,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 12, color: color),
+        const SizedBox(width: 5),
+        Text(
+          label,
+          style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+}

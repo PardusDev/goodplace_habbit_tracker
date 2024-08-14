@@ -154,12 +154,15 @@ class StringConstants {
 
   // region Habits operations
   static const String myHabits = "My Habits";
+  static const String homePageHabitListTileButton = "I did it!";
+  static const String homePageHabitListTileButtonCompleted = "Completed";
   // region Create Habit Screen
   static const String createHabitScreenTitle = "Create Habit";
   static const String createHabitScreenNameHint = "Habit Name";
   static const String createHabitScreenSubjectHint = "What is your subject?";
   static const String createHabitScreenAddImageLabel = "Add Image";
   static const String createHabitScreenCreateButton = "Create";
+  static const String habitNameEmptyError = "Habit name can't be empty.";
   // endregion
   // endregion Habits operations END
 
