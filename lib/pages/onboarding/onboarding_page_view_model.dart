@@ -99,8 +99,6 @@ class OnBoardingPageViewModel extends ChangeNotifier with BaseViewModel {
       );
       notifyListeners();
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('onboarding', true);
       _navigationService.navigateToPageClear("/home", null);
     }
   }

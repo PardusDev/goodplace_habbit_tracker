@@ -186,7 +186,7 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
         setRegistering(false);
         return;
       }
-      goToTheOnboardingIfNecessary();
+      navigationService.navigateToPageClear("/onboarding", null);
       reset();
     } catch (e) {
       setGeneralErrorText(e.toString());
@@ -201,7 +201,7 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       } else {
-        goToTheOnboardingIfNecessary();
+        navigationService.navigateToPageClear("/onboarding", null);
         reset();
       }
     } catch (e) {
@@ -209,16 +209,6 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
-  void goToTheOnboardingIfNecessary() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seenOnboarding = prefs.getBool('onboarding') ?? false;
-
-    if (seenOnboarding) {
-      navigationService.navigateToPageClear("/home", null);
-    } else {
-      navigationService.navigateToPageClear("/onboarding", null);
-    }
-  }
 
   void setGeneralErrorText(String error) {
     _generalErrorText = error;
