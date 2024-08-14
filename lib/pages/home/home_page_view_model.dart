@@ -7,7 +7,9 @@ import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
+import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
+import '../../services/habit_service.dart';
 import '../../widgets/Snackbars.dart';
 
 enum ViewState { geliyor, geldi, hata }
@@ -19,13 +21,20 @@ class HomePageViewModel with ChangeNotifier {
   String motivasyon="";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
+  final HabitService _habitService = HabitService();
+
+  List<UserHabit> _habits = [];
+  bool _habitsIsLoading = false;
+
+  List<UserHabit> get habits => _habits;
+  bool get habitsIsLoading => _habitsIsLoading;
 
   set state(ViewState value) {
     _state = value;
     notifyListeners();
   }
 
-  getMotivasyon()async{
+  getMotivasyon()async {
     try {
       motivasyon = await _repository.getMotivasyon();
     } catch (e) {
@@ -35,6 +44,26 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+    Future<void> fetchHabits(BuildContext buildContext) async {
+      try {
+        _habitsIsLoading = true;
+        notifyListeners();
+        User? firebaseUser = _authService.getCurrentUser();
+        _habits = await _habitService.getUserHabits(firebaseUser!);
+        _habitsIsLoading = false;
+        notifyListeners();
+      } catch (e) {
+        _habitsIsLoading = false;
+        notifyListeners();
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                e.toString()
+            )
+        );
+      }
+    }
 
   /// Get user details from Firebase and set it to AppUserManager
   void getUserInformation(BuildContext buildContext) {
