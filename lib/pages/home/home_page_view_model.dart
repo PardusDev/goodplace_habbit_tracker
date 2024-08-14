@@ -83,11 +83,18 @@ class HomePageViewModel with ChangeNotifier {
           doneAt: DateTime.now()
       );
       await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+      // TODO: Show a success message
       notifyListeners();
       return;
     } catch (e) {
       return;
     }
+  }
+
+  /// This function checks if the habit is completed for the selected date. And returns true if it is completed.
+  bool checkHabitIsCompletedForSelectedDate(UserHabit habit, DateTime selectedDate) {
+    final convertedDateId = generateIdFromDate(selectedDate);
+    return habit.doneHabits.any((element) => element.id == convertedDateId);
   }
 
   /// Get user details from Firebase and set it to AppUserManager
@@ -100,7 +107,7 @@ class HomePageViewModel with ChangeNotifier {
       });
     } catch (e) {
       // TODO: Handle this error
-      print(e);
+      throw e;
     }
   }
 

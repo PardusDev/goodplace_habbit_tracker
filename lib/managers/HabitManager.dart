@@ -18,13 +18,21 @@ class HabitManager with ChangeNotifier {
   Future<void> loadUserHabits(String uid) async {
     try {
       _habits = await _habitService.getUserHabits(uid);
+      // Run loadDoneHabitForSpecificDay for each habit
+      for (var habit in _habits) {
+        // TODO: Change DateTime.now() to a specific date (get it from the calendar)
+        final doneHabit = await loadDoneHabitForSpecificDay(uid, habit.habitId, DateTime.now());
+        if (doneHabit != null) {
+          habit.doneHabits.add(doneHabit);
+        }
+      }
       notifyListeners();
     } catch (e) {
       throw e;
     }
   }
 
-  Future<DoneHabit> loadDoneHabitForSpecificDay(String uid, String habitId, DateTime date) async {
+  Future<DoneHabit?> loadDoneHabitForSpecificDay(String uid, String habitId, DateTime date) async {
     try {
       final doneHabit = await _habitService.getDoneHabitForSpecificDay(uid, habitId, date);
       if (doneHabit == null) {

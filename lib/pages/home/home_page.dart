@@ -233,6 +233,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   // TODO: Improve image loading.
                   itemBuilder: (BuildContext context, int index) {
+                    print(homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index], DateTime.now()));
                     return HabitListTile(
                       title: homePageViewModel.habits[index].title,
                       imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
@@ -240,7 +241,8 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         homePageViewModel.doneHabit(homePageViewModel.habits[index]);
                       },
-                      isCompleted: false,
+                      // TODO: Change DateTime.now() to selected date
+                      isCompleted: homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index], DateTime.now()),
                     );
                   },
                 );

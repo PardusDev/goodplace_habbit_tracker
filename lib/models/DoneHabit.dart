@@ -10,7 +10,7 @@ class DoneHabit {
   factory DoneHabit.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return DoneHabit(
-      id: data['id'],
+      id: doc.id,
       habitId: data['habitId'],
       doneAt: (data['doneAt'] as Timestamp).toDate(),
     );
