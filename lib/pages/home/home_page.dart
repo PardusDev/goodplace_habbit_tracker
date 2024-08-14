@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
-import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
@@ -237,7 +236,10 @@ class _HomePageState extends State<HomePage> {
                     return HabitListTile(
                       title: homePageViewModel.habits[index].title,
                       imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
-                      onPressed: () {  },
+                      // TODO: Change isCompleted to real value
+                      onPressed: () {
+                        homePageViewModel.doneHabit(homePageViewModel.habits[index]);
+                      },
                       isCompleted: false,
                     );
                   },

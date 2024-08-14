@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/models/DoneHabit.dart';
 
 import '../constants/string_constants.dart';
 import '../models/UserHabit.dart';
@@ -23,6 +24,18 @@ class HabitManager with ChangeNotifier {
     }
   }
 
+  Future<DoneHabit> loadDoneHabitForSpecificDay(String uid, String habitId, DateTime date) async {
+    try {
+      final doneHabit = await _habitService.getDoneHabitForSpecificDay(uid, habitId, date);
+      if (doneHabit == null) {
+        throw Exception(StringConstants.anErrorOccured);
+      }
+      return doneHabit;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> addHabit(User user, UserHabit habit) async {
     try {
       final habitId = await _habitService.addNewHabit(user, habit);
@@ -30,9 +43,22 @@ class HabitManager with ChangeNotifier {
         throw Exception(StringConstants.anErrorOccured);
       }
       habit.habitId = habitId;
-      print(_habits.length);
       _habits.add(habit);
-      print(_habits.length);
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> addDoneHabit(User user, DoneHabit doneHabit) async {
+    try {
+      final doneHabitId = await _habitService.addDoneHabit(user, doneHabit);
+      if (doneHabitId == null) {
+        throw Exception(StringConstants.anErrorOccured);
+      }
+      if (_habits.any((element) => element.habitId == doneHabit.habitId)) {
+        _habits.firstWhere((element) => element.habitId == doneHabit.habitId).doneHabits.add(doneHabit);
+      }
       notifyListeners();
     } catch (e) {
       throw e;

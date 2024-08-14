@@ -4,10 +4,12 @@ import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart
 import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
+import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
+import '../../models/DoneHabit.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/Snackbars.dart';
@@ -69,6 +71,22 @@ class HomePageViewModel with ChangeNotifier {
               e.toString()
           )
       );
+    }
+  }
+
+  void doneHabit(UserHabit habit) async {
+    try {
+      final firebaseUser = _authService.getCurrentUser();
+      DoneHabit doneHabit = DoneHabit(
+          id: generateIdFromDate(DateTime.now()),
+          habitId: habit.habitId,
+          doneAt: DateTime.now()
+      );
+      await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+      notifyListeners();
+      return;
+    } catch (e) {
+      return;
     }
   }
 

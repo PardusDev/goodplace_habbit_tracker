@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DoneHabit {
-  final String id;
+  late String id;
   final String habitId;
   final DateTime doneAt;
 
@@ -10,7 +10,7 @@ class DoneHabit {
   factory DoneHabit.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return DoneHabit(
-      id: doc.id,
+      id: data['id'],
       habitId: data['habitId'],
       doneAt: (data['doneAt'] as Timestamp).toDate(),
     );
@@ -18,7 +18,6 @@ class DoneHabit {
 
   Map<String, dynamic> toDocument() {
     return {
-      'id': id,
       'habitId': habitId,
       'doneAt': Timestamp.fromDate(doneAt),
     };
