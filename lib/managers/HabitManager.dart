@@ -5,13 +5,11 @@ import '../constants/string_constants.dart';
 import '../models/UserHabit.dart';
 import '../services/habit_service.dart';
 
-class HabitManager extends ChangeNotifier {
+class HabitManager with ChangeNotifier {
   final HabitService _habitService = HabitService();
 
 
-  List<UserHabit> _habits = [];
-
-  Function(List<UserHabit>)? onHabitsUpdated;
+  static List<UserHabit> _habits = [];
 
 
   List<UserHabit> get habits => _habits;
@@ -32,7 +30,9 @@ class HabitManager extends ChangeNotifier {
         throw Exception(StringConstants.anErrorOccured);
       }
       habit.habitId = habitId;
+      print(_habits.length);
       _habits.add(habit);
+      print(_habits.length);
       notifyListeners();
     } catch (e) {
       throw e;

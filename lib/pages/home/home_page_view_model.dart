@@ -23,10 +23,9 @@ class HomePageViewModel with ChangeNotifier {
   final AuthService _authService = AuthService();
   final HabitManager _habitManager = HabitManager();
 
-  List<UserHabit> _habits = [];
   bool _habitsIsLoading = false;
 
-  List<UserHabit> get habits => _habits;
+  List<UserHabit> get habits => _habitManager.habits;
   bool get habitsIsLoading => _habitsIsLoading;
 
   set state(ViewState value) {
@@ -60,7 +59,6 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid);
-      _habits = _habitManager.habits;
       _habitsIsLoading = false;
       notifyListeners();
     } catch (e) {
@@ -107,7 +105,6 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void showCreateHabitModal(BuildContext buildContext) {
-    // TODO: Fetch habits after creating a new habit
     showModalBottomSheet(
         context: buildContext,
         useSafeArea: true,
@@ -115,6 +112,6 @@ class HomePageViewModel with ChangeNotifier {
         builder: (BuildContext context) {
           return const CreateHabitModal();
         }
-    );
+    ).then((value) => notifyListeners());
   }
 }
