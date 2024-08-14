@@ -34,6 +34,14 @@ class HomePageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  HomePageViewModel() {
+    _habitManager.addListener(_onHabitsUpdated);
+  }
+
+  void _onHabitsUpdated() {
+    notifyListeners();
+  }
+
   getMotivasyon()async {
     try {
       motivasyon = await _repository.getMotivasyon();

@@ -7,7 +7,11 @@ import '../services/habit_service.dart';
 
 class HabitManager extends ChangeNotifier {
   final HabitService _habitService = HabitService();
+
+
   List<UserHabit> _habits = [];
+
+  Function(List<UserHabit>)? onHabitsUpdated;
 
 
   List<UserHabit> get habits => _habits;

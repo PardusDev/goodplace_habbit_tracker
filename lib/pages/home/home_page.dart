@@ -211,8 +211,8 @@ class _HomePageState extends State<HomePage> {
 
           context.sized.emptySizedHeightBoxLow3x,
 
-          Consumer2<HomePageViewModel, HabitManager>(
-              builder: (context, homePageViewModel, habitManagerViewModel, child) {
+          Consumer<HomePageViewModel>(
+              builder: (context, homePageViewModel, child) {
                 if (homePageViewModel.habitsIsLoading) {
                   // TODO: Change this to shimmer
                   return const CustomShimmer(
@@ -221,13 +221,13 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                if (habitManagerViewModel.habits.isEmpty) {
+                if (homePageViewModel.habits.isEmpty) {
                   return Center(child: Text('Oh no! Here is empty'),);
                 }
 
                 return ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: habitManagerViewModel.habits.length,
+                  itemCount: homePageViewModel.habits.length,
                   shrinkWrap: true,
                   separatorBuilder: (BuildContext context, int index) {
                     return context.sized.emptySizedHeightBoxLow;
@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                   // TODO: Improve image loading.
                   itemBuilder: (BuildContext context, int index) {
                     return HabitListTile(
-                      title: habitManagerViewModel.habits[index].title,
+                      title: homePageViewModel.habits[index].title,
                       imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
                       onPressed: () {  },
                       isCompleted: false,

@@ -62,10 +62,10 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
       await _habitManager.addHabit(user!, newHabit);
 
+      notifyListeners();
+
       // Close the modal
       _navigationService.navigateToBack();
-
-      notifyListeners();
     } catch (e) {
       throw e;
     }
