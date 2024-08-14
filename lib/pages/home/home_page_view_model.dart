@@ -7,6 +7,7 @@ import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
+import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
@@ -114,7 +115,7 @@ class HomePageViewModel with ChangeNotifier {
     }
   }
 
-  void toggleHabit(UserHabit habit, bool isCompleted) async {
+  void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
       final firebaseUser = _authService.getCurrentUser();
       DoneHabit doneHabit = DoneHabit(
@@ -128,6 +129,14 @@ class HomePageViewModel with ChangeNotifier {
       } else {
         // TODO: Show a success message
         await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return const SuccessSplashBox(
+
+              );
+            }
+        );
       }
       notifyListeners();
     } catch (e) {
