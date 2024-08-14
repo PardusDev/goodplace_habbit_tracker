@@ -45,6 +45,8 @@ class HabitListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
+                // TODO: Maybe we can use AspectRatio instead of SizedBox
+                //        or we can use different thing.
                 width: context.sized.dynamicWidth(0.3),
                 child: Text(
                     title,

@@ -36,7 +36,7 @@ class HabitManager with ChangeNotifier {
     try {
       final doneHabit = await _habitService.getDoneHabitForSpecificDay(uid, habitId, date);
       if (doneHabit == null) {
-        throw Exception(StringConstants.anErrorOccured);
+        return null;
       }
       return doneHabit;
     } catch (e) {
@@ -70,6 +70,22 @@ class HabitManager with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       throw e;
+    }
+  }
+
+  Future<void> removeDoneHabit(User user, DoneHabit doneHabit) async {
+    try {
+      final result = await _habitService.deleteDoneHabit(user, doneHabit);
+      if (!result) {
+        throw Exception(StringConstants.anErrorOccured);
+      }
+      if (_habits.any((element) => element.habitId == doneHabit.habitId)) {
+        _habits.firstWhere((element) => element.habitId == doneHabit.habitId).doneHabits.removeWhere((existingHabit) => existingHabit.id == doneHabit.id);
+      }
+      notifyListeners();
+    } catch (e) {
+      // Don't need to move StringConstants to a separate file.
+      throw "An error occured while removing the done habit.";
     }
   }
 }

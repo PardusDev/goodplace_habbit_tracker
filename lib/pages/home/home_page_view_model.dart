@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
@@ -21,9 +23,11 @@ class HomePageViewModel with ChangeNotifier {
   ViewState _state = ViewState.geliyor;
   ViewState get state => _state;
   String motivasyon="";
+  String greeting = "";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
   final HabitManager _habitManager = HabitManager();
+  Timer? _timer; // Timer to update greeting message periodically
 
   bool _habitsIsLoading = false;
 
@@ -36,7 +40,39 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   HomePageViewModel() {
+    getGreetingMessage();
+    startGreetingUpdateTimer(); // Start the timer when the ViewModel is created
     _habitManager.addListener(_onHabitsUpdated);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  getGreetingMessage() {
+    final hour = DateTime.now().hour;
+
+
+    if (hour >= 4 && hour < 12) {
+      greeting = "Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+      greeting = "Good Afternoon";
+    } else if (hour >= 17 && hour < 21) {
+      greeting = "Good Evening";
+    } else {
+      greeting = "Good Night";
+    }
+
+    greeting = greeting + " X";
+    notifyListeners();
+  }
+  void startGreetingUpdateTimer() {
+    //_timer = Timer.periodic(Duration(minutes: 1), (timer) {
+     // getGreetingMessage();
+    //});
   }
 
   void _onHabitsUpdated() {
@@ -74,7 +110,7 @@ class HomePageViewModel with ChangeNotifier {
     }
   }
 
-  void doneHabit(UserHabit habit) async {
+  void toggleHabit(UserHabit habit, bool isCompleted) async {
     try {
       final firebaseUser = _authService.getCurrentUser();
       DoneHabit doneHabit = DoneHabit(
@@ -82,12 +118,15 @@ class HomePageViewModel with ChangeNotifier {
           habitId: habit.habitId,
           doneAt: DateTime.now()
       );
-      await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+      if (isCompleted) {
+        await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
+      } else {
+        await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+      }
       // TODO: Show a success message
       notifyListeners();
-      return;
     } catch (e) {
-      return;
+      throw e;
     }
   }
 

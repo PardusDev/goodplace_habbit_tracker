@@ -29,9 +29,8 @@ class HabitService {
       handleFirebaseException(e);
     } catch (e) {
       throw e;
-    } finally {
-      return false;
     }
+    return false;
   }
 
   Future<bool> checkIfHabitExists(User user, UserHabit userHabit) async {
@@ -160,6 +159,27 @@ class HabitService {
     return null;
   }
   //endregion
+
+  // region Delete Done Habit
+  Future<bool> deleteDoneHabit(User user, DoneHabit doneHabit) async {
+    try {
+      final exists = await checkIfDoneHabitExists(user, doneHabit);
+      if (exists == false) {
+        throw Exception("Done habit does not exist");
+      }
+      await _firestore
+          .collection("users").doc(user.uid)
+          .collection("habits").doc(doneHabit.habitId)
+          .collection("doneHabits").doc(doneHabit.id)
+          .delete();
+      return true;
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+      throw e;
+    }
+    return false;
+  }
 
   //region Get user habits
   Future<List<UserHabit>> getUserHabits(String uid) async {

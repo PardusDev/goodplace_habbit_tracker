@@ -24,20 +24,20 @@ class MyDrawer extends StatelessWidget {
             title: 'Settings',
             onTap: _mainModel.navigateToSettings,
           ),
-          const SizedBox(height: 24),
-          _buildListItem(
-            icon: Icons.logout,
-            title: 'Logout',
-            onTap: () {
-              _mainModel.signOut(context);
-            },
-          ),
-           const SizedBox(height: 24),
+           const SizedBox(height: 6),
           _buildListItem(
             icon: Icons.checklist,
             title: 'Manage My Habits',
             onTap: () {
               
+            },
+          ),
+          const SizedBox(height: 36),
+          _buildListItem(
+            icon: Icons.logout,
+            title: 'Logout',
+            onTap: () {
+              _mainModel.signOut(context);
             },
           ),
         ],
