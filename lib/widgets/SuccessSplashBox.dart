@@ -52,13 +52,13 @@ class SuccessSplashBox extends StatelessWidget {
               const Spacer(),
 
               Expanded(
-                flex: 8,
+                flex: 14,
                 child: Lottie.asset(
                   LottieConstants.successLottie,
                 )
               ),
 
-              const Spacer(flex: 2,),
+              const Spacer(flex: 1,),
 
               Expanded(
                 flex: 1,
@@ -73,10 +73,10 @@ class SuccessSplashBox extends StatelessWidget {
                 ),
               ),
 
-              const Spacer(flex: 2,),
+              const Spacer(flex: 6,),
 
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: StadiumSideBlueButton(
                     onPressed: () {
                       NavigationService.instance.navigateToBack();

@@ -183,6 +183,10 @@ class StringConstants {
 
   static const String successScreenButton = "Done";
   // endregion
+
+  // region Habit Alert Dialog
+  static const String habitAlertDialogTitle = "Are you sure?";
+  static const String habitAlertDialogBody = "Do you want to remove this habit?";
   // endregion Habits operations END
 
 }

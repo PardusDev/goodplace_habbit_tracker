@@ -7,9 +7,11 @@ import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
+import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -124,11 +126,20 @@ class HomePageViewModel with ChangeNotifier {
           doneAt: DateTime.now()
       );
       if (isCompleted) {
-        // TODO: Show a dialog to ask if the user is sure to remove the habit
-        await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return const ConfirmAlertDialog(
+                  title: StringConstants.habitAlertDialogTitle,
+                  body: StringConstants.habitAlertDialogBody
+              );
+            }
+        ) .then((value) async {
+          if (value == true) {
+            await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
+          }
+        });
       } else {
-        // TODO: Show a success message
-        await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
         showDialog(
             context: buildContext,
             builder: (BuildContext context) {
@@ -137,6 +148,7 @@ class HomePageViewModel with ChangeNotifier {
               );
             }
         );
+        await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
       }
       notifyListeners();
     } catch (e) {
