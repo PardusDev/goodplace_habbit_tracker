@@ -4,11 +4,9 @@ import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart
 import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
-import 'package:goodplace_habbit_tracker/services/habit_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
-import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -21,13 +19,6 @@ class HomePageViewModel with ChangeNotifier {
   String motivasyon="";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
-  final HabitService _habitService = HabitService();
-
-  List<UserHabit> _habits = [];
-  bool _habitsIsLoading = false;
-
-  List<UserHabit> get habits => _habits;
-  bool get habitsIsLoading => _habitsIsLoading;
 
   set state(ViewState value) {
     _state = value;
@@ -42,25 +33,6 @@ class HomePageViewModel with ChangeNotifier {
       motivasyon = e.toString();
     } finally {
       notifyListeners();
-    }
-  }
-
-  Future<void> fetchHabits(BuildContext buildContext) async {
-    try {
-      _habitsIsLoading = true;
-      notifyListeners();
-      User? firebaseUser = _authService.getCurrentUser();
-      _habits = await _habitService.getUserHabits(firebaseUser!);
-      _habitsIsLoading = false;
-      notifyListeners();
-    } catch (e) {
-      _habitsIsLoading = false;
-      notifyListeners();
-      ScaffoldMessenger.of(buildContext).showSnackBar(
-          errorSnackBar(
-              e.toString()
-          )
-      );
     }
   }
 

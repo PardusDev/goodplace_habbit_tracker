@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/string_constants.dart';
 
@@ -186,7 +185,8 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
         setRegistering(false);
         return;
       }
-      goToTheOnboardingIfNecessary();
+      navigationService.navigateToPageClear("/onboarding", null);
+      reset();
     } catch (e) {
       setGeneralErrorText(e.toString());
     } finally {
@@ -200,23 +200,14 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       } else {
-        goToTheOnboardingIfNecessary();
+        navigationService.navigateToPageClear("/onboarding", null);
+        reset();
       }
     } catch (e) {
       setGeneralErrorText(e.toString());
     }
   }
 
-  void goToTheOnboardingIfNecessary() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seenOnboarding = prefs.getBool('onboarding') ?? false;
-
-    if (seenOnboarding) {
-      navigationService.navigateToPageClear("/home", null);
-    } else {
-      navigationService.navigateToPageClear("/onboarding", null);
-    }
-  }
 
   void setGeneralErrorText(String error) {
     _generalErrorText = error;
@@ -225,6 +216,22 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   void setRegistering(bool value) {
     _registering = value;
+    notifyListeners();
+  }
+
+  void reset() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    _nameErrorText = '';
+    _emailErrorText = '';
+    _passwordErrorText = '';
+    _generalErrorText = '';
+    _nameValid = null;
+    _emailValid = null;
+    _passwordValid = null;
+    _registering = false;
+    _privacyPolicyChecked = false;
     notifyListeners();
   }
 
