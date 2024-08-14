@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/string_constants.dart';
 

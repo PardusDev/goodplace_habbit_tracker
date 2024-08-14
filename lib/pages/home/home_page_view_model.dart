@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
@@ -17,8 +19,22 @@ class HomePageViewModel with ChangeNotifier {
   ViewState _state = ViewState.geliyor;
   ViewState get state => _state;
   String motivasyon="";
+  String greeting="";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
+  Timer? _timer; // Timer to update greeting message periodically
+
+  HomePageViewModel() {
+    getGreetingMessage();
+    startGreetingUpdateTimer(); // Start the timer when the ViewModel is created
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer when the ViewModel is disposed
+    super.dispose();
+  }
+
 
   set state(ViewState value) {
     _state = value;
@@ -77,5 +93,28 @@ class HomePageViewModel with ChangeNotifier {
           return const CreateHabitModal();
         }
     );
+  }
+
+   getGreetingMessage() {
+   final hour = DateTime.now().hour;
+
+
+  if (hour >= 4 && hour < 12) {
+    greeting = "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    greeting = "Good Afternoon";
+  } else if (hour >= 17 && hour < 21) {
+    greeting = "Good Evening";
+  } else {
+    greeting = "Good Night";
+  }
+
+  greeting = greeting + " X";
+  notifyListeners();
+  }
+   void startGreetingUpdateTimer() {
+    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+      getGreetingMessage();
+    });
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/Calendar.dart';
+import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../../constants/color_constants.dart';
 
@@ -16,21 +17,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late HomePageViewModel _mainModel;
+  late HomePageViewModel _homeModel;
 
   @override
   void initState() {
     super.initState();
-    _mainModel = Provider.of<HomePageViewModel>(context, listen: false);
+    _homeModel = Provider.of<HomePageViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _mainModel.getMotivasyon();
-      _mainModel.getUserInformation(context);
+      _homeModel.getMotivasyon();
+      _homeModel.getUserInformation(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _mainModel = Provider.of<HomePageViewModel>(context, listen: true);
+    _homeModel = Provider.of<HomePageViewModel>(context, listen: true);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 77, 87, 200),
@@ -41,73 +42,28 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
         toolbarHeight: 100,
       ),
-      drawer: Drawer(
-  backgroundColor: Colors.white,
-  child: ListView(
-    padding: EdgeInsets.zero,
-    children: [
-   const   DrawerHeader(
-        decoration: BoxDecoration(
-          color:  Color.fromARGB(255, 77, 87, 200),
-        ),
-        child:  Text(
-          StringConstants.appName,
-          style: TextStyle(color: Colors.white, fontSize: 24),
-        ),
-      ),
-      ListTile(
-        title: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF4d57c8),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ListTile(
-            leading: const Icon(Icons.settings, color: Colors.white),
-            title: const Text(
-              'Settings',
-              style: TextStyle(color: Colors.white),
-            ),
-            onTap: () {
-              _mainModel.navigateToSettings();
-            },
-          ),
-        ),
-      ),
-      const SizedBox(height: 24,),
-      ListTile(
-        title: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF4d57c8),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ListTile(
-            leading: const Icon(Icons.logout, color: Colors.white),
-            title: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.white),
-            ),
-            onTap: () {
-              if (mounted) {
-                _mainModel.signOut(context);
-              }
-            },
-          ),
-        ),
-      )
-    ],
-  ),
-),
+      drawer: MyDrawer(mainModel: _homeModel),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildCalendar(size),
+              SizedBox(width: size.width * 0.9,
+              child: Text(
+                _homeModel.greeting,
+                style:const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white),
+                  textAlign: TextAlign.start,
+                  )),
+              const SizedBox(height: 15),
+              CalendarWidget(),
               const SizedBox(height: 30),
-              _buildMyHabits(size, _mainModel),
+              _buildMyHabits(size, _homeModel),
               const SizedBox(height: 30),
-              _buildCard(size, _mainModel),
+              _buildCard(size, _homeModel),
               const SizedBox(height: 30),
               _buildStreakInfo(size),
               const SizedBox(height: 30),
@@ -120,57 +76,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCalendar(Size size) {
-    return Container(
-      width: size.width * 0.9,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30.0, left: 30, right: 30, bottom: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2020, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: DateTime.now(),
-              headerVisible: false,
-              calendarStyle: const CalendarStyle(
-                defaultTextStyle: TextStyle(color: Color(0xFF4d57c8)),
-                weekendTextStyle: TextStyle(color: Color(0xFF4d57c8)),
-                todayTextStyle: TextStyle(color: Colors.white),
-                selectedTextStyle: TextStyle(color: Colors.white),
-              ),
-              daysOfWeekStyle: const DaysOfWeekStyle(
-                weekdayStyle: TextStyle(color: Color(0xFF4d57c8)),
-                weekendStyle: TextStyle(color: Color(0xFF4d57c8)),
-              ),
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _LegendItem(
-                  icon: Icons.circle,
-                  color: Color(0xFF4d57c8),
-                  label: 'All Complete',
-                ),
-                SizedBox(width: 20),
-                _LegendItem(
-                  icon: Icons.circle_outlined,
-                  color: Color(0xFF4d57c8),
-                  label: 'Some Complete',
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildMyHabits(Size size, HomePageViewModel _mainModel) {
+  Widget _buildMyHabits(Size size, HomePageViewModel _homeModel) {
     return Container(
       width: size.width * 0.9,
       decoration: BoxDecoration(
@@ -191,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 height: 26,
                 child: ElevatedButton(
                   onPressed: () {
-                    _mainModel.showCreateHabitModal(context);
+                    _homeModel.showCreateHabitModal(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -213,7 +120,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget _buildCard(Size size, HomePageViewModel _mainModel) {
+ Widget _buildCard(Size size, HomePageViewModel _homeModel) {
   return Container(
     width: size.width * 0.9,
     decoration: BoxDecoration(
@@ -221,11 +128,11 @@ class _HomePageState extends State<HomePage> {
       borderRadius: BorderRadius.circular(20),
     ),
     child: Center(
-      child: _mainModel.motivasyon.isNotEmpty
+      child: _homeModel.motivasyon.isNotEmpty
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
               child: Text(
-                _mainModel.motivasyon,
+                _homeModel.motivasyon,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Color(0xFF4d57c8), fontWeight: FontWeight.bold, fontSize: 15),
@@ -370,30 +277,4 @@ Widget _buildImageCard(Size size, String imagePath, String text, String textdesc
 }
 }
 
-class _LegendItem extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String label;
 
-  const _LegendItem({
-    required this.icon,
-    required this.color,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 12, color: color),
-        const SizedBox(width: 5),
-        Text(
-          label,
-          style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-}
