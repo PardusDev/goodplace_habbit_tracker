@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 @immutable
@@ -164,6 +166,27 @@ class StringConstants {
   static const String createHabitScreenCreateButton = "Create";
   static const String habitNameEmptyError = "Habit name can't be empty.";
   // endregion
+  // region Success Screen
+  static const String successScreenTitle = "Success!";
+
+  static const List<String> successScreenSubtitles = [
+    "High five! You’re on fire (in a good way)!",
+    "Boom! You just owned that task!",
+    "Achievement unlocked: You’re officially awesome!",
+    "Habit complete! You’re basically a habit ninja now.",
+    "Habit success! Who’s the boss? You’re the boss!",
+    "Daily habit done! Your streak is hotter than your morning coffee.",
+    "Crushed it! Your future self is giving you a high five!"
+  ];
+
+  static get successScreenSubtitleRandom => successScreenSubtitles[Random().nextInt(successScreenSubtitles.length)];
+
+  static const String successScreenButton = "Done";
+  // endregion
+
+  // region Habit Alert Dialog
+  static const String habitAlertDialogTitle = "Are you sure?";
+  static const String habitAlertDialogBody = "Do you want to remove this habit?";
   // endregion Habits operations END
 
 }

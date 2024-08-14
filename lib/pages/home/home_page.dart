@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                       title: homePageViewModel.habits[index].title,
                       imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
                       onPressed: () {
-                        homePageViewModel.toggleHabit(homePageViewModel.habits[index], isCompleted);
+                        homePageViewModel.toggleHabit(context, homePageViewModel.habits[index], isCompleted);
                       },
                       isCompleted: isCompleted,
                     );

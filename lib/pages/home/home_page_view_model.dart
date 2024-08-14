@@ -7,8 +7,11 @@ import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
+import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
+import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -26,8 +29,8 @@ class HomePageViewModel with ChangeNotifier {
   String greeting = "";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
+  final AppUserManager _appUserManager = AppUserManager();
   final HabitManager _habitManager = HabitManager();
-  Timer? _timer; // Timer to update greeting message periodically
 
   bool _habitsIsLoading = false;
 
@@ -41,14 +44,13 @@ class HomePageViewModel with ChangeNotifier {
 
   HomePageViewModel() {
     getGreetingMessage();
-    startGreetingUpdateTimer(); // Start the timer when the ViewModel is created
+    _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -66,17 +68,22 @@ class HomePageViewModel with ChangeNotifier {
       greeting = "Good Night";
     }
 
-    greeting = greeting + " X";
+    if (_appUserManager.appUser != null) {
+      greeting = greeting + " " + _appUserManager.appUser!.name + "!";
+    } else {
+      greeting = greeting + " Guest!";
+    }
+
     notifyListeners();
-  }
-  void startGreetingUpdateTimer() {
-    //_timer = Timer.periodic(Duration(minutes: 1), (timer) {
-     // getGreetingMessage();
-    //});
   }
 
   void _onHabitsUpdated() {
     notifyListeners();
+  }
+
+  void _onUserUpdated() {
+    notifyListeners();
+    getGreetingMessage();
   }
 
   getMotivasyon()async {
@@ -110,7 +117,7 @@ class HomePageViewModel with ChangeNotifier {
     }
   }
 
-  void toggleHabit(UserHabit habit, bool isCompleted) async {
+  void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
       final firebaseUser = _authService.getCurrentUser();
       DoneHabit doneHabit = DoneHabit(
@@ -119,11 +126,30 @@ class HomePageViewModel with ChangeNotifier {
           doneAt: DateTime.now()
       );
       if (isCompleted) {
-        await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return const ConfirmAlertDialog(
+                  title: StringConstants.habitAlertDialogTitle,
+                  body: StringConstants.habitAlertDialogBody
+              );
+            }
+        ) .then((value) async {
+          if (value == true) {
+            await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
+          }
+        });
       } else {
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return const SuccessSplashBox(
+
+              );
+            }
+        );
         await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
       }
-      // TODO: Show a success message
       notifyListeners();
     } catch (e) {
       throw e;
@@ -142,8 +168,9 @@ class HomePageViewModel with ChangeNotifier {
       User? firebaseUser = _authService.getCurrentUser();
       await _authService.getUserByUID(firebaseUser!.uid).then((value) {
         // Set user to AppUserManager
-        Provider.of<AppUserManager>(buildContext, listen: false).setUser(value!);
+        _appUserManager.setUser(value!);
       });
+      notifyListeners();
     } catch (e) {
       // TODO: Handle this error
       throw e;

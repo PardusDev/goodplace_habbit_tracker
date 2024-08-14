@@ -95,5 +95,15 @@ class ColorConstants {
   static const Color homePageCompletedHabitListTileButtonTextColor = Color(0xFF3F414E);
   // endregion
 
+  // region Success Screen
+
+  static const Color successScreenBackgroundColor = Color(0xFFFFFFFF);
+  static const Color successScreenTitleColor = Color(0xFF3F414E);
+  static const Color successScreenSubtitleColor = Color(0xFFA1A4B2);
+  static const Color successScreenButtonColor = Color(0xFF8E97FD);
+  static const Color successScreenButtonTextColor = Color(0xFFFFFFFF);
+
+  // endregion
+
 
 }
