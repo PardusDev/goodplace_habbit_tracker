@@ -26,8 +26,8 @@ class HomePageViewModel with ChangeNotifier {
   String greeting = "";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
+  final AppUserManager _appUserManager = AppUserManager();
   final HabitManager _habitManager = HabitManager();
-  Timer? _timer; // Timer to update greeting message periodically
 
   bool _habitsIsLoading = false;
 
@@ -41,14 +41,13 @@ class HomePageViewModel with ChangeNotifier {
 
   HomePageViewModel() {
     getGreetingMessage();
-    startGreetingUpdateTimer(); // Start the timer when the ViewModel is created
+    _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -66,17 +65,22 @@ class HomePageViewModel with ChangeNotifier {
       greeting = "Good Night";
     }
 
-    greeting = greeting + " X";
+    if (_appUserManager.appUser != null) {
+      greeting = greeting + " " + _appUserManager.appUser!.name + "!";
+    } else {
+      greeting = greeting + " Guest!";
+    }
+
     notifyListeners();
-  }
-  void startGreetingUpdateTimer() {
-    //_timer = Timer.periodic(Duration(minutes: 1), (timer) {
-     // getGreetingMessage();
-    //});
   }
 
   void _onHabitsUpdated() {
     notifyListeners();
+  }
+
+  void _onUserUpdated() {
+    notifyListeners();
+    getGreetingMessage();
   }
 
   getMotivasyon()async {
@@ -119,11 +123,12 @@ class HomePageViewModel with ChangeNotifier {
           doneAt: DateTime.now()
       );
       if (isCompleted) {
+        // TODO: Show a dialog to ask if the user is sure to remove the habit
         await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
       } else {
+        // TODO: Show a success message
         await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
       }
-      // TODO: Show a success message
       notifyListeners();
     } catch (e) {
       throw e;
@@ -142,8 +147,9 @@ class HomePageViewModel with ChangeNotifier {
       User? firebaseUser = _authService.getCurrentUser();
       await _authService.getUserByUID(firebaseUser!.uid).then((value) {
         // Set user to AppUserManager
-        Provider.of<AppUserManager>(buildContext, listen: false).setUser(value!);
+        _appUserManager.setUser(value!);
       });
+      notifyListeners();
     } catch (e) {
       // TODO: Handle this error
       throw e;
