@@ -21,6 +21,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<HabitDetailViewModel>(context, listen: false).resetEvents();
       final args = ModalRoute.of(context)!.settings.arguments as UserHabit;
       Provider.of<HabitDetailViewModel>(context, listen: false).setCurrentHabit(args);
       Provider.of<HabitDetailViewModel>(context, listen: false).fetchDoneHabitsForSpecificMonth(args, DateTime.now());

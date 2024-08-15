@@ -141,4 +141,9 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
   bool checkHabitIsCompletedForSelectedDate(UserHabit habit) {
     return _habitManager.checkHabitIsCompletedForSelectedDate(habit, _selectedDay);
   }
+
+  void resetEvents() {
+    _events = {};
+    notifyListeners();
+  }
 }
