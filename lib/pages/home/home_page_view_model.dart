@@ -231,6 +231,10 @@ class HomePageViewModel with ChangeNotifier {
     _navigationService.navigateToPage('/manageMyHabits', null);
   }
 
+  void navigateToHome(){
+    _navigationService.navigateToPage('/home', null);
+  }
+
   void showCreateHabitModal(BuildContext buildContext) {
     showModalBottomSheet(
         context: buildContext,

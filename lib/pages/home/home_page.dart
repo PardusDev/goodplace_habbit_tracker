@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 if (homePageViewModel.habits.isEmpty) {
-                  return Center(child: Text('Oh no! Here is empty'),);
+                  return const Center(child: Text('Oh no! Here is empty'),);
                 }
 
                 return ListView.separated(
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xFF4d57c8), fontWeight: FontWeight.bold, fontSize: 15),
               ),
             )
-          : CustomShimmer(width: double.infinity, height: 20),
+          : const CustomShimmer(width: double.infinity, height: 20),
     ),
   );
 }

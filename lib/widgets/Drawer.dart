@@ -22,6 +22,17 @@ class MyDrawer extends StatelessWidget {
           _buildDrawerHeader(),
           const SizedBox(height: 24),
           _buildListItem(
+            icon: Icons.home,
+            title: 'Home Page',
+            onTap: () {
+              Navigator.pop(context);
+              if(currentPage!="Home Page"){
+                _mainModel.navigateToHome();
+              }
+            },
+          ),
+          const SizedBox(height: 6),
+          _buildListItem(
             icon: Icons.settings,
             title: 'Settings',
             onTap: (){
