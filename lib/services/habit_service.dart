@@ -160,6 +160,35 @@ class HabitService {
   }
   //endregion
 
+  // region Get Done Habits According to Month
+  Future<List<DoneHabit>> getDoneHabitsForSpecificMonth(String uid, String habitId, int year, int month) async {
+    try {
+      final startDateId = generateIdFromDate(DateTime(year, month, 1));
+      // With this method, we can get the last day of the month
+      final endDateId = generateIdFromDate(DateTime(year, month + 1, 1).subtract(const Duration(days: 1)));
+
+      final querySnapshot = await _firestore
+          .collection("users").doc(uid)
+          .collection("habits").doc(habitId)
+          .collection("doneHabits")
+          .where(FieldPath.documentId, isGreaterThanOrEqualTo: startDateId)
+          .where(FieldPath.documentId, isLessThanOrEqualTo: endDateId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.map((doc) => DoneHabit.fromDocument(doc)).toList();
+      } else {
+        return [];
+      }
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+      throw e;
+    }
+    return [];
+  }
+  // endregion
+
   // region Delete Done Habit
   Future<bool> deleteDoneHabit(User user, DoneHabit doneHabit) async {
     try {
@@ -180,6 +209,7 @@ class HabitService {
     }
     return false;
   }
+  // endregion
 
   //region Get user habits
   Future<List<UserHabit>> getUserHabits(String uid) async {

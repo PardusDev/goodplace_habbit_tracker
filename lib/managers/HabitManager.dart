@@ -21,7 +21,9 @@ class HabitManager with ChangeNotifier {
       _habits = await _habitService.getUserHabits(uid);
       for (var habit in _habits) {
         final doneHabit = await loadDoneHabitForSpecificDay(uid, habit.habitId, dateTime);
-        if (doneHabit != null) {
+
+        // If doneHabit exist in the list don't add it again.
+        if (doneHabit != null && !habit.doneHabits.any((dh) => dh.id == doneHabit.id)) {
           habit.doneHabits.add(doneHabit);
         }
       }
@@ -38,6 +40,19 @@ class HabitManager with ChangeNotifier {
         return null;
       }
       return doneHabit;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<bool> loadDoneHabitForSpecificMonth(String uid, String habitId, int year, int month) async {
+    try {
+      final doneHabits = await _habitService.getDoneHabitsForSpecificMonth(uid, habitId, year, month);
+      // Replace doneHabits with the existing doneHabits.
+      _habits.firstWhere((element) => element.habitId == habitId).doneHabits.clear();
+      _habits.firstWhere((element) => element.habitId == habitId).doneHabits.addAll(doneHabits);
+      notifyListeners();
+      return true;
     } catch (e) {
       throw e;
     }
