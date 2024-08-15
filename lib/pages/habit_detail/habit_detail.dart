@@ -66,35 +66,43 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                 ),
               ),
               const SizedBox(height: 25),
-              const Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Su İç',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return Text(
+                        userHabit.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      );
+                    }
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         '🔥',
                         style: TextStyle(fontSize: 18),
                       ),
-                      SizedBox(width: 4),
-                      Text(
-                        "4",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      const SizedBox(width: 4),
+                      Consumer<HabitDetailViewModel>(
+                        builder: (context, viewModel, child) {
+                          return Text(
+                            userHabit.maxStreak.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }
                       ),
                     ],
                   ),
@@ -103,7 +111,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
               const SizedBox(height: 20),
               Text(
                 userHabit.subject,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color.fromARGB(255, 200, 200, 200),
                   fontSize: 16,
                 ),
@@ -111,7 +119,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
               const SizedBox(height: 5),
               Text(
                 'Creation Time: ${dateFormatterToShow(userHabit.createdAt)}',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                 ),
@@ -140,7 +148,6 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Implement the habit completion logic
                             viewModel.toggleHabit(context, userHabit, viewModel.checkHabitIsCompletedForSelectedDate(userHabit));
                           },
                           style: ElevatedButton.styleFrom(
