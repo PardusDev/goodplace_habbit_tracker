@@ -190,8 +190,7 @@ class HomePageViewModel with ChangeNotifier {
 
   /// This function checks if the habit is completed for the selected date. And returns true if it is completed.
   bool checkHabitIsCompletedForSelectedDate(UserHabit habit) {
-    final convertedDateId = generateIdFromDate(_selectedDate);
-    return habit.doneHabits.any((element) => element.id == convertedDateId);
+    return _habitManager.checkHabitIsCompletedForSelectedDate(habit, selectedDate);
   }
 
   /// Get user details from Firebase and set it to AppUserManager
@@ -229,6 +228,10 @@ class HomePageViewModel with ChangeNotifier {
 
   void navigateToManageMyHabits(){
     _navigationService.navigateToPage('/manageMyHabits', null);
+  }
+
+  void navigateToHome(){
+    _navigationService.navigateToPage('/home', null);
   }
 
   void showCreateHabitModal(BuildContext buildContext) {

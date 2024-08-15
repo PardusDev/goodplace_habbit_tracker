@@ -22,27 +22,27 @@ class NavigationRoute {
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
       case NavigatorConstants.SPLASH_PAGE:
-        return slideAnimatedRoute(const WelcomePage());
+        return slideAnimatedRoute(const WelcomePage(), args.arguments);
       case NavigatorConstants.WELCOME_PAGE:
-        return slideAnimatedRoute(const WelcomePage());
+        return slideAnimatedRoute(const WelcomePage(), args.arguments);
       case NavigatorConstants.LOGIN_PAGE:
-        return slideAnimatedRoute(const LoginPage());
+        return slideAnimatedRoute(const LoginPage(), args.arguments);
       case NavigatorConstants.REGISTER_PAGE:
-        return slideAnimatedRoute(const RegisterPage());
+        return slideAnimatedRoute(const RegisterPage(), args.arguments);
       case NavigatorConstants.ONBOARDING_PAGE:
-        return slideAnimatedRoute(const OnBoardingPage());
+        return slideAnimatedRoute(const OnBoardingPage(), args.arguments);
       case NavigatorConstants.HOME_PAGE:
-        return slideAnimatedRoute(const HomePage());
+        return slideAnimatedRoute(const HomePage(), args.arguments);
       case NavigatorConstants.SETTINGS_PAGE:
-        return slideAnimatedRoute(const SettingsPage());
+        return slideAnimatedRoute(const SettingsPage(), args.arguments);
       case NavigatorConstants.MANAGEMYHABITS_PAGE:
-        return slideAnimatedRoute(const ManageMyHabitsPage());
+        return slideAnimatedRoute(const ManageMyHabitsPage(), args.arguments);
       case NavigatorConstants.HABITDETAIL_PAGE:
-        return slideAnimatedRoute(const HabitDetailPage());
+        return slideAnimatedRoute(const HabitDetailPage(), args.arguments);
       case NavigatorConstants.NOT_FOUND:
-        return slideAnimatedRoute(const NotFound());
+        return slideAnimatedRoute(const NotFound(), args.arguments);
       default:
-        return slideAnimatedRoute(const NotFound());
+        return slideAnimatedRoute(const NotFound(), args.arguments);
     }
   }
 
@@ -53,10 +53,10 @@ class NavigationRoute {
     );
   }
 
-  PageRouteBuilder slideAnimatedRoute(Widget widget) {
+  PageRouteBuilder slideAnimatedRoute(Widget widget, Object? args) {
     return PageRouteBuilder(
         pageBuilder: (context, animation, secondayAnimation) => widget,
-        settings: RouteSettings(name: widget.toString()),
+        settings: RouteSettings(name: widget.toString(), arguments: args),
         transitionsBuilder: RightTransition
     );
   }
