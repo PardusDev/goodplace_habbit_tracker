@@ -50,6 +50,7 @@ class HabitManager with ChangeNotifier {
       final doneHabits = await _habitService.getDoneHabitsForSpecificMonth(uid, habitId, year, month);
       // Replace doneHabits with the existing doneHabits.
       _habits.firstWhere((element) => element.habitId == habitId).doneHabits.clear();
+      // Add all doneHabits to the existing doneHabits.
       _habits.firstWhere((element) => element.habitId == habitId).doneHabits.addAll(doneHabits);
       notifyListeners();
       return true;

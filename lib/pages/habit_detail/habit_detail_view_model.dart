@@ -55,6 +55,8 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> fetchDoneHabitsForSpecificMonth(DateTime date) async {
     User? user = FirebaseAuth.instance.currentUser;
+    // Before fetching the done habits, we need to reset the events
+    resetEvents();
     await _habitManager.loadDoneHabitForSpecificMonth(user!.uid, currentHabit.habitId, date.year, date.month);
     prepareEvents();
     notifyListeners();
