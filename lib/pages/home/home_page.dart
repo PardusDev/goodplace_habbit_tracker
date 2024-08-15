@@ -123,7 +123,6 @@ class _HomePageState extends State<HomePage> {
           Consumer<HomePageViewModel>(
               builder: (context, homePageViewModel, child) {
                 if (homePageViewModel.habitsIsLoading) {
-                  // TODO: Change this to shimmer
                   return const CustomShimmer(
                     width: double.infinity,
                     height: 24,

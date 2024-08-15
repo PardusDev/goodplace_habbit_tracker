@@ -10,6 +10,7 @@ import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -40,7 +41,6 @@ class HomePageViewModel with ChangeNotifier {
   void setSelectedDate(BuildContext buildContext, DateTime value) {
     if (value == _selectedDate) return;
     _selectedDate = value;
-    // TODO: Fetch habits for the selected date
     fetchHabits(buildContext);
     notifyListeners();
   }
@@ -56,15 +56,8 @@ class HomePageViewModel with ChangeNotifier {
     _habitManager.addListener(_onHabitsUpdated);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
   getGreetingMessage() {
     final hour = DateTime.now().hour;
-
 
     if (hour >= 4 && hour < 12) {
       greeting = "Good Morning";
@@ -127,13 +120,37 @@ class HomePageViewModel with ChangeNotifier {
 
   void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
-      // TODO: Block the user from adding a done habit for the future or past dates.
       final firebaseUser = _authService.getCurrentUser();
       DoneHabit doneHabit = DoneHabit(
           id: generateIdFromDate(_selectedDate),
           habitId: habit.habitId,
           doneAt: _selectedDate
       );
+
+      /*
+      TODO: We are not blocking the user from marking habits for the future.
+            We will implement this feature in the future.
+      // Block if the selected date is not today
+      if (_selectedDate != DateTime.now()) {
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                "You can only mark habits for today."
+            )
+        );
+        return;
+      }
+      */
+
+      // Block if the selected date is past
+      if (_selectedDate.isBefore(DateTime.now())) {
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                StringConstants.habitPastDateError
+            )
+        );
+        return;
+      }
+
       if (isCompleted) {
         /*
         TODO: This function currently out of use. It will be used in the future.

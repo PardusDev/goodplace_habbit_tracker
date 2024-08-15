@@ -189,4 +189,8 @@ class StringConstants {
   static const String habitAlertDialogBody = "Do you want to remove this habit?";
   // endregion Habits operations END
 
+  // region Habit Errors
+  static const String habitPastDateError = "You can't mark habits for the past.";
+  // endregion
+
 }
