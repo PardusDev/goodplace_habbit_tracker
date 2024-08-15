@@ -13,4 +13,6 @@ class NavigatorConstants {
   static const NOT_FOUND = "/not_found";
   static const HOME_PAGE = "/home";
   static const SETTINGS_PAGE = "/settings";
+  static const MANAGEMYHABITS_PAGE = "/manageMyHabits";
+  static const HABITDETAIL_PAGE = "/habitDetail";
 }

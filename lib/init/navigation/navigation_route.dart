@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/pages/habit_detail/habit_detail.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
+import 'package:goodplace_habbit_tracker/pages/manage_my_habits/manage_my_habits_page.dart';
 import 'package:goodplace_habbit_tracker/pages/onboarding/onboarding_page.dart';
 import 'package:goodplace_habbit_tracker/widgets/NotFound.dart';
 
@@ -33,6 +35,10 @@ class NavigationRoute {
         return slideAnimatedRoute(const HomePage());
       case NavigatorConstants.SETTINGS_PAGE:
         return slideAnimatedRoute(const SettingsPage());
+      case NavigatorConstants.MANAGEMYHABITS_PAGE:
+        return slideAnimatedRoute(const ManageMyHabitsPage());
+      case NavigatorConstants.HABITDETAIL_PAGE:
+        return slideAnimatedRoute(const HabitDetailPage());
       case NavigatorConstants.NOT_FOUND:
         return slideAnimatedRoute(const NotFound());
       default:
