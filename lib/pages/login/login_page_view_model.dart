@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/string_constants.dart';
 
@@ -31,6 +30,14 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
     navigationService.navigateToPage('/register', null);
   }
 
+  void navigateToOnboarding() {
+    navigationService.navigateToPage('/onboarding', null);
+  }
+
+  void navigateToHome() {
+    navigationService.navigateToPage('/home', null);
+  }
+
   Future<void> login() async {
     final email = emailController.text;
     final password = passwordController.text;
@@ -40,7 +47,6 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setErrorText(StringConstants.loginScreenEmailOrPasswdNotRight);
       }
-      goToTheOnboardingIfNecessary();
     } catch (e) {
       setErrorText(e.toString());
       return;
@@ -50,25 +56,19 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> loginWithGoogle() async {
     try {
-      user = await _authService.signInWithGoogle();
+      UserCredential? userCredential = await _authService.signInWithGoogle();
+      user = userCredential!.user;
       if (user == null) {
         setErrorText(StringConstants.anErrorOccured);
       } else {
-        goToTheOnboardingIfNecessary();
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          navigateToOnboarding();
+        } else {
+          navigateToHome();
+        }
       }
     } catch (e) {
       setErrorText(e.toString());
-    }
-  }
-
-  void goToTheOnboardingIfNecessary() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seenOnboarding = prefs.getBool('onboarding') ?? false;
-
-    if (seenOnboarding) {
-      navigationService.navigateToPageClear("/home", null);
-    } else {
-      navigationService.navigateToPageClear("/onboarding", null);
     }
   }
 

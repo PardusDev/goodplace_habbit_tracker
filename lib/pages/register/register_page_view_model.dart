@@ -50,6 +50,15 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   void navigateToLogin() {
     navigationService.navigateToPage('/login', null);
   }
+
+  void navigateToOnboarding() {
+    navigationService.navigateToPage('/onboarding', null);
+  }
+
+  void navigateToHome() {
+    navigationService.navigateToPage('/home', null);
+  }
+
   //region NAME *************************************
   void onNameChanged(String value) {
     final result = _validateName(value);
@@ -186,7 +195,6 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
         return;
       }
       navigationService.navigateToPageClear("/onboarding", null);
-      reset();
     } catch (e) {
       setGeneralErrorText(e.toString());
     } finally {
@@ -196,12 +204,16 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> continueWithGoogle() async {
     try {
-      user = await _authService.signInWithGoogle();
+      UserCredential? userCredential = await _authService.signInWithGoogle();
+      user = userCredential!.user;
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       } else {
-        navigationService.navigateToPageClear("/onboarding", null);
-        reset();
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          navigateToOnboarding();
+        } else {
+          navigateToHome();
+        }
       }
     } catch (e) {
       setGeneralErrorText(e.toString());
@@ -216,22 +228,6 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   void setRegistering(bool value) {
     _registering = value;
-    notifyListeners();
-  }
-
-  void reset() {
-    nameController.clear();
-    emailController.clear();
-    passwordController.clear();
-    _nameErrorText = '';
-    _emailErrorText = '';
-    _passwordErrorText = '';
-    _generalErrorText = '';
-    _nameValid = null;
-    _emailValid = null;
-    _passwordValid = null;
-    _registering = false;
-    _privacyPolicyChecked = false;
     notifyListeners();
   }
 

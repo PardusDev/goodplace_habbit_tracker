@@ -61,7 +61,11 @@ class _HomePageState extends State<HomePage> {
                     textAlign: TextAlign.start,
                   )),
               const SizedBox(height: 15),
-              CalendarWidget(),
+              CalendarWidget(
+                onDaySelected: (selectedDay) {
+                  _homeModel.setSelectedDate(context, selectedDay);
+                },
+              ),
               const SizedBox(height: 30),
               _buildMyHabits(size, _homeModel),
               const SizedBox(height: 30),
@@ -119,7 +123,6 @@ class _HomePageState extends State<HomePage> {
           Consumer<HomePageViewModel>(
               builder: (context, homePageViewModel, child) {
                 if (homePageViewModel.habitsIsLoading) {
-                  // TODO: Change this to shimmer
                   return const CustomShimmer(
                     width: double.infinity,
                     height: 24,
@@ -139,8 +142,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   // TODO: Improve image loading.
                   itemBuilder: (BuildContext context, int index) {
-                    // TODO: Change DateTime.now() to selected date
-                    final isCompleted = homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index], DateTime.now());
+                    final isCompleted = homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index]);
                     return HabitListTile(
                       title: homePageViewModel.habits[index].title,
                       imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',

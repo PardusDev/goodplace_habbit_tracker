@@ -15,13 +15,11 @@ class HabitManager with ChangeNotifier {
 
   List<UserHabit> get habits => _habits;
 
-  Future<void> loadUserHabits(String uid) async {
+  Future<void> loadUserHabits(String uid, DateTime dateTime) async {
     try {
       _habits = await _habitService.getUserHabits(uid);
-      // Run loadDoneHabitForSpecificDay for each habit
       for (var habit in _habits) {
-        // TODO: Change DateTime.now() to a specific date (get it from the calendar)
-        final doneHabit = await loadDoneHabitForSpecificDay(uid, habit.habitId, DateTime.now());
+        final doneHabit = await loadDoneHabitForSpecificDay(uid, habit.habitId, dateTime);
         if (doneHabit != null) {
           habit.doneHabits.add(doneHabit);
         }
@@ -58,7 +56,7 @@ class HabitManager with ChangeNotifier {
     }
   }
 
-  Future<void> addDoneHabit(User user, DoneHabit doneHabit) async {
+  Future<void> addDoneHabit(User user, UserHabit userHabit, DoneHabit doneHabit) async {
     try {
       final doneHabitId = await _habitService.addDoneHabit(user, doneHabit);
       if (doneHabitId == null) {
@@ -67,6 +65,7 @@ class HabitManager with ChangeNotifier {
       if (_habits.any((element) => element.habitId == doneHabit.habitId)) {
         _habits.firstWhere((element) => element.habitId == doneHabit.habitId).doneHabits.add(doneHabit);
       }
+      checkAndUpdateHabitStreak(user, userHabit, doneHabit);
       notifyListeners();
     } catch (e) {
       throw e;
@@ -87,5 +86,60 @@ class HabitManager with ChangeNotifier {
       // Don't need to move StringConstants to a separate file.
       throw "An error occured while removing the done habit.";
     }
+  }
+
+  Future<void> updateHabit(User user, UserHabit habit) async {
+    try {
+      final result = await _habitService.updateHabit(user, habit);
+      if (!result) {
+        throw Exception(StringConstants.anErrorOccured);
+      }
+      final index = _habits.indexWhere((element) => element.habitId == habit.habitId);
+      if (index != -1) {
+        _habits[index] = habit;
+      }
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /// This method checks if the habit is completed for the selected date.
+  /// With that, updates the current streak, max streak, and current streak last date.
+  Future<void> checkAndUpdateHabitStreak(User user, UserHabit userHabit, DoneHabit doneHabit) async {
+    final lastDate = userHabit.currentStreakLastDate;
+    if (userHabit.currentStreakLastDate == null) {
+      // This means the user has never completed the habit. So, the streak is 0.
+      // Update the max streak, current streak, and current streak last date.
+      userHabit.currentStreak = 1;
+      userHabit.maxStreak = userHabit.currentStreak;
+      userHabit.currentStreakLastDate = doneHabit.doneAt;
+      await updateHabit(user, userHabit);
+      return;
+    }
+
+    final difference = doneHabit.doneAt.difference(lastDate!);
+    if (difference.inDays <= 1) {
+      // This means the user has completed the habit yesterday.
+      // Update the current streak and current streak last date.
+      userHabit.currentStreak += 1;
+      userHabit.currentStreakLastDate = doneHabit.doneAt;
+      if (userHabit.currentStreak > userHabit.maxStreak) {
+        // Update the max streak if the current streak is greater than the max streak.
+        userHabit.maxStreak = userHabit.currentStreak;
+      }
+      await updateHabit(user, userHabit);
+      return;
+    } else if (difference.inDays > 1) {
+      // This means the user has not completed the habit yesterday.
+      // Update the current streak to 1 and current streak last date to today.
+      userHabit.currentStreak = 1;
+      userHabit.currentStreakLastDate = doneHabit.doneAt;
+      await updateHabit(user, userHabit);
+      return;
+    }
+
+    await updateHabit(user, userHabit);
+    return;
   }
 }

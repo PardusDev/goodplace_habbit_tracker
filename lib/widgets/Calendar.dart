@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarWidget extends StatefulWidget {
+  final ValueChanged<DateTime> onDaySelected;
+
+  const CalendarWidget({Key? key, required this.onDaySelected}) : super(key: key);
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
@@ -37,6 +40,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
                 });
+                widget.onDaySelected(selectedDay);
               },
               headerVisible: false,
               calendarStyle: const CalendarStyle(
@@ -80,6 +84,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 }
+
 class _LegendItem extends StatelessWidget {
   final IconData icon;
   final Color color;

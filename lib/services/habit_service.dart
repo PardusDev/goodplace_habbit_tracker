@@ -194,4 +194,28 @@ class HabitService {
     return [];
   }
   //endregion
+
+  //region Update habit
+  Future<bool> updateHabit(User user, UserHabit userHabit) async {
+    try {
+      /*
+      TODO: This method is not working properly. Fix it.
+      final exists = await checkIfHabitExists(user, userHabit);
+      if (exists == false) {
+        throw Exception("Habit does not exist");
+      }
+      */
+      await _firestore
+          .collection("users").doc(user.uid)
+          .collection("habits").doc(userHabit.habitId)
+          .update(userHabit.toDocument());
+      return true;
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+      throw e;
+    }
+    return false;
+  }
+  //endregion
 }

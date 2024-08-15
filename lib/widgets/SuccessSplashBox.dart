@@ -18,7 +18,7 @@ class SuccessSplashBox extends StatelessWidget {
         width: context.sized.dynamicWidth(0.9),
         height: context.sized.dynamicHeight(0.7),
         decoration: BoxDecoration(
-          borderRadius: context.border.lowBorderRadius,
+          borderRadius: context.border.highBorderRadius,
           color: ColorConstants.successScreenBackgroundColor,
           boxShadow: const [
             BoxShadow(
@@ -38,7 +38,7 @@ class SuccessSplashBox extends StatelessWidget {
               const Spacer(),
 
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Text(
                   StringConstants.successScreenTitle,
                   style: context.general.textTheme.headlineLarge?.copyWith(
@@ -52,7 +52,7 @@ class SuccessSplashBox extends StatelessWidget {
               const Spacer(),
 
               Expanded(
-                flex: 14,
+                flex: 20,
                 child: Lottie.asset(
                   LottieConstants.successLottie,
                 )
@@ -65,15 +65,15 @@ class SuccessSplashBox extends StatelessWidget {
                 child: Text(
                   StringConstants.successScreenSubtitleRandom,
                   textAlign: TextAlign.center,
-                  style: context.general.textTheme.headlineSmall?.copyWith(
+                  style: context.general.textTheme.titleLarge?.copyWith(
                     color: ColorConstants.successScreenSubtitleColor,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     overflow: TextOverflow.visible,
                   ),
                 ),
               ),
 
-              const Spacer(flex: 6,),
+              const Spacer(flex: 8,),
 
               Expanded(
                 flex: 3,
