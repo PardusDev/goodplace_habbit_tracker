@@ -50,6 +50,7 @@ class HabitManager with ChangeNotifier {
       final doneHabits = await _habitService.getDoneHabitsForSpecificMonth(uid, habitId, year, month);
       // Replace doneHabits with the existing doneHabits.
       _habits.firstWhere((element) => element.habitId == habitId).doneHabits.clear();
+      // Add all doneHabits to the existing doneHabits.
       _habits.firstWhere((element) => element.habitId == habitId).doneHabits.addAll(doneHabits);
       notifyListeners();
       return true;
@@ -158,6 +159,18 @@ class HabitManager with ChangeNotifier {
     await updateHabit(user, userHabit);
     return;
   }
+
+  // region Sorting
+  void sortByCreationDate() {
+    _habits.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    notifyListeners();
+  }
+
+  void sortByMaxStreak() {
+    _habits.sort((a, b) => b.maxStreak.compareTo(a.maxStreak));
+    notifyListeners();
+  }
+  // endregion
 
   bool checkHabitIsCompletedForSelectedDate(UserHabit habit, DateTime dateTime) {
     final convertedDateId = generateIdFromDate(dateTime);

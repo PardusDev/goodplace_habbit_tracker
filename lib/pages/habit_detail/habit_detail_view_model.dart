@@ -12,13 +12,12 @@ import '../../widgets/Snackbars.dart';
 import '../../widgets/SuccessSplashBox.dart';
 
 class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
+  final UserHabit currentHabit;
   final HabitManager _habitManager = HabitManager();
 
-  UserHabit? _currentHabit;
   DateTime _selectedDay = DateTime.now();
   Map<DateTime, List<DoneHabit>> _events = {};
 
-  UserHabit? get currentHabit => _currentHabit;
   DateTime get selectedDay => _selectedDay;
   Map<DateTime, List<DoneHabit>> get events => _events;
   List<UserHabit> get habits => _habitManager.habits;
@@ -28,7 +27,8 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
-  HabitDetailViewModel() {
+  HabitDetailViewModel({required this.currentHabit}) {
+    fetchDoneHabitsForSpecificMonth(DateTime.now());
     _habitManager.addListener(_onHabitsUpdated);
   }
 
@@ -36,14 +36,9 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
-  void setCurrentHabit(UserHabit habit) {
-    _currentHabit = habit;
-    notifyListeners();
-  }
-
   // For the calendar
   void prepareEvents() {
-    for (var doneHabit in currentHabit!.doneHabits) {
+    for (var doneHabit in currentHabit.doneHabits) {
       prepareAndAddEvent(doneHabit);
     }
   }
@@ -58,9 +53,11 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
-  Future<void> fetchDoneHabitsForSpecificMonth(UserHabit userHabit, DateTime date) async {
+  Future<void> fetchDoneHabitsForSpecificMonth(DateTime date) async {
     User? user = FirebaseAuth.instance.currentUser;
-    await _habitManager.loadDoneHabitForSpecificMonth(user!.uid, userHabit.habitId, date.year, date.month);
+    // Before fetching the done habits, we need to reset the events
+    resetEvents();
+    await _habitManager.loadDoneHabitForSpecificMonth(user!.uid, currentHabit.habitId, date.year, date.month);
     prepareEvents();
     notifyListeners();
   }
