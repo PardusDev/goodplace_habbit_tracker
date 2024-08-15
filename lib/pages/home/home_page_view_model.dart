@@ -7,11 +7,9 @@ import 'package:goodplace_habbit_tracker/locator.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
-import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -33,9 +31,19 @@ class HomePageViewModel with ChangeNotifier {
   final HabitManager _habitManager = HabitManager();
 
   bool _habitsIsLoading = false;
+  DateTime _selectedDate = DateTime.now();
 
   List<UserHabit> get habits => _habitManager.habits;
   bool get habitsIsLoading => _habitsIsLoading;
+  DateTime get selectedDate => _selectedDate;
+
+  void setSelectedDate(BuildContext buildContext, DateTime value) {
+    if (value == _selectedDate) return;
+    _selectedDate = value;
+    // TODO: Fetch habits for the selected date
+    fetchHabits(buildContext);
+    notifyListeners();
+  }
 
   set state(ViewState value) {
     _state = value;
@@ -103,7 +111,7 @@ class HomePageViewModel with ChangeNotifier {
       _habitsIsLoading = true;
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
-      await _habitManager.loadUserHabits(firebaseUser!.uid);
+      await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
       _habitsIsLoading = false;
       notifyListeners();
     } catch (e) {
@@ -119,13 +127,17 @@ class HomePageViewModel with ChangeNotifier {
 
   void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
+      // TODO: Block the user from adding a done habit for the future or past dates.
       final firebaseUser = _authService.getCurrentUser();
       DoneHabit doneHabit = DoneHabit(
-          id: generateIdFromDate(DateTime.now()),
+          id: generateIdFromDate(_selectedDate),
           habitId: habit.habitId,
-          doneAt: DateTime.now()
+          doneAt: _selectedDate
       );
       if (isCompleted) {
+        /*
+        TODO: This function currently out of use. It will be used in the future.
+                The out of use reason is that the function is not working properly with Streak.
         showDialog(
             context: buildContext,
             builder: (BuildContext context) {
@@ -139,6 +151,7 @@ class HomePageViewModel with ChangeNotifier {
             await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
           }
         });
+         */
       } else {
         showDialog(
             context: buildContext,
@@ -148,7 +161,7 @@ class HomePageViewModel with ChangeNotifier {
               );
             }
         );
-        await _habitManager.addDoneHabit(firebaseUser!, doneHabit);
+        await _habitManager.addDoneHabit(firebaseUser!, habit, doneHabit);
       }
       notifyListeners();
     } catch (e) {
@@ -157,8 +170,8 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   /// This function checks if the habit is completed for the selected date. And returns true if it is completed.
-  bool checkHabitIsCompletedForSelectedDate(UserHabit habit, DateTime selectedDate) {
-    final convertedDateId = generateIdFromDate(selectedDate);
+  bool checkHabitIsCompletedForSelectedDate(UserHabit habit) {
+    final convertedDateId = generateIdFromDate(_selectedDate);
     return habit.doneHabits.any((element) => element.id == convertedDateId);
   }
 

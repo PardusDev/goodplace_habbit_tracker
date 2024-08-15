@@ -57,7 +57,10 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
           subject: subjectController.text,
           imagePath: imagePathController.text,
           createdAt: DateTime.now(),
-          doneHabits: []
+          doneHabits: [],
+          maxStreak: 0,
+          currentStreakLastDate: null,
+          currentStreak: 0
       );
 
       await _habitManager.addHabit(user!, newHabit);
