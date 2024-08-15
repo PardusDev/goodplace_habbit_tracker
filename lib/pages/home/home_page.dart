@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
         toolbarHeight: 100,
       ),
-      drawer: MyDrawer(mainModel: _homeModel),
+      drawer: MyDrawer(mainModel: _homeModel, currentPage:"Home Page"),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

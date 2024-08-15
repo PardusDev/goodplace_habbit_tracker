@@ -4,10 +4,12 @@ import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 
 class MyDrawer extends StatelessWidget {
   final HomePageViewModel _mainModel;
+  final String currentPage;
 
   const MyDrawer({
     Key? key,
     required HomePageViewModel mainModel,
+   required this.currentPage
   }) : _mainModel = mainModel, super(key: key);
 
   @override
@@ -22,14 +24,22 @@ class MyDrawer extends StatelessWidget {
           _buildListItem(
             icon: Icons.settings,
             title: 'Settings',
-            onTap: _mainModel.navigateToSettings,
+            onTap: (){
+              Navigator.pop(context);
+              if(currentPage!="Settings"){
+                _mainModel.navigateToSettings();
+              }
+            },
           ),
            const SizedBox(height: 6),
           _buildListItem(
             icon: Icons.checklist,
             title: 'Manage My Habits',
-            onTap: () {
-              
+            onTap: (){
+              Navigator.pop(context);
+              if(currentPage!='Manage My Habits'){
+                _mainModel.navigateToManageMyHabits();
+              }
             },
           ),
           const SizedBox(height: 36),
