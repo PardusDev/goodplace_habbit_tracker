@@ -14,76 +14,82 @@ class CreateHabitModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CreateHabitModalViewModel>(
-      builder: (context, viewModel, child) {
-        return CollapsableBottomSheetMultipleWidget(
-          title: StringConstants.createHabitScreenTitle,
-          buttonText: StringConstants.createHabitScreenCreateButton,
-          onPressed: viewModel.createHabit,
-          children: [
-            InputSection(
-              title: "Habit Name",
-              description: "Enter the name of the habit you want to create.",
-              hintText: StringConstants.createHabitScreenNameHint,
-              controller: viewModel.titleController,
-              onChanged: viewModel.onTitleChanged,
-            ),
-            const SizedBox(height: 16.0),
-            InputSection(
-              title: "Habit Subject - Optional",
-              description: "Describe the subject of your habit.",
-              hintText: StringConstants.createHabitScreenSubjectHint,
-              controller: viewModel.subjectController,
-            ),
-            const SizedBox(height: 24.0),
-            const ImageSelectionSection(
-            ),
-            const SizedBox(height: 16.0),
-            GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
+    return ChangeNotifierProvider<CreateHabitModalViewModel>(
+      create: (context) => CreateHabitModalViewModel(),
+      child: Consumer<CreateHabitModalViewModel>(
+        builder: (context, viewModel, child) {
+          return CollapsableBottomSheetMultipleWidget(
+            title: StringConstants.createHabitScreenTitle,
+            buttonText: StringConstants.createHabitScreenCreateButton,
+            onPressed: viewModel.createHabit,
+            children: [
+              InputSection(
+                title: "Habit Name",
+                description: "Enter the name of the habit you want to create.",
+                hintText: StringConstants.createHabitScreenNameHint,
+                controller: viewModel.titleController,
+                onChanged: viewModel.onTitleChanged,
               ),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: viewModel.images.length,
-              itemBuilder: (context, index) {
-                if (viewModel.imagesIsLoading) {
-                  return const CustomShimmer(
-                    height: 100.0,
-                    width: 100.0,
-                  );
-                }
+              const SizedBox(height: 16.0),
+              InputSection(
+                title: "Habit Subject - Optional",
+                description: "Describe the subject of your habit.",
+                hintText: StringConstants.createHabitScreenSubjectHint,
+                controller: viewModel.subjectController,
+              ),
+              const SizedBox(height: 24.0),
+              ImageSelectionSection(
+                onPressed: () async {
+                  viewModel.uploadImage();
+                },
+              ),
+              const SizedBox(height: 16.0),
+              GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: viewModel.images.length,
+                itemBuilder: (context, index) {
+                  if (viewModel.imagesIsLoading) {
+                    return const CustomShimmer(
+                      height: 100.0,
+                      width: 100.0,
+                    );
+                  }
 
-                return SelectableImageCard(
-                  imageUrl: viewModel.images[index].url,
-                  isSelected: viewModel.selectedImageIndex == index,
-                  onTap: () {
-                    viewModel.selectedImageIndex = index;
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 24.0,),
-            Consumer<CreateHabitModalViewModel>(
-                builder: (context, viewModel, child) {
-                  return Visibility(
-                    visible: viewModel.errorText.isNotEmpty,
-                    child: Text(
-                      viewModel.errorText,
-                      style: context.general.textTheme.titleSmall!.copyWith(
-                        color: ColorConstants.errorColor,
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
+                  return SelectableImageCard(
+                    imageUrl: viewModel.images[index].url,
+                    isSelected: viewModel.selectedImageIndex == index,
+                    onTap: () {
+                      viewModel.selectedImageIndex = index;
+                    },
                   );
-                }
-            )
-          ],
-        );
-      },
+                },
+              ),
+              const SizedBox(height: 24.0,),
+              Consumer<CreateHabitModalViewModel>(
+                  builder: (context, viewModel, child) {
+                    return Visibility(
+                      visible: viewModel.errorText.isNotEmpty,
+                      child: Text(
+                        viewModel.errorText,
+                        style: context.general.textTheme.titleSmall!.copyWith(
+                          color: ColorConstants.errorColor,
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    );
+                  }
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -141,7 +147,8 @@ class InputSection extends StatelessWidget {
 }
 
 class ImageSelectionSection extends StatelessWidget {
-  const ImageSelectionSection({super.key});
+  final VoidCallback onPressed;
+  const ImageSelectionSection({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +171,7 @@ class ImageSelectionSection extends StatelessWidget {
           const SizedBox(height: 8.0),
           GestureDetector(
             onTap: () {
-              // Resim seçme fonksiyonunu tetikle
+              onPressed();
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
