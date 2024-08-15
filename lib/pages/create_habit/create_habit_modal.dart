@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../widgets/CollapsableBottomSheetMultipleWidget.dart';
+import '../../widgets/CustomShimmer.dart';
+import '../../widgets/SelectableImageCard.dart';
 
 class CreateHabitModal extends StatelessWidget {
   const CreateHabitModal({super.key});
@@ -34,7 +36,34 @@ class CreateHabitModal extends StatelessWidget {
               controller: viewModel.subjectController,
             ),
             const SizedBox(height: 24.0),
-            ImageSelectionSection(
+            const ImageSelectionSection(
+            ),
+            const SizedBox(height: 16.0),
+            GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+              ),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: viewModel.images.length,
+              itemBuilder: (context, index) {
+                if (viewModel.imagesIsLoading) {
+                  return const CustomShimmer(
+                    height: 100.0,
+                    width: 100.0,
+                  );
+                }
+
+                return SelectableImageCard(
+                  imageUrl: viewModel.images[index].url,
+                  isSelected: viewModel.selectedImageIndex == index,
+                  onTap: () {
+                    viewModel.selectedImageIndex = index;
+                  },
+                );
+              },
             ),
             const SizedBox(height: 24.0,),
             Consumer<CreateHabitModalViewModel>(

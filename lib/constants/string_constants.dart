@@ -164,7 +164,8 @@ class StringConstants {
   static const String createHabitScreenSubjectHint = "What is your subject?";
   static const String createHabitScreenAddImageLabel = "Add Image";
   static const String createHabitScreenCreateButton = "Create";
-  static const String habitNameEmptyError = "Habit name can't be empty.";
+  static const String createHabitScreenNameEmptyError = "Habit name can't be empty.";
+  static const String createHabitScreenImageNotSelectedError = "Please select an image for your habit.";
   // endregion
   // region Success Screen
   static const String successScreenTitle = "Success!";
