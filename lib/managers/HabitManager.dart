@@ -5,6 +5,7 @@ import 'package:goodplace_habbit_tracker/models/DoneHabit.dart';
 import '../constants/string_constants.dart';
 import '../models/UserHabit.dart';
 import '../services/habit_service.dart';
+import '../utilities/generate_id_from_date.dart';
 
 class HabitManager with ChangeNotifier {
   final HabitService _habitService = HabitService();
@@ -141,5 +142,10 @@ class HabitManager with ChangeNotifier {
 
     await updateHabit(user, userHabit);
     return;
+  }
+
+  bool checkHabitIsCompletedForSelectedDate(UserHabit habit, DateTime dateTime) {
+    final convertedDateId = generateIdFromDate(dateTime);
+    return habit.doneHabits.any((element) => element.id == convertedDateId);
   }
 }

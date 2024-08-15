@@ -5,6 +5,7 @@ import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
 import 'package:goodplace_habbit_tracker/widgets/HabitCardWithImageBackground.dart';
 import 'package:provider/provider.dart';
 
+
 class ManageMyHabitsPage extends StatefulWidget {
   const ManageMyHabitsPage({super.key});
 
@@ -52,7 +53,9 @@ class _ManageMyHabitsPageState extends State<ManageMyHabitsPage> {
               ),
               itemBuilder: (context, index) {
                 return HabitCardWithImageBackground(
-                    onTap: () {},
+                    onTap: () {
+                      viewModel.navigateToManageMyHabits(viewModel.habits[index]);
+                    },
                     imageUrl: viewModel.habits[index].imagePath,
                     userHabit: viewModel.habits[index]
                 );
