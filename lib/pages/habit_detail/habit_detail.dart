@@ -117,7 +117,11 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
               ),
               const SizedBox(height: 30),
               // Calendar Widget
-              CalendarWidget(),
+              CalendarWidget(
+                onDaySelected: (day) {
+                  // Do something with the selected day
+                },
+              ),
               const SizedBox(height: 30),
               Center(
                 child: SizedBox(
