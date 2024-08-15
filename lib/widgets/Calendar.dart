@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarWidget extends StatefulWidget {
+  final ValueChanged<DateTime> onMonthChanged;
   final ValueChanged<DateTime> onDaySelected;
+  final List<dynamic> Function(DateTime) eventLoader;
 
-  const CalendarWidget({Key? key, required this.onDaySelected}) : super(key: key);
+  const CalendarWidget({Key? key, required this.onDaySelected, required this.onMonthChanged, required this.eventLoader}) : super(key: key);
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
@@ -42,6 +44,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 });
                 widget.onDaySelected(selectedDay);
               },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+                widget.onMonthChanged(focusedDay);
+              },
+              eventLoader: (day) {
+                final key = DateTime(day.year, day.month, day.day);
+                return widget.eventLoader(key);
+              },
               headerVisible: false,
               calendarStyle: const CalendarStyle(
                 defaultTextStyle: TextStyle(color: Color(0xFF4d57c8)),
@@ -56,6 +66,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 ),
                 todayTextStyle: TextStyle(color: Colors.white),
                 selectedTextStyle: TextStyle(color: Colors.white),
+                markerDecoration: BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
               ),
               daysOfWeekStyle: const DaysOfWeekStyle(
                 weekdayStyle: TextStyle(color: Color(0xFF4d57c8)),

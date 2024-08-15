@@ -65,6 +65,12 @@ class _HomePageState extends State<HomePage> {
                 onDaySelected: (selectedDay) {
                   _homeModel.setSelectedDate(context, selectedDay);
                 },
+                onMonthChanged: (focusedDay) {
+
+                },
+                eventLoader: (day) {
+                  return [];
+                },
               ),
               const SizedBox(height: 30),
               _buildMyHabits(size, _homeModel),
