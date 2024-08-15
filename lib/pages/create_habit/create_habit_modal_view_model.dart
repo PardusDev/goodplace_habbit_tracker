@@ -2,30 +2,47 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
+import 'package:goodplace_habbit_tracker/services/image_service.dart';
 
 import '../../constants/string_constants.dart';
 import '../../init/navigation/navigation_service.dart';
+import '../../models/ImageModel.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
 
 class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
   final _authService = AuthService();
+  final _imageService = ImageService();
   final _habitManager = HabitManager();
   final _navigationService = NavigationService.instance;
+
+  List<ImageModel> _images = [];
+  bool _imagesIsLoading = false;
+  int _selectedImageIndex = -1;
 
   String _errorText = '';
   bool _titleValid = false;
 
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
-  final _imagePathController = TextEditingController();
 
   String get errorText => _errorText;
   bool get titleValid => _titleValid;
+  List<ImageModel> get images => _images;
+  bool get imagesIsLoading => _imagesIsLoading;
+  int get selectedImageIndex => _selectedImageIndex;
 
   TextEditingController get titleController => _titleController;
   TextEditingController get subjectController => _subjectController;
-  TextEditingController get imagePathController => _imagePathController;
+
+  set selectedImageIndex(int value) {
+    _selectedImageIndex = value;
+    notifyListeners();
+  }
+
+  CreateHabitModalViewModel() {
+    fetchImages();
+  }
 
   void onTitleChanged(String title) {
     if (title.isNotEmpty) {
@@ -36,13 +53,36 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
+  void setErrorText(String errorText) {
+    _errorText = errorText;
+    notifyListeners();
+  }
+
+  // Fetch images
+  Future<void> fetchImages() async {
+    try {
+      _imagesIsLoading = true;
+      notifyListeners();
+      _images = (await _imageService.fetchImages())!;
+      _imagesIsLoading = false;
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
 
 
   // Add text controllers for the text fields
 
   Future<void> createHabit() async {
     if (!_titleValid) {
-      setErrorText(StringConstants.habitNameEmptyError);
+      setErrorText(StringConstants.createHabitScreenNameEmptyError);
+      return;
+    }
+
+    if (_selectedImageIndex == -1) {
+      setErrorText(StringConstants.createHabitScreenImageNotSelectedError);
       return;
     }
 
@@ -55,7 +95,7 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
           habitId: '',
           title: titleController.text,
           subject: subjectController.text,
-          imagePath: imagePathController.text,
+          imagePath: images[selectedImageIndex].url,
           createdAt: DateTime.now(),
           doneHabits: [],
           maxStreak: 0,
@@ -72,10 +112,5 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     } catch (e) {
       throw e;
     }
-  }
-
-  void setErrorText(String errorText) {
-    _errorText = errorText;
-    notifyListeners();
   }
 }

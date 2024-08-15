@@ -5,7 +5,7 @@ import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 
 import '../../core/base/base_view_model.dart';
 import '../../services/version_service.dart';
-import '../../utility/version_manager.dart';
+import '../../utilities/version_manager.dart';
 
 class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
   final AuthService _authenticationService = AuthService();

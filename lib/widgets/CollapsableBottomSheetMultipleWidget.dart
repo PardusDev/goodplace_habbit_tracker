@@ -20,6 +20,19 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: Container(
+                width: 60.0,
+                height: 6.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16.0),
+
             Expanded(
               child: Text(
                 title,

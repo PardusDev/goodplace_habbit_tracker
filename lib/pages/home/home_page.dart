@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                     final isCompleted = homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index]);
                     return HabitListTile(
                       title: homePageViewModel.habits[index].title,
-                      imageUrl: 'https://www.theinspiringjournal.com/wp-content/uploads/2024/08/77-Morning-Motivational-Quotes-for-Success.jpg',
+                      imageUrl: homePageViewModel.habits[index].imagePath,
                       onPressed: () {
                         homePageViewModel.toggleHabit(context, homePageViewModel.habits[index], isCompleted);
                       },

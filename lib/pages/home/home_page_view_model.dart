@@ -10,12 +10,12 @@ import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
+import '../../utilities/normalize_date.dart';
 import '../../widgets/Snackbars.dart';
 
 enum ViewState { geliyor, geldi, hata }
@@ -142,10 +142,12 @@ class HomePageViewModel with ChangeNotifier {
       */
 
       // Block if the selected date is past
-      if (_selectedDate.isBefore(DateTime.now())) {
+      DateTime normalizedToday = normalizeDate(DateTime.now());
+      DateTime normalizedSelectedDate = normalizeDate(_selectedDate);
+      if (normalizedSelectedDate.isBefore(normalizedToday)) {
         ScaffoldMessenger.of(buildContext).showSnackBar(
             errorSnackBar(
-                StringConstants.habitPastDateError
+                "You can't mark habits for the past."
             )
         );
         return;
