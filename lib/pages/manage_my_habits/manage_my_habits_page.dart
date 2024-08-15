@@ -71,43 +71,47 @@ class _ManageMyHabitsPageState extends State<ManageMyHabitsPage> {
 
     return Stack(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+       Container(
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    color: Colors.white,
+    image:  DecorationImage(
+      image: const AssetImage('assets/images/asset_habit.jpeg'),
+      fit: BoxFit.cover,
+      colorFilter: ColorFilter.mode(
+        Colors.black.withOpacity(0.4), // Adjust opacity to make it more transparent
+        BlendMode.darken,
+      ),
+    ),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(8),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          habitTitle,
+          style: const TextStyle(
             color: Colors.white,
-            image: const DecorationImage(
-              image: AssetImage('assets/images/asset_habit.jpeg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  habitTitle,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  habitDescription,
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 101, 101, 101),
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
           ),
         ),
+        Text(
+          habitDescription,
+          style: const TextStyle(
+            color: Color.fromARGB(255, 101, 101, 101),
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    ),
+  ),
+),
         Positioned(
           top: 8,
           right: 8,
