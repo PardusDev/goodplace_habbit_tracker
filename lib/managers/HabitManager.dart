@@ -160,6 +160,18 @@ class HabitManager with ChangeNotifier {
     return;
   }
 
+  // region Sorting
+  void sortByCreationDate() {
+    _habits.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    notifyListeners();
+  }
+
+  void sortByMaxStreak() {
+    _habits.sort((a, b) => b.maxStreak.compareTo(a.maxStreak));
+    notifyListeners();
+  }
+  // endregion
+
   bool checkHabitIsCompletedForSelectedDate(UserHabit habit, DateTime dateTime) {
     final convertedDateId = generateIdFromDate(dateTime);
     return habit.doneHabits.any((element) => element.id == convertedDateId);
