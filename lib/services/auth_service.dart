@@ -40,7 +40,7 @@ class AuthService {
     return null;
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<UserCredential?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
@@ -70,7 +70,7 @@ class AuthService {
         }
       }
 
-      return userCredential.user;
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
     } catch (e) {
