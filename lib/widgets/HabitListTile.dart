@@ -28,7 +28,7 @@ class HabitListTile extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.center,
+                  begin: Alignment.centerRight,
                   end: Alignment.centerLeft,
                   colors: [
                     Colors.white.withOpacity(1),
@@ -39,15 +39,26 @@ class HabitListTile extends StatelessWidget {
             ),
           ),
         ),
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  Colors.black.withOpacity(0),
+                  Colors.black.withOpacity(0.4),
+                ],
+              ),
+            ),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                // TODO: Maybe we can use AspectRatio instead of SizedBox
-                //        or we can use different thing.
-                width: context.sized.dynamicWidth(0.3),
+              Expanded(
                 child: Text(
                     title,
                     style: context.general.textTheme.titleLarge?.copyWith(

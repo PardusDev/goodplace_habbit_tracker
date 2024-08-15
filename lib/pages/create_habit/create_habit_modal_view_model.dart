@@ -77,6 +77,7 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
   // Upload image
   Future<void> uploadImage() async {
     try {
+      requestPermissionForImageUpload();
       XFile? selectedImage = await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);
       if (selectedImage == null) {
         return;

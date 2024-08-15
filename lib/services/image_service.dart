@@ -36,11 +36,12 @@ class ImageService {
       final uniqueId = const Uuid().v4();
       final fileExtension = getExtensionOfFile(selectedImage.path);
 
-      final fileName = '$uniqueId$fileExtension';
+      final fileName = '$uniqueId.$fileExtension';
 
       final storageReference = _storageReference.ref().child('userMotivationImages/$fileName');
       final storageUploadTask = storageReference.putFile(selectedImage);
 
+      final snapshot = await storageUploadTask.whenComplete(() => null);
       final downloadUrl =  await storageReference.getDownloadURL();
 
       ImageModel imageModel = ImageModel(
