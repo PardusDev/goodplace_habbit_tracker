@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/pages/habit_detail/habit_detail_view_model.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
+import 'package:goodplace_habbit_tracker/pages/manage_my_habits/manage_my_habits_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -12,11 +14,13 @@ class ManageMyHabitsPage extends StatefulWidget {
 
 class _ManageMyHabitsPageState extends State<ManageMyHabitsPage> {
   late HomePageViewModel _homeModel;
+  late ManageMyHabitsViewModel _manageMyHabitModel;
 
   @override
   void initState() {
     super.initState();
     _homeModel = Provider.of<HomePageViewModel>(context, listen: false);
+    _manageMyHabitModel = Provider.of<ManageMyHabitsViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _homeModel.getUserInformation(context);
       await _homeModel.fetchHabits(context);
@@ -26,6 +30,7 @@ class _ManageMyHabitsPageState extends State<ManageMyHabitsPage> {
   @override
   Widget build(BuildContext context) {
     _homeModel = Provider.of<HomePageViewModel>(context, listen: true);
+    _manageMyHabitModel = Provider.of<ManageMyHabitsViewModel>(context, listen: true);
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -69,71 +74,76 @@ class _ManageMyHabitsPageState extends State<ManageMyHabitsPage> {
     String habitDescription = 'Günlük en az 3Lt su içmemiz gerekmektedir.';
     String habitStreak = '4';
 
-    return Stack(
-      children: [
-       Container(
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(20),
-    color: Colors.white,
-    image:  DecorationImage(
-      image: const AssetImage('assets/images/asset_habit.jpeg'),
-      fit: BoxFit.cover,
-      colorFilter: ColorFilter.mode(
-        Colors.black.withOpacity(0.4), // Adjust opacity to make it more transparent
-        BlendMode.darken,
+    return GestureDetector(
+      onTap: (){
+        _manageMyHabitModel.navigateToManageMyHabits();
+      },
+      child: Stack(
+        children: [
+         Container(
+        decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Colors.white,
+      image:  DecorationImage(
+        image: const AssetImage('assets/images/asset_habit.jpeg'),
+        fit: BoxFit.cover,
+        colorFilter: ColorFilter.mode(
+          Colors.black.withOpacity(0.4), // Adjust opacity to make it more transparent
+          BlendMode.darken,
+        ),
       ),
-    ),
-  ),
-  child: Padding(
-    padding: const EdgeInsets.all(8),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          habitTitle,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
         ),
-        Text(
-          habitDescription,
-          style: const TextStyle(
-            color: Color.fromARGB(255, 101, 101, 101),
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
+        child: Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            habitTitle,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          Text(
+            habitDescription,
+            style: const TextStyle(
+              color: Color.fromARGB(255, 101, 101, 101),
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
         ),
-      ],
-    ),
-  ),
-),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: Row(
-            children: [
-              const Text(
-                '🔥',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                habitStreak,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+      ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Row(
+              children: [
+                const Text(
+                  '🔥',
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
-            ],
+                const SizedBox(width: 4),
+                Text(
+                  habitStreak,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
