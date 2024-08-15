@@ -141,6 +141,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Implement the habit completion logic
+                            viewModel.toggleHabit(context, userHabit, viewModel.checkHabitIsCompletedForSelectedDate(userHabit));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: viewModel.checkHabitIsCompletedForSelectedDate(userHabit)
