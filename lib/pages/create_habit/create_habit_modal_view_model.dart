@@ -1,8 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/services/image_service.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants/string_constants.dart';
 import '../../init/navigation/navigation_service.dart';
@@ -71,9 +74,23 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
-
-
-  // Add text controllers for the text fields
+  // Upload image
+  Future<void> uploadImage() async {
+    try {
+      requestPermissionForImageUpload();
+      XFile? selectedImage = await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);
+      if (selectedImage == null) {
+        return;
+      }
+      File imageFile = File(selectedImage.path);
+      final uploadedImageModel = await _imageService.uploadImage(imageFile);
+      _images.add(uploadedImageModel);
+      _selectedImageIndex = _images.length - 1;
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Future<void> createHabit() async {
     if (!_titleValid) {
@@ -112,5 +129,12 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<void> requestPermissionForImageUpload() async {
+    // Request permission for image upload
+    await [
+      Permission.storage,
+    ].request();
   }
 }
