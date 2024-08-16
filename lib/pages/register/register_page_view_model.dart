@@ -52,11 +52,11 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   }
 
   void navigateToOnboarding() {
-    navigationService.navigateToPage('/onboarding', null);
+    navigationService.navigateToPageClear('/onboarding', null);
   }
 
   void navigateToHome() {
-    navigationService.navigateToPage('/home', null);
+    navigationService.navigateToPageClear('/home', null);
   }
 
   //region NAME *************************************

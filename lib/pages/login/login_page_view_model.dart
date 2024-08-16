@@ -31,11 +31,11 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
   }
 
   void navigateToOnboarding() {
-    navigationService.navigateToPage('/onboarding', null);
+    navigationService.navigateToPageClear('/onboarding', null);
   }
 
   void navigateToHome() {
-    navigationService.navigateToPage('/home', null);
+    navigationService.navigateToPageClear('/home', null);
   }
 
   Future<void> login() async {
@@ -47,6 +47,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
       if (user == null) {
         setErrorText(StringConstants.loginScreenEmailOrPasswdNotRight);
       }
+      navigateToHome();
     } catch (e) {
       setErrorText(e.toString());
       return;

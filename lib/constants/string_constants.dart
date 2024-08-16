@@ -158,6 +158,7 @@ class StringConstants {
   static const String myHabits = "My Habits";
   static const String homePageHabitListTileButton = "Do it!";
   static const String homePageHabitListTileButtonCompleted = "Already Done";
+  static const String homePageHabitListTileShowAllText = "Show All";
   // region Create Habit Screen
   static const String createHabitScreenTitle = "Create Habit";
   static const String createHabitScreenNameHint = "Habit Name";
@@ -166,6 +167,11 @@ class StringConstants {
   static const String createHabitScreenCreateButton = "Create";
   static const String createHabitScreenNameEmptyError = "Habit name can't be empty.";
   static const String createHabitScreenImageNotSelectedError = "Please select an image for your habit.";
+
+  static const String fetchImagesError = "An error occured while fetching images. Please try again later.";
+  static const String uploadImageError = "An error occured while uploading image. Please try again later.";
+  static const String createHabitError = "An error occured while creating habit. Please try again later.";
+
   // endregion
   // region Success Screen
   static const String successScreenTitle = "Success!";

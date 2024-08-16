@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/widgets/CustomShimmer.dart';
 
 import '../models/UserHabit.dart';
 
@@ -16,20 +18,22 @@ class HabitCardWithImageBackground extends StatelessWidget {
       },
       child: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
+            ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              image:  DecorationImage(
-                image: NetworkImage(imageUrl),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), // Adjust opacity to make it more transparent
-                  BlendMode.darken,
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.black.withOpacity(0.4),
+                colorBlendMode: BlendMode.darken,
+                placeholder: (context, url) => const SizedBox.expand(
+                    child: CustomShimmer()
                 ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,7 +83,7 @@ class HabitCardWithImageBackground extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+
         ],
       ),
     );

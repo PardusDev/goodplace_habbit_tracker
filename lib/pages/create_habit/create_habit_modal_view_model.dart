@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/services/image_service.dart';
+import 'package:goodplace_habbit_tracker/widgets/Snackbars.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -70,6 +71,9 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       _imagesIsLoading = false;
       notifyListeners();
     } catch (e) {
+      ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+        errorSnackBar(StringConstants.fetchImagesError),
+      );
       throw e;
     }
   }
@@ -88,6 +92,9 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       _selectedImageIndex = _images.length - 1;
       notifyListeners();
     } catch (e) {
+      ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+        errorSnackBar(StringConstants.uploadImageError),
+      );
       throw e;
     }
   }
@@ -127,6 +134,9 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       // Close the modal
       _navigationService.navigateToBack();
     } catch (e) {
+      ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+        errorSnackBar(StringConstants.createHabitError),
+      );
       throw e;
     }
   }

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/color_constants.dart';
+import 'CustomShimmer.dart';
 
 class SelectableImageCard extends StatefulWidget {
   final String imageUrl;
@@ -53,9 +55,15 @@ class _SelectableImageCardState extends State<SelectableImageCard> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
-          child: Image.network(
-            widget.imageUrl,
+          child: CachedNetworkImage(
+            imageUrl: widget.imageUrl,
             fit: BoxFit.cover,
+            placeholder: (context, url) {
+              return const SizedBox.expand(
+                child: CustomShimmer(),
+              );
+            },
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
         ),
       ),
