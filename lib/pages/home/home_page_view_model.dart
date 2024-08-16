@@ -31,10 +31,13 @@ class HomePageViewModel with ChangeNotifier {
   final AppUserManager _appUserManager = AppUserManager();
   final HabitManager _habitManager = HabitManager();
 
+  bool _showAll = false;
   bool _habitsIsLoading = false;
   DateTime _selectedDate = DateTime.now();
 
+
   List<UserHabit> get habits => _habitManager.habits;
+  get showAll => _showAll;
   bool get habitsIsLoading => _habitsIsLoading;
   DateTime get selectedDate => _selectedDate;
 
@@ -47,6 +50,11 @@ class HomePageViewModel with ChangeNotifier {
 
   set state(ViewState value) {
     _state = value;
+    notifyListeners();
+  }
+
+  void toggleShowAll() {
+    _showAll = !_showAll;
     notifyListeners();
   }
 

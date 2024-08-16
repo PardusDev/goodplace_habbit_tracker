@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/pages/habit_detail/habit_detail_view_model.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
@@ -55,11 +56,16 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                     width: size.width,
                     height: size.height / 3,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(userHabit.imagePath),
-                        fit: BoxFit.cover,
-                      ),
                       borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10), // Radius ekliyoruz
+                      child: CachedNetworkImage(
+                        imageUrl: userHabit.imagePath,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 25),

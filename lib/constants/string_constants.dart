@@ -158,6 +158,7 @@ class StringConstants {
   static const String myHabits = "My Habits";
   static const String homePageHabitListTileButton = "Do it!";
   static const String homePageHabitListTileButtonCompleted = "Already Done";
+  static const String homePageHabitListTileShowAllText = "Show All";
   // region Create Habit Screen
   static const String createHabitScreenTitle = "Create Habit";
   static const String createHabitScreenNameHint = "Habit Name";

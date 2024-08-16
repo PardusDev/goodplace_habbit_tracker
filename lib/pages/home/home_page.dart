@@ -141,25 +141,42 @@ class _HomePageState extends State<HomePage> {
 
                 return ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: homePageViewModel.habits.length,
+                  itemCount: homePageViewModel.showAll
+                      ? homePageViewModel.habits.length
+                      : (homePageViewModel.habits.length > 3 ? 4 : homePageViewModel.habits.length),
                   shrinkWrap: true,
                   separatorBuilder: (BuildContext context, int index) {
                     return context.sized.emptySizedHeightBoxLow;
                   },
                   // TODO: Improve image loading.
                   itemBuilder: (BuildContext context, int index) {
-                    final isCompleted = homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index]);
-                    return HabitListTile(
-                      title: homePageViewModel.habits[index].title,
-                      imageUrl: homePageViewModel.habits[index].imagePath,
-                      onTap: () {
-                        homePageViewModel.navigateToHabitDetail(homePageViewModel.habits[index]);
-                      },
-                      onButtonPressed: () {
-                        homePageViewModel.toggleHabit(context, homePageViewModel.habits[index], isCompleted);
-                      },
-                      isCompleted: isCompleted,
-                    );
+                    if (!homePageViewModel.showAll && index == 3) {
+                      // Show "Show All" button as the last item if not showing all habits
+                      return TextButton(
+                        onPressed: () {
+                          homePageViewModel.toggleShowAll();
+                        },
+                        child: Text(StringConstants.homePageHabitListTileShowAllText, style: context.general.textTheme.titleMedium!.copyWith(
+                            color: ColorConstants.homePageHabitListShowAllTextColor,
+                          )
+                        ),
+                      );
+                    } else {
+                      final isCompleted = homePageViewModel.checkHabitIsCompletedForSelectedDate(homePageViewModel.habits[index]);
+
+                      return HabitListTile(
+                        title: homePageViewModel.habits[index].title,
+                        imageUrl: homePageViewModel.habits[index].imagePath,
+                        onTap: () {
+                          homePageViewModel.navigateToHabitDetail(homePageViewModel.habits[index]);
+                        },
+                        onButtonPressed: () {
+                          homePageViewModel.toggleHabit(context, homePageViewModel.habits[index], isCompleted);
+                        },
+                        isCompleted: isCompleted,
+                      );
+                    }
+
                   },
                 );
               }
