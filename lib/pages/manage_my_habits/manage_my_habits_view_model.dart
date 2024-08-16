@@ -44,6 +44,8 @@ class ManageMyHabitsViewModel extends ChangeNotifier with BaseViewModel {
   // endregion
 
  void navigateToManageMyHabits(UserHabit userHabit){
-    _navigationService.navigateToPage('/habitDetail', userHabit);
+    _navigationService.navigateToPage('/habitDetail', userHabit).then((_) {
+      notifyListeners();
+    });
   }
 }
