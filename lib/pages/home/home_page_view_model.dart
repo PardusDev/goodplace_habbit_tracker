@@ -223,15 +223,15 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void navigateToSettings() {
-    _navigationService.navigateToPage('/settings', null);
+    _navigationService.navigateToPage('/settings', null).then((_) => notifyListeners());
   }
 
   void navigateToManageMyHabits(){
-    _navigationService.navigateToPage('/manageMyHabits', null);
+    _navigationService.navigateToPage('/manageMyHabits', null).then((_) => notifyListeners());
   }
 
   void navigateToHome(){
-    _navigationService.navigateToPage('/home', null);
+    _navigationService.navigateToPage('/home', null).then((_) => notifyListeners());
   }
 
   void showCreateHabitModal(BuildContext buildContext) {
