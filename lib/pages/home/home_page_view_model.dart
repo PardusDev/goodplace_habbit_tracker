@@ -184,7 +184,11 @@ class HomePageViewModel with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      throw e;
+      ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+          errorSnackBar(
+              e.toString()
+          )
+      );
     }
   }
 
