@@ -152,7 +152,10 @@ class _HomePageState extends State<HomePage> {
                     return HabitListTile(
                       title: homePageViewModel.habits[index].title,
                       imageUrl: homePageViewModel.habits[index].imagePath,
-                      onPressed: () {
+                      onTap: () {
+                        homePageViewModel.navigateToHabitDetail(homePageViewModel.habits[index]);
+                      },
+                      onButtonPressed: () {
                         homePageViewModel.toggleHabit(context, homePageViewModel.habits[index], isCompleted);
                       },
                       isCompleted: isCompleted,
