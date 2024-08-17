@@ -10,8 +10,14 @@ class StringConstants {
   static const String appName = 'GoodPlace';
 
   //region Error screen strings
-  static const String notFound = "We couldn't find the page you were looking for. :(";
+  static const String notFound = "We couldn't find the page you were looking for";
   static const String notFoundSub = "Something went wrong. Try again later 👉👈";
+  static const String back = "Back";
+  //endregion
+
+  //region No Network screen strings
+  static const String noNetwork = "No Network";
+  static const String noNetworkSub = "Please check your internet connection and try again.";
   //endregion
 
   //region Welcome screen strings
