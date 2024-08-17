@@ -32,7 +32,7 @@ class SplashPageViewModel with ChangeNotifier, BaseViewModel {
     await checkVersion(clientVersion);
     if (_isRequiredUpdate) {
       // Show a dialog to the user to update the app.
-      navigationService.navigateToPageClear(("/update"), null);
+      navigationService.navigateToPageClear(("/needUpdate"), null);
       return;
     }
 

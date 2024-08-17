@@ -16,7 +16,7 @@ class VersionService {
         fromFirestore: (snapshot, options) => NumberModel().fromDocument(snapshot),
         toFirestore: (value, options) => value.toJson()
     )
-        .doc(PlatformEnum.versionName)
+        .doc(PlatformEnum.currentPlatform.platformName)
         .get();
 
     return response.data()?.number;

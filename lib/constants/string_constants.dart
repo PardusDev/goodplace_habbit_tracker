@@ -20,6 +20,13 @@ class StringConstants {
   static const String noNetworkSub = "Please check your internet connection and try again.";
   //endregion
 
+  //region Need Update screen strings
+  static const String needUpdate = "Update Required";
+  static const String needUpdateSub = "Please update the app to continue using it.";
+  static const String update = "Update";
+  static const String updateButtonDummy = "This button is not working. Because this app is developed for educational purposes.";
+  //endregion
+
   //region Welcome screen strings
   static const String welcomeScreenStrongTitle = 'Hi, Welcome';
   static const String welcomeScreenTitle = "to $appName";
