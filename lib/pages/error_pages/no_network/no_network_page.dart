@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
 import 'package:kartal/kartal.dart';
 
+import '../../../constants/image_constants.dart';
 import '../../../constants/string_constants.dart';
 
 class NoNetworkPage extends StatelessWidget {
@@ -19,7 +20,8 @@ class NoNetworkPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(),
-              Image.asset('assets/images/no_network.png'),
+              Image.asset(ImageConstants.noNetworkVector),
+              context.sized.emptySizedHeightBoxLow,
               Text(StringConstants.noNetwork, style: context.general.textTheme.headlineMedium!.copyWith(
                 fontWeight: FontWeight.w500,
               ),),

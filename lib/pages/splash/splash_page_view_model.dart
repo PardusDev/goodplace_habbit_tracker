@@ -3,12 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 import 'package:goodplace_habbit_tracker/services/connectivity_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/base/base_view_model.dart';
 import '../../services/version_service.dart';
 import '../../utilities/version_manager.dart';
 
-class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
+class SplashPageViewModel with ChangeNotifier, BaseViewModel {
   final AuthService _authenticationService = AuthService();
   final VersionService _versionService = VersionService();
   final ConnectivityService _connectivityService = ConnectivityService();
@@ -16,7 +17,16 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
 
   bool get isRequiredUpdate => _isRequiredUpdate;
 
-  Future handleStartUpLogic(String clientVersion) async {
+  SplashPageViewModel() {
+    handleStartUpLogic();
+  }
+
+  void handleStartUpLogic() async {
+    // Get the client version.
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String clientVersion = packageInfo.version;
+
+    // Get the current user.
     User? user = await _authenticationService.getCurrentUser();
 
     await checkVersion(clientVersion);
@@ -27,7 +37,11 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
     }
 
     // Check the network connection.
-    checkConnectivity();
+    final hasConnection = await _connectivityService.hasConnection();
+    if (!hasConnection) {
+      navigationService.navigateToPageClear(("/noNetwork"), null);
+      return;
+    }
 
     // Fake delay to simulate a network request.
     await Future.delayed(const Duration(milliseconds: 750));
@@ -35,13 +49,6 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
       navigationService.navigateToPageClear(("/home"), null);
     } else {
       navigationService.navigateToPageClear("/welcome", null);
-    }
-  }
-
-  void checkConnectivity() async {
-    final hasConnection = await _connectivityService.hasConnection();
-    if (!hasConnection) {
-      navigationService.navigateToPageClear(("/noNetwork"), null);
     }
   }
 
