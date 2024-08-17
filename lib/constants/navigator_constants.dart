@@ -12,6 +12,7 @@ class NavigatorConstants {
   static const ONBOARDING_PAGE = "/onboarding";
   static const NOT_FOUND = "/not_found";
   static const NO_NETWORK = "/noNetwork";
+  static const NEED_UPDATE = "/needUpdate";
   static const HOME_PAGE = "/home";
   static const SETTINGS_PAGE = "/settings";
   static const MANAGEMYHABITS_PAGE = "/manageMyHabits";

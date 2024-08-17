@@ -81,6 +81,7 @@ To get a local copy up and running follow these simple steps.
     <img src="/screenshots/NotFoundPageScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/BottomModalScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/NoNetworkPageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/NeedUpdatePageScreenshot.png" alt="Screenshot from App" width="300" />
 </div>
 
 ## Contributors
