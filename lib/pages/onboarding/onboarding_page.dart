@@ -10,31 +10,34 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorConstants.backgroundColor,
-      body: Consumer<OnBoardingPageViewModel>(
-        builder: (context, viewModel, child) {
-          return PageView(
-            controller: viewModel.pageController,
-            onPageChanged: viewModel.onPageChanged,
-            children: viewModel.pages,
-          );
-        },
-      ),
-      floatingActionButton: Consumer<OnBoardingPageViewModel>(
-        builder: (context, viewModel, child) {
-          return CircularButtonGappedBorder(
-            buttonBackground: ColorConstants.primaryColor,
-            onPressed: viewModel.nextPage,
-            padding: const EdgeInsets.all(24),
-            quarterBorderColor: ColorConstants.primaryColor,
-            quarterBorderWidth: 3,
-            quarterBorderGap: 14,
-            fullBorderColor: ColorConstants.secondaryColor,
-            fullBorderWidth: 0.05,
-            fullBorderGap: 14,
-          );
-        }
+    return ChangeNotifierProvider(
+      create: (context) => OnBoardingPageViewModel(),
+      child: Scaffold(
+        backgroundColor: ColorConstants.backgroundColor,
+        body: Consumer<OnBoardingPageViewModel>(
+          builder: (context, viewModel, child) {
+            return PageView(
+              controller: viewModel.pageController,
+              onPageChanged: viewModel.onPageChanged,
+              children: viewModel.pages,
+            );
+          },
+        ),
+        floatingActionButton: Consumer<OnBoardingPageViewModel>(
+          builder: (context, viewModel, child) {
+            return CircularButtonGappedBorder(
+              buttonBackground: ColorConstants.primaryColor,
+              onPressed: viewModel.nextPage,
+              padding: const EdgeInsets.all(24),
+              quarterBorderColor: ColorConstants.primaryColor,
+              quarterBorderWidth: 3,
+              quarterBorderGap: 14,
+              fullBorderColor: ColorConstants.secondaryColor,
+              fullBorderWidth: 0.05,
+              fullBorderGap: 14,
+            );
+          }
+        ),
       ),
     );
   }

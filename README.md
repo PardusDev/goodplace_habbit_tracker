@@ -29,6 +29,12 @@ To get a local copy up and running follow these simple steps.
 - [shimmer](https://pub.dev/packages/shimmer) for shimmer effect
 - [get_it](https://pub.dev/packages/get_it) for dependency injection
 - [table_calendar](https://pub.dev/packages/table_calendar) for calendar widget on the home page
+- [lottie](https://pub.dev/packages/lottie) for Lottie animations
+- [image_picker](https://pub.dev/packages/image_picker) for picking images
+- [uuid](https://pub.dev/packages/uuid) for generating unique ids
+- [permission_handler](https://pub.dev/packages/permission_handler) for handling permissions
+- [cached_network_image](https://pub.dev/packages/cached_network_image) for caching network images
+- [flutter_widget_from_html_core](https://pub.dev/packages/flutter_widget_from_html_core) for rendering HTML content
 
 ## Screenshots
 
@@ -58,10 +64,24 @@ To get a local copy up and running follow these simple steps.
 ### Home Page
 <img src="/screenshots/HomePageScreenshot.png" alt="Screenshot from App" width="300" />
 
+### Manage My Habits
+<img src="/screenshots/ManageMyHabitsPageScreenshot.png" alt="Screenshot from App" width="300" />
+
+### Habit Details
+<img src="/screenshots/HabitDetailsPageScreenshot.png" alt="Screenshot from App" width="300" />
+
+### Create Habit
+<img src="/screenshots/CreateHabitModalScreenshot.png" alt="Screenshot from App" width="300" />
+
+### Success Splash
+<img src="/screenshots/SuccessSplashScreenshot.png" alt="Screenshot from App" width="300" />
+
 ### Some Minor Pages
 <div style="display: flex; justify-content: space-between;">
     <img src="/screenshots/NotFoundPageScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/BottomModalScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/NoNetworkPageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/NeedUpdatePageScreenshot.png" alt="Screenshot from App" width="300" />
 </div>
 
 ## Contributors

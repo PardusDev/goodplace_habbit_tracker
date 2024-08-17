@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/image_constants.dart';
 import '../../constants/string_constants.dart';
@@ -99,8 +98,6 @@ class OnBoardingPageViewModel extends ChangeNotifier with BaseViewModel {
       );
       notifyListeners();
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('onboarding', true);
       _navigationService.navigateToPageClear("/home", null);
     }
   }

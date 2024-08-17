@@ -10,7 +10,11 @@ class ImageConstants {
   static final String splashPageBg = 'splash_screen_bg'.imageToPng;
   static final String welcomeBackground = 'welcome_background'.imageToPng;
   static final String authPageShapeBg = 'auth_page_shape_bg'.imageToPng;
+  static final String noNetworkVector = 'no_network'.imageToPng;
+  static final String updateRequiredVector = 'update_required_vector'.imageToPng;
 
+  static final String googlePlayStore = 'google_play_store'.iconToPng;
+  static final String appleStore = 'apple_store'.iconToPng;
   static final String passwordHide = 'ic_password_hide'.iconToPng;
   static final String passwordShown = 'ic_password_shown'.iconToPng;
 

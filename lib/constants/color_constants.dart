@@ -82,5 +82,30 @@ class ColorConstants {
   ];
   // endregion
 
+  // region HomePage
+  static const Color homePageCardBackgroundColor = Color(0xFFFFFFFF);
+  static const Color homePageCardTitleColor = Color(0xFF373737);
+
+  static const Color homePageAddHabbitButtonBackgroundColor = Color(0xFF4D57C8);
+  static const Color homePageAddHabbitButtonIconColor = Color(0xFFFFFFFF);
+  static const Color homePageHabitListTileTitleColor = Color(0xFFEFEFEF);
+  static const Color homePageHabitListTileButtonColor = Color(0xFF4D57C8);
+  static const Color homePageHabitListTileButtonTextColor = Color(0xFFFFFFFF);
+  static const Color homePageCompletedHabitListTileButton = Color(0xFFA1A4B2);
+  static const Color homePageCompletedHabitListTileButtonTextColor = Color(0xFF3F414E);
+
+  static const Color homePageHabitListShowAllTextColor = Color(0xFF4D57C8);
+  // endregion
+
+  // region Success Screen
+
+  static const Color successScreenBackgroundColor = Color(0xFFFFFFFF);
+  static const Color successScreenTitleColor = Color(0xFF3F414E);
+  static const Color successScreenSubtitleColor = Color(0xFFA1A4B2);
+  static const Color successScreenButtonColor = Color(0xFF8E97FD);
+  static const Color successScreenButtonTextColor = Color(0xFFFFFFFF);
+
+  // endregion
+
 
 }

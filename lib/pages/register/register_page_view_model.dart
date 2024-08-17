@@ -2,43 +2,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/string_constants.dart';
 
 class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   final AuthService _authService = AuthService();
   late final BuildContext viewModelContext;
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
   User? user;
   bool _privacyPolicyChecked = false;
 
+  String _nameErrorText = '';
   String _emailErrorText = '';
   String _passwordErrorText = '';
-  String _rePasswordErrorText = '';
   String _generalErrorText = '';
 
-  bool _emailValid = false;
-  bool _passwordValid = false;
-  bool _confirmPasswordValid = false;
+  bool? _nameValid = null;
+  bool? _emailValid = null;
+  bool? _passwordValid = null;
   bool _registering = false;
 
   RegisterPageViewModel();
 
+  String get nameErrorText => _nameErrorText;
   String get emailErrorText => _emailErrorText;
   String get passwordErrorText => _passwordErrorText;
-  String get rePasswordErrorText => _rePasswordErrorText;
   String get generalErrorText => _generalErrorText;
 
+  String get name => nameController.text;
   String get email => emailController.text;
   String get password => passwordController.text;
-  String get confirmPassword => confirmPasswordController.text;
 
-  bool get emailValid => _emailValid;
-  bool get passwordValid => _passwordValid;
-  bool get confirmPasswordValid => _confirmPasswordValid;
+  bool? get nameValid => _nameValid;
+  bool? get emailValid => _emailValid;
+  bool? get passwordValid => _passwordValid;
 
   bool get privacyPolicyChecked => _privacyPolicyChecked;
 
@@ -51,6 +50,42 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   void navigateToLogin() {
     navigationService.navigateToPage('/login', null);
   }
+
+  void navigateToOnboarding() {
+    navigationService.navigateToPageClear('/onboarding', null);
+  }
+
+  void navigateToHome() {
+    navigationService.navigateToPageClear('/home', null);
+  }
+
+  //region NAME *************************************
+  void onNameChanged(String value) {
+    final result = _validateName(value);
+    _nameValid = result['isValid'];
+    setNameErrorText(result['errorText']);
+  }
+
+  Map<String, dynamic> _validateName(String value) {
+    if (value.isEmpty) {
+      return {'errorText': StringConstants.registerScreenNameCantBeEmpty, 'isValid': false};
+    }
+    else if (!RegExp(r'^\S+$').hasMatch(value)) {
+      return {'errorText': StringConstants.registerScreenNameNotValid, 'isValid': false};
+    }
+    else if (value.length < 2) {
+      return {'errorText': StringConstants.registerScreenNameShouldBeAtLeast2Chars, 'isValid': false};
+    }
+    else {
+      return {'errorText': '', 'isValid': true};
+    }
+  }
+
+  setNameErrorText(String error) {
+    _nameErrorText = error;
+    notifyListeners();
+  }
+  //endregion NAME *************************************
 
   // EMAIL *************************************
   void onEmailChanged(String value) {
@@ -118,30 +153,6 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   }
   // PASSWD END *************************************
 
-  // CONFIRM PASSWD *************************************
-  void onConfirmPasswordChanged(String value) {
-    final result = _validateConfirmPassword(value);
-    _confirmPasswordValid = result['isValid'];
-    setConfirmPasswordErrorText(result['errorText']);
-  }
-
-  Map<String, dynamic> _validateConfirmPassword(String value) {
-    if (value.isEmpty) {
-      return {'errorText': StringConstants.registerScreenPasswordCantBeEmpty, 'isValid': false};
-    }
-    else if (value != passwordController.text) {
-      return {'errorText': StringConstants.registerScreenPasswordNotMatch, 'isValid': false};
-    }
-    else {
-      return {'errorText': '', 'isValid': true};
-    }
-  }
-
-  void setConfirmPasswordErrorText(String error) {
-    _rePasswordErrorText = error;
-    notifyListeners();
-  }
-  // CONFIRM PASSWD END *************************************
   void updatePrivacyPolicyChecked(bool isChecked) {
     _privacyPolicyChecked = isChecked;
     if (generalErrorText == StringConstants.registerScreenPrivacyPolicyNotChecked && isChecked) {
@@ -154,16 +165,11 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
     if (_registering) {
       return;
     }
+
     /*
     print(!emailValid));
     print(!passwordValid);
-    print(confirmPasswordValid);
     */
-
-    // Check if the email, password and confirm password is valid
-    if (!emailValid || !passwordValid || !confirmPasswordValid) {
-      return;
-    }
 
     // Check if the privacy policy is checked
     if (!_privacyPolicyChecked) {
@@ -171,16 +177,24 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
       return;
     }
 
+    if (emailValid != true || passwordValid != true || nameValid != true) {
+      // Check all fields
+      onNameChanged(name);
+      onEmailChanged(email);
+      onPasswordChanged(password);
+      return;
+    }
+
     setRegistering(true);
 
     try {
-      user = await _authService.registerWithEmailAndPassword(email, password);
+      user = await _authService.registerWithEmailAndPassword(name, email, password);
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
         setRegistering(false);
         return;
       }
-      goToTheOnboardingIfNecessary();
+      navigationService.navigateToPageClear("/onboarding", null);
     } catch (e) {
       setGeneralErrorText(e.toString());
     } finally {
@@ -190,27 +204,22 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> continueWithGoogle() async {
     try {
-      user = await _authService.signInWithGoogle();
+      UserCredential? userCredential = await _authService.signInWithGoogle();
+      user = userCredential!.user;
       if (user == null) {
         setGeneralErrorText(StringConstants.anErrorOccured);
       } else {
-        goToTheOnboardingIfNecessary();
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          navigateToOnboarding();
+        } else {
+          navigateToHome();
+        }
       }
     } catch (e) {
       setGeneralErrorText(e.toString());
     }
   }
 
-  void goToTheOnboardingIfNecessary() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seenOnboarding = prefs.getBool('onboarding') ?? false;
-
-    if (seenOnboarding) {
-      navigationService.navigateToPageClear("/home", null);
-    } else {
-      navigationService.navigateToPageClear("/onboarding", null);
-    }
-  }
 
   void setGeneralErrorText(String error) {
     _generalErrorText = error;
@@ -220,5 +229,13 @@ class RegisterPageViewModel extends ChangeNotifier with BaseViewModel {
   void setRegistering(bool value) {
     _registering = value;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

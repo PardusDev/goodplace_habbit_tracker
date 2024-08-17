@@ -8,7 +8,7 @@ class OneLinePasswordInputFieldValidable extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final Function(String) onChanged;
-  final bool isValid;
+  final bool? isValid;
 
   const OneLinePasswordInputFieldValidable({
     super.key,
@@ -22,9 +22,11 @@ class OneLinePasswordInputFieldValidable extends StatelessWidget {
   Widget build(BuildContext context) {
     return OneLinePasswordInputField(
       hintText: hintText,
-      suffixIcon: Icon(
-        isValid ? IconConstants.checkIcon : IconConstants.exclamationIcon,
-        color: isValid ? ColorConstants.validColor : ColorConstants.errorColor,
+      suffixIcon: (isValid == null)
+        ? null
+        : Icon(
+          isValid! ? IconConstants.checkIcon : IconConstants.exclamationIcon,
+          color: isValid! ? ColorConstants.validColor : ColorConstants.errorColor,
       ),
       obscureText: true,
       onChanged: onChanged,

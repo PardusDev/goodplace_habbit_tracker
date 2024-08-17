@@ -7,4 +7,8 @@ class Repository {
   getMotivasyon() async{
    return await _apiService.getMotivation();
   }
+
+  Future<String?> getPrivacyPolicy() async {
+    return await _apiService.getPrivacyPolicy();
+  }
 }
