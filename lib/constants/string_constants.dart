@@ -162,6 +162,7 @@ class StringConstants {
 
   // region Habits operations
   static const String myHabits = "My Habits";
+  static const String homePageHabitListIsEmpty = "You don't have any habits yet. Create one now!";
   static const String homePageHabitListTileButton = "Do it!";
   static const String homePageHabitListTileButtonCompleted = "Already Done";
   static const String homePageHabitListTileShowAllText = "Show All";
