@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/services/auth_service.dart';
+import 'package:goodplace_habbit_tracker/services/connectivity_service.dart';
 
 import '../../core/base/base_view_model.dart';
 import '../../services/version_service.dart';
@@ -10,6 +11,7 @@ import '../../utilities/version_manager.dart';
 class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
   final AuthService _authenticationService = AuthService();
   final VersionService _versionService = VersionService();
+  final ConnectivityService _connectivityService = ConnectivityService();
   late final _isRequiredUpdate;
 
   bool get isRequiredUpdate => _isRequiredUpdate;
@@ -23,12 +25,23 @@ class SplashPageViewModel extends ChangeNotifier with BaseViewModel {
       navigationService.navigateToPageClear(("/update"), null);
       return;
     }
+
+    // Check the network connection.
+    checkConnectivity();
+
     // Fake delay to simulate a network request.
     await Future.delayed(const Duration(milliseconds: 750));
     if (user != null) {
       navigationService.navigateToPageClear(("/home"), null);
     } else {
       navigationService.navigateToPageClear("/welcome", null);
+    }
+  }
+
+  void checkConnectivity() async {
+    final hasConnection = await _connectivityService.hasConnection();
+    if (!hasConnection) {
+      navigationService.navigateToPageClear(("/noNetwork"), null);
     }
   }
 
