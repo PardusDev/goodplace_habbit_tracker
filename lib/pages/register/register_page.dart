@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/register/register_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/CheckboxWithWidget.dart';
-import 'package:goodplace_habbit_tracker/widgets/CollapsableBottomSheet.dart';
+import 'package:goodplace_habbit_tracker/widgets/PrivacyPolicyCollapsableBottomSheet.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputFieldValidable.dart';
 import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueButton.dart';
 import 'package:kartal/kartal.dart';
@@ -225,14 +225,8 @@ class RegisterPage extends StatelessWidget {
                                         useSafeArea: true,
                                         isScrollControlled: true,
                                         builder: (BuildContext context) {
-                                          return const CollapsableBottomSheet(
+                                          return const PrivacyPolicyCollapsableBottomSheet(
                                               title: StringConstants.privacyPolicy,
-                                              /*
-                                              TODO: In production, this value cannot be constant.
-                                                It needs to be fetched from the API.
-                                                Currently, since we are in developer mode, it is a fixed value for demo purposes.
-                                              */
-                                              text: StringConstants.privacyPolicyText
                                           );
                                         }
                                     );
