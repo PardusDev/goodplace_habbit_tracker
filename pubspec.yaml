@@ -83,9 +83,13 @@ dependencies:
   # For caching images
   cached_network_image: ^3.4.0
 
+  # For rendering HTML content
+  flutter_widget_from_html_core: ^0.15.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+
 
 dev_dependencies:
   flutter_test:

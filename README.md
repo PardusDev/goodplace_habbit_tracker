@@ -34,6 +34,7 @@ To get a local copy up and running follow these simple steps.
 - [uuid](https://pub.dev/packages/uuid) for generating unique ids
 - [permission_handler](https://pub.dev/packages/permission_handler) for handling permissions
 - [cached_network_image](https://pub.dev/packages/cached_network_image) for caching network images
+- [flutter_widget_from_html_core](https://pub.dev/packages/flutter_widget_from_html_core) for rendering HTML content
 
 ## Screenshots
 
@@ -79,6 +80,7 @@ To get a local copy up and running follow these simple steps.
 <div style="display: flex; justify-content: space-between;">
     <img src="/screenshots/NotFoundPageScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/BottomModalScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/NoNetworkPageScreenshot.png" alt="Screenshot from App" width="300" />
 </div>
 
 ## Contributors

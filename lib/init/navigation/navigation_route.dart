@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/pages/error_pages/no_network/no_network_page.dart';
 import 'package:goodplace_habbit_tracker/pages/habit_detail/habit_detail.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page.dart';
 import 'package:goodplace_habbit_tracker/pages/login/login_page.dart';
 import 'package:goodplace_habbit_tracker/pages/manage_my_habits/manage_my_habits_page.dart';
 import 'package:goodplace_habbit_tracker/pages/onboarding/onboarding_page.dart';
-import 'package:goodplace_habbit_tracker/widgets/NotFound.dart';
+import 'package:goodplace_habbit_tracker/pages/error_pages/not_found/not_found_page.dart';
 
 import '../../animations/right_transition.dart';
 import '../../constants/navigator_constants.dart';
@@ -41,6 +42,8 @@ class NavigationRoute {
         return slideAnimatedRoute(const HabitDetailPage(), args.arguments);
       case NavigatorConstants.NOT_FOUND:
         return slideAnimatedRoute(const NotFound(), args.arguments);
+      case NavigatorConstants.NO_NETWORK:
+        return slideAnimatedRoute(const NoNetworkPage(), args.arguments);
       default:
         return slideAnimatedRoute(const NotFound(), args.arguments);
     }

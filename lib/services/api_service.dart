@@ -15,4 +15,16 @@ class ApiService {
       throw e;
     }
   }
+
+  Future<String?> getPrivacyPolicy() async {
+    try {
+      var response = await Dio().get('https://pardev.one/goodplace-privacy-policy.json');
+      return response.data['privacy'];
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      throw e;
+    }
+    return null;
+  }
 }
