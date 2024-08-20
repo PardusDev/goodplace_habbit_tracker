@@ -106,7 +106,8 @@ class InputSection extends StatelessWidget {
     required this.description,
     required this.hintText,
     required this.controller,
-    super.key, this.onChanged,
+    super.key, 
+    this.onChanged,
   });
 
   @override
@@ -115,17 +116,48 @@ class InputSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-            ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            description,
-            style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+          Row(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+              Text(
+                description,
+                style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+              ),
+                ],
+              ),
+             const Expanded(child: SizedBox()),
+               if (title == "Habit Subject - Optional") ...[
+                GestureDetector(
+                  onTap: () {
+                    controller.text = "AI generated description...";
+                  },
+                  child:const Row(
+                    children: [
+                       Icon(Icons.star, color: Colors.orange),
+                       SizedBox(width: 5,),
+                        Text(
+                    "Auto-fill",
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.orange,
+                    ),
+                  ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
           ),
           const SizedBox(height: 8.0),
           TextField(

@@ -44,6 +44,9 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
             backgroundColor: Colors.transparent,
             iconTheme: const IconThemeData(color: Colors.white),
             toolbarHeight: 100,
+            actions: [
+              IconButton(onPressed: (){}, icon: Icon(Icons.delete, color: const Color.fromARGB(255, 248, 90, 79),),tooltip: "Delete the habit",)
+            ],
           ),
           drawer: MyDrawer(mainModel: _homeModel, currentPage: "Habit Detail"),
           body: Padding(
