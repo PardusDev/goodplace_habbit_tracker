@@ -97,6 +97,10 @@ class ColorConstants {
   static const Color homePageHabitListShowAllTextColor = Color(0xFF4D57C8);
   // endregion
 
+  // region CreateHabit
+  static const Color createHabitAIIconColor = Color(0xFFFFD700);
+  // endregion
+
   // region Success Screen
 
   static const Color successScreenBackgroundColor = Color(0xFFFFFFFF);

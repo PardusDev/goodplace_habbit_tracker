@@ -30,6 +30,8 @@ class HomePageViewModel with ChangeNotifier {
   final AuthService _authService = AuthService();
   final AppUserManager _appUserManager = AppUserManager();
   final HabitManager _habitManager = HabitManager();
+  bool _aiFabExpanded = false;
+  String _aiFabMessage = "";
 
   bool _showAll = false;
   bool _habitsIsLoading = false;
@@ -40,6 +42,8 @@ class HomePageViewModel with ChangeNotifier {
   get showAll => _showAll;
   bool get habitsIsLoading => _habitsIsLoading;
   DateTime get selectedDate => _selectedDate;
+  bool get aiFabExpanded => _aiFabExpanded;
+  String get aiFabMessage => _aiFabMessage;
 
   void setSelectedDate(BuildContext buildContext, DateTime value) {
     if (value == _selectedDate) return;
@@ -58,10 +62,38 @@ class HomePageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+
+  void toggleAIExpand() {
+    _aiFabExpanded = !_aiFabExpanded;
+    notifyListeners();
+  }
+
+  void setAIExpand(bool value) {
+    _aiFabExpanded = value;
+    notifyListeners();
+  }
+
+  void setAIExpandMessage(String message) {
+    _aiFabMessage = message;
+    notifyListeners();
+  }
+
   HomePageViewModel() {
     getGreetingMessage();
+    showAIMessage();
     _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
+  }
+
+  void showAIMessage() {
+    Timer(const Duration(milliseconds: 1500), () {
+      setAIExpandMessage("Can't find a habit to pick up? I can help!");
+      setAIExpand(true);
+
+      Timer(const Duration(milliseconds: 6000), () {
+        setAIExpand(false);
+      });
+    });
   }
 
   getGreetingMessage() {

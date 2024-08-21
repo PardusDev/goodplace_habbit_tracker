@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
 
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -142,5 +143,30 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
   void resetEvents() {
     _events = {};
     notifyListeners();
+  }
+
+  Future<void> deleteHabit(BuildContext buildContext) async {
+    try {
+      User firebaseUser = FirebaseAuth.instance.currentUser!;
+      bool confirm = await showDialog(
+          context: buildContext,
+          builder: (BuildContext context) {
+            return ConfirmAlertDialog(
+                title: "Are you sure?",
+                body: "Do you want to delete this habit? This action can't be undone."
+            );
+          }
+      ) ?? false;
+      if (confirm) {
+        await _habitManager.deleteHabit(firebaseUser, currentHabit);
+        Navigator.pop(buildContext);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(buildContext).showSnackBar(
+          errorSnackBar(
+              e.toString()
+          )
+      );
+    }
   }
 }
