@@ -8,6 +8,7 @@ import '../../constants/string_constants.dart';
 import '../../widgets/CollapsableBottomSheetMultipleWidget.dart';
 import '../../widgets/CustomShimmer.dart';
 import '../../widgets/SelectableImageCard.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CreateHabitModal extends StatelessWidget {
   const CreateHabitModal({super.key});
@@ -29,6 +30,7 @@ class CreateHabitModal extends StatelessWidget {
                 hintText: StringConstants.createHabitScreenNameHint,
                 controller: viewModel.titleController,
                 onChanged: viewModel.onTitleChanged,
+                viewModel: viewModel,
               ),
               const SizedBox(height: 16.0),
               InputSection(
@@ -36,6 +38,7 @@ class CreateHabitModal extends StatelessWidget {
                 description: "Describe the subject of your habit.",
                 hintText: StringConstants.createHabitScreenSubjectHint,
                 controller: viewModel.subjectController,
+                viewModel: viewModel,
               ),
               const SizedBox(height: 24.0),
               ImageSelectionSection(
@@ -100,13 +103,16 @@ class InputSection extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final CreateHabitModalViewModel viewModel;
+  final int maxChars = 25;
 
   const InputSection({
     required this.title,
     required this.description,
     required this.hintText,
     required this.controller,
-    super.key, 
+    required this.viewModel,
+    super.key,
     this.onChanged,
   });
 
@@ -130,29 +136,29 @@ class InputSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4.0),
-              Text(
-                description,
-                style: const TextStyle(fontSize: 12.0, color: Colors.grey),
-              ),
+                  Text(
+                    description,
+                    style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                  ),
                 ],
               ),
-             const Expanded(child: SizedBox()),
-               if (title == "Habit Subject - Optional") ...[
+              const Expanded(child: SizedBox()),
+              if (title == "Habit Subject - Optional") ...[
                 GestureDetector(
                   onTap: () {
-                    controller.text = "AI generated description...";
+                    viewModel.autoFillDescription();
                   },
-                  child:const Row(
+                  child: const Row(
                     children: [
-                       Icon(Icons.star, color: Colors.orange),
-                       SizedBox(width: 5,),
-                        Text(
-                    "Auto-fill",
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.orange,
-                    ),
-                  ),
+                      Icon(Icons.star, color: Colors.orange),
+                      SizedBox(width: 5),
+                      Text(
+                        "Auto-fill",
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.orange,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -160,23 +166,81 @@ class InputSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8.0),
-          TextField(
-            onChanged: onChanged,
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.0),
+          if (title == "Habit Subject - Optional" && viewModel.descLoading)
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: TextField(
+                enabled: false,
+                controller: controller,
+                maxLines: 5,
+                minLines: 5,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
               ),
-              filled: true,
-              fillColor: Colors.white,
+            )
+          else
+            Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    if (title == "Habit Name") {
+                      if (value.length <= maxChars) {
+                        controller.text = value;
+                        controller.selection = TextSelection.fromPosition(
+                          TextPosition(offset: value.length),
+                        );
+                      } else {
+                        controller.text = value.substring(0, maxChars);
+                        controller.selection = TextSelection.fromPosition(
+                          TextPosition(offset: maxChars),
+                        );
+                      }
+                    }
+                    if (onChanged != null) onChanged!(controller.text);
+                  },
+                  controller: controller,
+                  maxLines: title == "Habit Subject - Optional" ? 5 : 1,
+                  minLines: title == "Habit Subject - Optional" ? 5 : 1,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 12.0),
+                  ),
+                ),
+                if (title == "Habit Name" && controller.text.length >= 20)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      '${controller.text.length}/$maxChars',
+                      style: TextStyle(
+                        color: controller.text.length == maxChars
+                            ? Colors.red
+                            : Colors.orange,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          ),
         ],
       ),
     );
   }
 }
+
 
 class ImageSelectionSection extends StatelessWidget {
   final VoidCallback onPressed;

@@ -4,6 +4,8 @@ import 'package:goodplace_habbit_tracker/core/exceptions/handle_dio_exception.da
 
 class ApiService {
   String path = "https://api.quotable.io";
+  String aiPath = "https://patrons-openai.openai.azure.com/openai/deployments/GrowTogether/chat/completions?api-version=2024-02-15-preview";
+  String apiKey = '9070bb36762b4ddc8552f51b98091334';
 
   getMotivation() async {
     try {
@@ -27,4 +29,56 @@ class ApiService {
     }
     return null;
   }
+
+
+Future<String> autoFillDescription(String title) async {
+  try {
+    Map<String, String> headers = {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+    };
+    
+    Map<String, dynamic> data = {
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are a habit assistant and your name is GoodPlaceT. When a user wants to create a habit, they will give you a topic related to that habit and you will give them a short text explaining and motivating that habit. This text should not have a title and should be a short motivational text about the habit."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": title,
+            }
+          ]
+        }
+      ],
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "max_tokens": 800
+    };
+
+    var response = await Dio().post(
+      aiPath,
+      data: data,
+      options: Options(
+        headers: headers,
+      ),
+    );
+
+    final messageContent = response.data['choices'][0]['message']['content'];
+    return messageContent;
+  } on DioException catch (e) {
+    handleDioException(e);
+    throw Exception("An error occurred during the API call.");
+  } catch (e) {
+    throw Exception("An error occurred: ${e.toString()}");
+  }
+}
 }

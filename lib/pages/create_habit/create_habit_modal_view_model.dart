@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
+import 'package:goodplace_habbit_tracker/services/api_service.dart';
 import 'package:goodplace_habbit_tracker/services/image_service.dart';
 import 'package:goodplace_habbit_tracker/widgets/Snackbars.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
   final _imageService = ImageService();
   final _habitManager = HabitManager();
   final _navigationService = NavigationService.instance;
+  final _apiService = ApiService();
 
   List<ImageModel> _images = [];
   bool _imagesIsLoading = false;
@@ -38,6 +40,8 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
   TextEditingController get titleController => _titleController;
   TextEditingController get subjectController => _subjectController;
+
+  bool descLoading=false;
 
   set selectedImageIndex(int value) {
     _selectedImageIndex = value;
@@ -147,4 +151,26 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       Permission.storage,
     ].request();
   }
+
+ Future<void> autoFillDescription() async {
+  if (!_titleValid) {
+    setErrorText(StringConstants.createHabitScreenNameEmptyError);
+    return;
+  }
+  try {
+    descLoading = true;
+    notifyListeners();
+    _subjectController.text = "";
+    String response = await _apiService.autoFillDescription(_titleController.text);
+    _subjectController.text = response;
+  } catch (e) {
+        _subjectController.text = "";
+    ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+        errorSnackBar(StringConstants.autoFillError),
+      );
+  } finally {
+    descLoading = false;
+    notifyListeners();
+  }
+}
 }

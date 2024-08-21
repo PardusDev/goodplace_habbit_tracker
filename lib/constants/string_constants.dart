@@ -334,6 +334,7 @@ class StringConstants {
   static const String fetchImagesError = "An error occured while fetching images. Please try again later.";
   static const String uploadImageError = "An error occured while uploading image. Please try again later.";
   static const String createHabitError = "An error occured while creating habit. Please try again later.";
+  static const String autoFillError = "An error occurred during the automatic filling of the description. Please try again later.";
 
   // endregion
   // region Success Screen
