@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal_view_model.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
@@ -148,15 +149,20 @@ class InputSection extends StatelessWidget {
                   onTap: () {
                     viewModel.autoFillDescription();
                   },
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.star, color: Colors.orange),
+                      Image.asset(
+                        ImageConstants.aiCreateIcon,
+                        color: ColorConstants.createHabitAIIconColor,
+                        width: 20.0,
+                        height: 20.0,
+                      ),
                       SizedBox(width: 5),
                       Text(
                         "Auto-fill",
                         style: TextStyle(
                           fontSize: 12.0,
-                          color: Colors.orange,
+                          color: ColorConstants.createHabitAIIconColor,
                         ),
                       ),
                     ],
