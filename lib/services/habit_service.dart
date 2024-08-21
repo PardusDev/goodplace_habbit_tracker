@@ -247,5 +247,20 @@ class HabitService {
     }
     return false;
   }
+
+  Future<bool> deleteHabit(User user, UserHabit currentHabit) async {
+    try {
+      await _firestore
+          .collection("users").doc(user.uid)
+          .collection("habits").doc(currentHabit.habitId)
+          .delete();
+      return true;
+    } on FirebaseException catch (e) {
+      handleFirebaseException(e);
+    } catch (e) {
+     throw e;
+    }
+    return false;
+  }
   //endregion
 }

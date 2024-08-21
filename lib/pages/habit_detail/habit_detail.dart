@@ -45,7 +45,13 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
             iconTheme: const IconThemeData(color: Colors.white),
             toolbarHeight: 100,
             actions: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.delete, color: const Color.fromARGB(255, 248, 90, 79),),tooltip: "Delete the habit",)
+              Consumer<HabitDetailViewModel>(
+                builder: (context, viewModel, child) {
+                  return IconButton(onPressed: (){
+                    viewModel.deleteHabit(context);
+                  }, icon: Icon(Icons.delete, color: const Color.fromARGB(255, 248, 90, 79),),tooltip: "Delete the habit",);
+                }
+              )
             ],
           ),
           drawer: MyDrawer(mainModel: _homeModel, currentPage: "Habit Detail"),
@@ -62,7 +68,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10), // Radius ekliyoruz
+                      borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
                         imageUrl: userHabit.imagePath,
                         fit: BoxFit.cover,

@@ -176,4 +176,18 @@ class HabitManager with ChangeNotifier {
     final convertedDateId = generateIdFromDate(dateTime);
     return habit.doneHabits.any((element) => element.id == convertedDateId);
   }
+
+  Future<bool> deleteHabit(User user, UserHabit currentHabit) async {
+    try {
+      final result = await _habitService.deleteHabit(user, currentHabit);
+      if (result) {
+        _habits.remove(currentHabit);
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
