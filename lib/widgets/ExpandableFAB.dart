@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/color_constants.dart';
+import '../pages/home/home_page_view_model.dart';
 
 class ExpandableFAB extends StatefulWidget {
   final String message;
@@ -16,7 +18,6 @@ class ExpandableFAB extends StatefulWidget {
 class _ExpandableFABState extends State<ExpandableFAB> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _widthAnimation;
-  bool _isExpanded = false;
 
   @override
   void initState() {
@@ -43,16 +44,6 @@ class _ExpandableFABState extends State<ExpandableFAB> with SingleTickerProvider
     );
   }
 
-  void _toggleExpand() {
-    setState(() {
-      if (_isExpanded) {
-        _controller.reverse();
-      } else {
-        _controller.forward();
-      }
-      _isExpanded = !_isExpanded;
-    });
-  }
 
   @override
   void dispose() {
@@ -62,40 +53,50 @@ class _ExpandableFABState extends State<ExpandableFAB> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return GestureDetector(
-            onTap: _toggleExpand,
-            child: Container(
-              width: _widthAnimation.value,
-              height: 56.0,
-              margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32.0),
-                color: ColorConstants.primaryColor,
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (!_isExpanded)
-                    widget.icon
-                  else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-                      child: Row(
-                        children: [
-                          widget.icon,
-                          const SizedBox(width: 8.0,),
-                          Expanded(child: Text(widget.message, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis,)),
-                        ],
-                      ),
-                    )
-                ],
-              ),
-            )
-          );
+    return Consumer<HomePageViewModel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.aiFabExpanded) {
+          _controller.forward();
+        } else {
+          _controller.reverse();
         }
+
+        return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return GestureDetector(
+                onTap: widget.onPressed,
+                child: Container(
+                  width: _widthAnimation.value,
+                  height: 56.0,
+                  margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(32.0),
+                    color: ColorConstants.primaryColor,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (!viewModel.aiFabExpanded)
+                        widget.icon
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                          child: Row(
+                            children: [
+                              widget.icon,
+                              const SizedBox(width: 8.0,),
+                              Expanded(child: Text(widget.message, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis,)),
+                            ],
+                          ),
+                        )
+                    ],
+                  ),
+                )
+              );
+            }
+        );
+      }
     );
   }
 }

@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: MyDrawer(mainModel: _homeModel, currentPage:"Home Page"),
       floatingActionButton: ExpandableFAB(
-        message: 'Create Habit',
+        message: _homeModel.aiFabMessage,
         icon: Image.asset(
           ImageConstants.aiAvatar,
           color: Colors.white,
