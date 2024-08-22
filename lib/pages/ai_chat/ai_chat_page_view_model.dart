@@ -119,13 +119,10 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
       notifyListeners();
     } catch (e) {
-      _messages.add(
-        MessageWidget(
-          message: StringConstants.aiErrorMessage,
-          isUser: false,
-          isLoadingNotifier: ValueNotifier<bool>(false)
-        ),
-      );
+      await Future.delayed(Duration(milliseconds: 1500));
+      MessageWidget lastMessage = _messages.last as MessageWidget;
+      lastMessage.message = StringConstants.aiErrorMessage;
+      lastMessage.isLoadingNotifier.value = false;
     }
   }
 
