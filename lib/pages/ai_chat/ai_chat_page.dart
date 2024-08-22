@@ -5,6 +5,7 @@ import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/color_constants.dart';
+import '../../constants/string_constants.dart';
 import '../../widgets/SortCard.dart';
 import '../../widgets/StadiumSideBlueIconButton.dart';
 
@@ -42,7 +43,7 @@ class _AiChatPageState extends State<AiChatPage> {
                 const SizedBox(height: 16.0),
 
                 Text(
-                  "GoodplaceT",
+                  StringConstants.aiName,
                   style: context.general.textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: ColorConstants.collapsableBottomSheetTitleColor

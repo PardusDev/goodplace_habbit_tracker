@@ -18,7 +18,7 @@ class StadiumSideIconButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(context.sized.dynamicHeight(0.06)),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
         child: Icon(

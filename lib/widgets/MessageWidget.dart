@@ -16,39 +16,48 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isUser) {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          context.sized.emptySizedWidthBoxNormal,
           Expanded(
             child: Container(
               padding: context.padding.low,
               decoration: BoxDecoration(
-                color: ColorConstants.aiChatBubbleBackgroundColor,
+                color: ColorConstants.aiChatBubbleUserBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: Text(
                 message,
                 style: context.general.textTheme.titleMedium!
                     .copyWith(
-                    color: ColorConstants.aiChatBubbleTextColor,
+                    color: ColorConstants.aiChatBubbleUserTextColor,
                     fontWeight: FontWeight.w300
                 ),
               ),
             ),
           ),
           context.sized.emptySizedWidthBoxLow3x,
-          Image.asset(
-            ImageConstants.userAvatar,
-            width: 24,
-            color: ColorConstants.primaryColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Image.asset(
+              ImageConstants.userAvatar,
+              width: 24,
+              color: ColorConstants.primaryColor,
+            ),
           ),
         ],
       );
     } else {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            ImageConstants.aiCreateIcon,
-            width: 24,
-            color: ColorConstants.primaryColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Image.asset(
+              ImageConstants.aiCreateIcon,
+              width: 24,
+              color: ColorConstants.primaryColor,
+            ),
           ),
           context.sized.emptySizedWidthBoxLow3x,
           Expanded(
@@ -86,7 +95,8 @@ class MessageWidget extends StatelessWidget {
                 );
               }
             ),
-          )
+          ),
+          context.sized.emptySizedWidthBoxNormal,
         ],
       );
     }
