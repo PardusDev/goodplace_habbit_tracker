@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/init/navigation/navigation_service.dart';
 import 'package:goodplace_habbit_tracker/locator.dart';
+import 'package:goodplace_habbit_tracker/pages/ai_chat/ai_chat_page.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.dart';
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
@@ -289,6 +290,17 @@ class HomePageViewModel with ChangeNotifier {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return const CreateHabitModal();
+        }
+    ).then((value) => notifyListeners());
+  }
+
+  void showAiChatModal(BuildContext buildContext) {
+    showModalBottomSheet(
+        context: buildContext,
+        useSafeArea: true,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return const AiChatPage();
         }
     ).then((value) => notifyListeners());
   }

@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           width: 32,
         ),
         onPressed: () {
-          // Show
+          _homeModel.showAiChatModal(context);
         },
       ),
       body: SingleChildScrollView(
