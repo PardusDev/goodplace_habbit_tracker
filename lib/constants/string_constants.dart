@@ -207,7 +207,7 @@ class StringConstants {
 
   // region Ai Chat
   static const String aiWelcomeMessage = "Hello. I'm GoodplaceT. How can I help you today?";
-
+  static const String aiErrorMessage = "I'm sorry, an error occurred while processing your request. Please try again later.";
   // endregion
 
   // region Habit Alert Dialog
