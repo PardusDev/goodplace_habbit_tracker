@@ -19,6 +19,7 @@ class ImageConstants {
   static final String passwordShown = 'ic_password_shown'.iconToPng;
   static final String aiAvatar = 'ai_avatar'.iconToPng;
   static final String aiCreateIcon = 'ai_create_icon'.iconToPng;
+  static final String userAvatar = 'user_avatar'.iconToPng;
 
   //region Onboarding
   static final String onboardingPage1 = 'page1'.onboardingToPng;

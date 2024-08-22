@@ -30,16 +30,28 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       ]
     }
   ];
-  
-  void addMessageToConservationHistory(String message, bool isUser) {
-    // Widget. Maybe we can delete this
-    _messages.add(
-      MessageWidget(
-        message: message,
-        isUser: isUser,
-      ),
-    );
 
+  final List<Map<String, dynamic>> _startMessages = [
+    {
+      "title": "I need motivation",
+      "message": "I'm losing motivation, can you help me get back on track?",
+    },
+    {
+      "title": "Suggest a habit",
+      "message": "Can you suggest a new habit for me to try?",
+    },
+    {
+      "title": "Habit tips",
+      "message": "Do you have any tips for maintaining my habits?",
+    },
+    {
+      "title": "Boost my focus",
+      "message": "I'm having trouble focusing on my habits. How can I improve?",
+    }
+  ];
+  List<Map<String, dynamic>> get startMessages => _startMessages;
+
+  void addMessageToConservationHistory(String message, bool isUser) {
     // Add message to conversation history
     _conversationHistory.add({
       "role": isUser ? "user" : "assistant",
@@ -51,12 +63,27 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       ]
     });
   }
+
+  void addMessageToWidgetList(String message, bool isUser) {
+    // Widget
+    _messages.add(
+      MessageWidget(
+        message: message,
+        isUser: isUser,
+      ),
+    );
+  }
+
+  void addMessageToBatch(String message, bool isUser) {
+    addMessageToConservationHistory(message, isUser);
+    addMessageToWidgetList(message, isUser);
+  }
   
   Future<void> sendMessageToAI(String message) async {
     try {
       final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
 
-      addMessageToConservationHistory(aiResponse, false);
+      addMessageToBatch(aiResponse, false);
 
       notifyListeners();
     } catch (e) {
@@ -77,13 +104,27 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     }
     
     // Add user message to conversation history
-    addMessageToConservationHistory(userMessage, true);
+    addMessageToBatch(userMessage, true);
     
     _messageController.clear();
     notifyListeners();
     
     // Send the message to the AI
     await sendMessageToAI(userMessage);
+    notifyListeners();
+  }
+
+  Future<void> sendPreparedMessage(Map<String, dynamic> preparedMessage) async {
+    // Widget
+    addMessageToWidgetList(preparedMessage["title"], true);
+
+    // Add message to conversation history
+    addMessageToConservationHistory(preparedMessage["message"], true);
+
+    notifyListeners();
+
+    // Send the message to the AI
+    await sendMessageToAI(preparedMessage["message"]);
     notifyListeners();
   }
 }

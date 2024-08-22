@@ -33,7 +33,7 @@ class MessageWidget extends StatelessWidget {
           ),
           context.sized.emptySizedWidthBoxLow3x,
           Image.asset(
-            ImageConstants.aiAvatar,
+            ImageConstants.userAvatar,
             width: 24,
             color: ColorConstants.primaryColor,
           ),

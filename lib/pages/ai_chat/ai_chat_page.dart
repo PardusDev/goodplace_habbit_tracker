@@ -5,6 +5,7 @@ import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/color_constants.dart';
+import '../../widgets/SortCard.dart';
 import '../../widgets/StadiumSideBlueIconButton.dart';
 
 class AiChatPage extends StatefulWidget {
@@ -61,6 +62,29 @@ class _AiChatPageState extends State<AiChatPage> {
                         itemCount: viewModel.messages.length,
                         itemBuilder: (context, index) {
                           return viewModel.messages[length - index];
+                        },
+                      );
+                    }
+                  ),
+                ),
+
+                context.sized.emptySizedHeightBoxLow3x,
+
+                SizedBox(
+                  height: 40,
+                  child: Consumer<AiChatPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) => context.sized.emptySizedWidthBoxLow3x,
+                        itemCount: viewModel.startMessages.length,
+                        itemBuilder: (context, index) {
+                          return SortCard(
+                              text: viewModel.startMessages[index]["title"],
+                              onPressed: () {
+                                viewModel.sendPreparedMessage(viewModel.startMessages[index]);
+                              }
+                          );
                         },
                       );
                     }
