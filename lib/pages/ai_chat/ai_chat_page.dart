@@ -21,7 +21,7 @@ class _AiChatPageState extends State<AiChatPage> {
     return ChangeNotifierProvider(
       create: (context) => AiChatPageViewModel(),
       child: Scaffold(
-        body: Container(
+        body: SizedBox(
           width: double.infinity,
           child: Padding(
             padding: context.padding.normal,

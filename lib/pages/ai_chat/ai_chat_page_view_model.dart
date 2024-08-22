@@ -11,12 +11,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   final TextEditingController _messageController = TextEditingController();
   TextEditingController get messageController => _messageController;
 
-  final List<Widget> _messages = [
-    const MessageWidget(
-      message: StringConstants.aiWelcomeMessage,
-      isUser: false,
-    ),
-  ];
+  final List<Widget> _messages = [];
   List<Widget> get messages => _messages;
 
   final List<Map<String, dynamic>> _conversationHistory = [
@@ -51,6 +46,19 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   ];
   List<Map<String, dynamic>> get startMessages => _startMessages;
 
+  AiChatPageViewModel() {
+    _messages.add(
+      MessageWidget(
+          message: StringConstants.aiWelcomeMessage,
+          isUser: false,
+          isLoadingNotifier: ValueNotifier<bool>(true)
+      )
+    );
+
+    MessageWidget lastMessage = _messages.last as MessageWidget;
+    lastMessage.isLoadingNotifier.value = false;
+  }
+
   void addMessageToConservationHistory(String message, bool isUser) {
     // Add message to conversation history
     _conversationHistory.add({
@@ -70,17 +78,41 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       MessageWidget(
         message: message,
         isUser: isUser,
+        isLoadingNotifier: ValueNotifier<bool>(!isUser)
       ),
     );
+
+    if (!isUser) {
+      Future.delayed(const Duration(seconds: 2), () {
+        MessageWidget lastMessage = _messages.last as MessageWidget;
+        lastMessage.isLoadingNotifier.value = false;
+      });
+    }
   }
 
   void addMessageToBatch(String message, bool isUser) {
     addMessageToConservationHistory(message, isUser);
-    addMessageToWidgetList(message, isUser);
+    if (isUser) {
+      addMessageToWidgetList(message, isUser);
+    } else {
+      // Edit the last message to show the AI response
+      MessageWidget lastMessage = _messages.last as MessageWidget;
+      lastMessage.message = message;
+      lastMessage.isLoadingNotifier.value = false;
+    }
   }
   
   Future<void> sendMessageToAI(String message) async {
     try {
+      // Add message to widget list
+      _messages.add(
+        MessageWidget(
+          message: "",
+          isUser: false,
+          isLoadingNotifier: ValueNotifier<bool>(true)
+        ),
+      );
+
       final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
 
       addMessageToBatch(aiResponse, false);
@@ -88,9 +120,10 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       notifyListeners();
     } catch (e) {
       _messages.add(
-        const MessageWidget(
+        MessageWidget(
           message: StringConstants.aiErrorMessage,
           isUser: false,
+          isLoadingNotifier: ValueNotifier<bool>(false)
         ),
       );
     }
@@ -98,8 +131,13 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
   Future<void> sendMessage() async {
     final userMessage = _messageController.text;
+    final lastMessage = _messages.last as MessageWidget;
 
     if (userMessage.isEmpty) {
+      return;
+    }
+
+    if (lastMessage.isLoadingNotifier.value) {
       return;
     }
     
@@ -115,6 +153,12 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   }
 
   Future<void> sendPreparedMessage(Map<String, dynamic> preparedMessage) async {
+    final lastMessage = _messages.last as MessageWidget;
+
+    if (lastMessage.isLoadingNotifier.value) {
+      return;
+    }
+
     // Widget
     addMessageToWidgetList(preparedMessage["title"], true);
 
