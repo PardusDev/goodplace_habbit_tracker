@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 
+import '../../constants/string_constants.dart';
 import '../../widgets/MessageWidget.dart';
 
 class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
@@ -9,7 +10,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
   final List<Widget> _messages = [
     const MessageWidget(
-      message: "Hello, I'm GoodplaceT. How can I help you? Please write a message.",
+      message: StringConstants.aiWelcomeMessage,
       isUser: false,
     ),
   ];
