@@ -1,62 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/services/api_service.dart';
 import 'package:kartal/kartal.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/image_constants.dart';
-import 'CustomShimmer.dart';
 
 class AIMessageStreamWidget extends StatefulWidget {
   Stream<String> messageStream;
-  final ValueNotifier<bool> isLoadingNotifier;
+  final ValueNotifier<bool> isStreamingNotifier;
+  final Function(String) onMessageCompleted;
+  final Function onMessagePartReceived;
 
-  AIMessageStreamWidget({required this.messageStream, required this.isLoadingNotifier}) : super(key: UniqueKey());
+  AIMessageStreamWidget(
+      {required String message,
+      required List<Map<String, dynamic>> conversationHistory,
+      required this.isStreamingNotifier,
+      required this.onMessageCompleted, required this.onMessagePartReceived})
+      : messageStream =
+            ApiService().goodplaceTChatStream(message, conversationHistory);
 
   @override
   _AIMessageStreamWidgetState createState() => _AIMessageStreamWidgetState();
 }
 
-class _AIMessageStreamWidgetState extends State<AIMessageStreamWidget> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class _AIMessageStreamWidgetState extends State<AIMessageStreamWidget>
+    with SingleTickerProviderStateMixin {
   String displayedMessage = '';
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 700),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    if (!widget.isLoadingNotifier.value) {
-      _animation = const AlwaysStoppedAnimation(1.0);
-    }
-
-    widget.isLoadingNotifier.addListener(() {
-      if (!widget.isLoadingNotifier.value) {
-        _controller.forward();
-      }
-    });
-
     widget.messageStream.listen(
-          (messagePart) {
+      (messagePart) {
         if (messagePart.isNotEmpty) {
           setState(() {
             displayedMessage += messagePart;
+            widget.onMessagePartReceived();
           });
         }
       },
+      onDone: () {
+        widget.isStreamingNotifier.value = false;
+        widget.onMessageCompleted(displayedMessage);
+      },
       onError: (error) {
+        widget.isStreamingNotifier.value = false;
         print("Stream Error: $error");
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +68,7 @@ class _AIMessageStreamWidgetState extends State<AIMessageStreamWidget> with Sing
         ),
         context.sized.emptySizedWidthBoxLow3x,
         ValueListenableBuilder<bool>(
-          valueListenable: widget.isLoadingNotifier,
+          valueListenable: widget.isStreamingNotifier,
           builder: (context, isLoading, child) {
             return Container(
               constraints: BoxConstraints(
@@ -86,28 +79,30 @@ class _AIMessageStreamWidgetState extends State<AIMessageStreamWidget> with Sing
                 color: ColorConstants.aiChatBubbleBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: isLoading
-                  ? Column(
-                children: [
-                  const CustomShimmer(
-                    height: 10,
-                    width: double.infinity,
-                  ),
-                  context.sized.emptySizedHeightBoxLow,
-                  const CustomShimmer(
-                    height: 10,
-                    width: double.infinity,
-                  ),
-                ],
-              )
-                  : FadeTransition(
-                opacity: _controller.isCompleted ? const AlwaysStoppedAnimation(1.0) : _animation,
-                child: Text(
-                  displayedMessage,
+              child: RichText(
+                text: TextSpan(
+                  text: displayedMessage,
                   style: context.general.textTheme.titleMedium!.copyWith(
                     color: ColorConstants.aiChatBubbleTextColor,
                     fontWeight: FontWeight.w300,
                   ),
+                  children: [
+                    if (isLoading)
+                      WidgetSpan(
+                          child: Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: ColorConstants.aiChatBubbleIndicatorGradientColors,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                          ),
+                      )
+                  ]
                 ),
               ),
             );

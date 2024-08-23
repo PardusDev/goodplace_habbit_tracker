@@ -1,7 +1,7 @@
 
 import 'dart:async';
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_dio_exception.dart';
 
@@ -87,6 +87,7 @@ class ApiService {
 
   // This method currently out of use
   // Please use Stream method below
+  /*
   Future<String> goodplaceTChat(String lastMessage, List<Map<String, dynamic>> conversationHistory) async {
     try {
       Map<String, String> headers = {
@@ -129,10 +130,9 @@ class ApiService {
       throw Exception("An error occurred: ${e.toString()}");
     }
   }
+   */
 
   Stream<String> goodplaceTChatStream(String lastMessage, List<Map<String, dynamic>> conversationHistory) async* {
-    final controller = StreamController<String>();
-
     try {
       Map<String, String> headers = {
         'api-key': apiKey,
@@ -141,12 +141,7 @@ class ApiService {
 
       conversationHistory.add({
         "role": "user",
-        "content": [
-          {
-            "type": "text",
-            "text": lastMessage,
-          }
-        ]
+        "content": lastMessage,
       });
 
       Map<String, dynamic> data = {
@@ -154,54 +149,52 @@ class ApiService {
         "temperature": 0.7,
         "top_p": 0.95,
         "max_tokens": 800,
-        "stream": true
+        "stream": true,
       };
 
       var response = await Dio().post(
         aiPath,
-        data: data,
+        data: json.encode(data),
         options: Options(
           headers: headers,
           responseType: ResponseType.stream,
         ),
       );
 
-      StringBuffer buffer = StringBuffer();
+      final responseStream = response.data.stream.transform(StreamTransformer.fromHandlers(
+        handleData: (Uint8List data, EventSink<String> sink) {
+          sink.add(utf8.decode(data));
+        },
+      ));
 
-      response.data.stream.listen((chunk) {
-        final chunkString = utf8.decode(chunk);
-        buffer.write(chunkString);
+      await for (var chunk in responseStream) {
+        final lines = chunk.split('\n');
 
-        final lines = buffer.toString().split('\n');
         for (var line in lines) {
           if (line.startsWith("data: ")) {
-            final jsonString = line.substring(6).trim();
-            try {
-              final jsonResponse = json.decode(jsonString);
-              if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
-                final content = jsonResponse['choices'][0]['delta']['content'];
-                controller.add(content);
+            final dataString = line.substring(6);
+
+            if (dataString.trim().isNotEmpty) {
+              try {
+                final jsonResponse = jsonDecode(dataString);
+
+                if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
+                  final delta = jsonResponse['choices'][0]['delta'];
+
+                  if (delta != null && delta['content'] != null) {
+                    await Future.delayed(const Duration(milliseconds: 15));
+                    yield delta['content'];
+                  }
+                }
+              } catch (e) {
+                continue;
               }
-            } catch (e) {
-              print("Error: $e");
             }
           }
         }
-        buffer.clear();
-      }, onDone: () {
-        controller.close();
-      }, onError: (error) {
-        controller.addError("Stream error: $error");
-        controller.close();
-      });
-    } on DioException catch (e) {
-      controller.addError("An error occurred during the API call: $e");
-      controller.close();
+      }
     } catch (e) {
-      controller.addError("An error occurred: ${e.toString()}");
-      controller.close();
+      throw Exception("An error occured: ${e.toString()}");
     }
-
-    yield* controller.stream;
   }
 }
