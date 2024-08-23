@@ -73,7 +73,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       _status = "Focused on ${userHabit.title}";
     }
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       MessageWidget lastMessage = _messages.last as MessageWidget;
       lastMessage.isLoadingNotifier.value = false;
     });
@@ -145,10 +145,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     );
 
     if (!isUser) {
-      Future.delayed(const Duration(milliseconds: 400), () {
-        MessageWidget lastMessage = _messages.last as MessageWidget;
-        lastMessage.isLoadingNotifier.value = false;
-      });
+      MessageWidget lastMessage = _messages.last as MessageWidget;
+      lastMessage.isLoadingNotifier.value = false;
     }
   }
 
