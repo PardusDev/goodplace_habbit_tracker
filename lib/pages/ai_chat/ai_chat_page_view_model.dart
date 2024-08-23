@@ -12,6 +12,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   final TextEditingController _messageController = TextEditingController();
   TextEditingController get messageController => _messageController;
 
+  final ScrollController _messagesListController = ScrollController();
+  ScrollController get messagesListController => _messagesListController;
+
   final List<Widget> _messages = [];
   List<Widget> get messages => _messages;
 
@@ -73,7 +76,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       _status = "Focused on ${userHabit.title}";
     }
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       MessageWidget lastMessage = _messages.last as MessageWidget;
       lastMessage.isLoadingNotifier.value = false;
     });
@@ -145,10 +148,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     );
 
     if (!isUser) {
-      Future.delayed(const Duration(milliseconds: 400), () {
-        MessageWidget lastMessage = _messages.last as MessageWidget;
-        lastMessage.isLoadingNotifier.value = false;
-      });
+      MessageWidget lastMessage = _messages.last as MessageWidget;
+      lastMessage.isLoadingNotifier.value = false;
     }
   }
 
@@ -181,7 +182,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
       notifyListeners();
     } catch (e) {
-      await Future.delayed(Duration(milliseconds: 1500));
+      await Future.delayed(const Duration(milliseconds: 1500));
       MessageWidget lastMessage = _messages.last as MessageWidget;
       lastMessage.message = StringConstants.aiErrorMessage;
       lastMessage.isLoadingNotifier.value = false;
@@ -199,6 +200,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     if (lastMessage.isLoadingNotifier.value) {
       return;
     }
+
+    // Scroll to the bottom of the list
+    scrollToBottom();
     
     // Add user message to conversation history
     addMessageToBatch(userMessage, true);
@@ -218,6 +222,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       return;
     }
 
+    // Scroll to the bottom of the list
+    scrollToBottom();
+
     // Widget
     addMessageToWidgetList(preparedMessage["title"], true);
 
@@ -229,5 +236,13 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     // Send the message to the AI
     await sendMessageToAI(preparedMessage["message"]);
     notifyListeners();
+  }
+
+  void scrollToBottom() {
+    _messagesListController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }

@@ -5,16 +5,57 @@ import 'package:kartal/kartal.dart';
 import '../constants/color_constants.dart';
 import '../constants/image_constants.dart';
 
-@immutable
-class MessageWidget extends StatelessWidget {
+class MessageWidget extends StatefulWidget {
   String message;
   final bool isUser;
   final ValueNotifier<bool> isLoadingNotifier;
-  MessageWidget({super.key, required this.message, required this.isUser, required this.isLoadingNotifier});
+
+  MessageWidget({
+    required this.message,
+    required this.isUser,
+    required this.isLoadingNotifier,
+  }) : super(key: UniqueKey());
+
+  @override
+  _MessageWidgetState createState() => _MessageWidgetState();
+}
+
+class _MessageWidgetState extends State<MessageWidget> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    if (!widget.isLoadingNotifier.value) {
+      _animation = const AlwaysStoppedAnimation(1.0);
+    }
+
+    widget.isLoadingNotifier.addListener(() {
+      if (!widget.isLoadingNotifier.value) {
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (isUser) {
+    if (widget.isUser) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -31,11 +72,10 @@ class MessageWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
             ),
             child: Text(
-              message,
-              style: context.general.textTheme.titleMedium!
-                  .copyWith(
-                  color: ColorConstants.aiChatBubbleUserTextColor,
-                  fontWeight: FontWeight.w300
+              widget.message,
+              style: context.general.textTheme.titleMedium!.copyWith(
+                color: ColorConstants.aiChatBubbleUserTextColor,
+                fontWeight: FontWeight.w300,
               ),
             ),
           ),
@@ -66,7 +106,7 @@ class MessageWidget extends StatelessWidget {
           ),
           context.sized.emptySizedWidthBoxLow3x,
           ValueListenableBuilder<bool>(
-            valueListenable: isLoadingNotifier,
+            valueListenable: widget.isLoadingNotifier,
             builder: (context, isLoading, child) {
               return Container(
                 constraints: BoxConstraints(
@@ -79,28 +119,30 @@ class MessageWidget extends StatelessWidget {
                 ),
                 child: isLoading
                     ? Column(
-                        children: [
-                          const CustomShimmer(
-                            height: 10,
-                            width: double.infinity,
-                          ),
-                          context.sized.emptySizedHeightBoxLow,
-                          const CustomShimmer(
-                            height: 10,
-                            width: double.infinity,
-                          )
-                        ],
-                      )
-                    : Text(
-                        message,
-                        style: context.general.textTheme.titleMedium!
-                          .copyWith(
-                            color: ColorConstants.aiChatBubbleTextColor,
-                            fontWeight: FontWeight.w300
-                          ),
-                        ),
+                  children: [
+                    const CustomShimmer(
+                      height: 10,
+                      width: double.infinity,
+                    ),
+                    context.sized.emptySizedHeightBoxLow,
+                    const CustomShimmer(
+                      height: 10,
+                      width: double.infinity,
+                    ),
+                  ],
+                )
+                    : FadeTransition(
+                  opacity: _controller.isCompleted ? const AlwaysStoppedAnimation(1.0) : _animation,
+                  child: Text(
+                    widget.message,
+                    style: context.general.textTheme.titleMedium!.copyWith(
+                      color: ColorConstants.aiChatBubbleTextColor,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
               );
-            }
+            },
           ),
           context.sized.emptySizedWidthBoxNormal,
         ],
