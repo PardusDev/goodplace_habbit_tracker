@@ -28,7 +28,7 @@ class _MessageWidgetState extends State<MessageWidget> with SingleTickerProvider
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 700),
       vsync: this,
     );
     _animation = CurvedAnimation(
