@@ -81,6 +81,7 @@ class _AiChatPageState extends State<AiChatPage> {
                       builder: (context, viewModel, child) {
                         final length = viewModel.messages.length - 1;
                         return ListView.separated(
+                          controller: viewModel.messagesListController,
                           padding: EdgeInsets.zero,
                           reverse: true,
                           separatorBuilder: (context, index) => context.sized.emptySizedHeightBoxLow,
@@ -93,7 +94,7 @@ class _AiChatPageState extends State<AiChatPage> {
                     ),
                   ),
 
-                  context.sized.emptySizedHeightBoxLow3x,
+                  context.sized.emptySizedHeightBoxLow,
 
                   SizedBox(
                     height: 40,
@@ -116,7 +117,7 @@ class _AiChatPageState extends State<AiChatPage> {
                     ),
                   ),
 
-                  context.sized.emptySizedHeightBoxLow3x,
+                  context.sized.emptySizedHeightBoxLow,
 
                   Consumer<AiChatPageViewModel>(
                     builder: (context, viewModel, child) {

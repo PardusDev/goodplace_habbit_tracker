@@ -12,6 +12,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   final TextEditingController _messageController = TextEditingController();
   TextEditingController get messageController => _messageController;
 
+  final ScrollController _messagesListController = ScrollController();
+  ScrollController get messagesListController => _messagesListController;
+
   final List<Widget> _messages = [];
   List<Widget> get messages => _messages;
 
@@ -197,6 +200,13 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     if (lastMessage.isLoadingNotifier.value) {
       return;
     }
+
+    // Scroll to the bottom of the list
+    _messagesListController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
     
     // Add user message to conversation history
     addMessageToBatch(userMessage, true);
