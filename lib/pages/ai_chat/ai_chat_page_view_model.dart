@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 import 'package:goodplace_habbit_tracker/services/api_service.dart';
+import 'package:goodplace_habbit_tracker/widgets/AIMessageWidget.dart';
+import 'package:goodplace_habbit_tracker/widgets/UserMessageWidget.dart';
 
 import '../../constants/string_constants.dart';
 import '../../models/UserHabit.dart';
-import '../../widgets/MessageWidget.dart';
 
 class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   final ApiService _apiService = ApiService();
@@ -45,9 +46,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       });
 
       _messages.add(
-          MessageWidget(
+          AIMessageWidget(
               message: StringConstants.aiWelcomeMessage,
-              isUser: false,
               isLoadingNotifier: ValueNotifier<bool>(true)
           )
       );
@@ -66,9 +66,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       });
 
       _messages.add(
-        MessageWidget(
+        AIMessageWidget(
           message: "Let's talk about your habit: ${userHabit.title}",
-          isUser: false,
           isLoadingNotifier: ValueNotifier<bool>(true),
         ),
       );
@@ -77,7 +76,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     }
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      MessageWidget lastMessage = _messages.last as MessageWidget;
+      AIMessageWidget lastMessage = _messages.last as AIMessageWidget;
       lastMessage.isLoadingNotifier.value = false;
     });
   }
@@ -139,18 +138,24 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
   void addMessageToWidgetList(String message, bool isUser) {
     // Widget
-    _messages.add(
-      MessageWidget(
-        message: message,
-        isUser: isUser,
-        isLoadingNotifier: ValueNotifier<bool>(!isUser)
-      ),
-    );
-
+    if (isUser) {
+      _messages.add(
+        UserMessageWidget(message: message)
+      );
+    } else {
+      _messages.add(
+        AIMessageWidget(
+          message: message,
+          isLoadingNotifier: ValueNotifier<bool>(true)
+        ),
+      );
+    }
+    /*
     if (!isUser) {
       MessageWidget lastMessage = _messages.last as MessageWidget;
       lastMessage.isLoadingNotifier.value = false;
     }
+     */
   }
 
   void addMessageToBatch(String message, bool isUser) {
@@ -159,7 +164,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       addMessageToWidgetList(message, isUser);
     } else {
       // Edit the last message to show the AI response
-      MessageWidget lastMessage = _messages.last as MessageWidget;
+      AIMessageWidget lastMessage = _messages.last as AIMessageWidget;
       lastMessage.message = message;
       lastMessage.isLoadingNotifier.value = false;
     }
@@ -169,9 +174,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     try {
       // Add message to widget list
       _messages.add(
-        MessageWidget(
+        AIMessageWidget(
           message: "",
-          isUser: false,
           isLoadingNotifier: ValueNotifier<bool>(true)
         ),
       );
@@ -183,7 +187,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       notifyListeners();
     } catch (e) {
       await Future.delayed(const Duration(milliseconds: 1500));
-      MessageWidget lastMessage = _messages.last as MessageWidget;
+      AIMessageWidget lastMessage = _messages.last as AIMessageWidget;
       lastMessage.message = StringConstants.aiErrorMessage;
       lastMessage.isLoadingNotifier.value = false;
     }
@@ -191,7 +195,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
 
   Future<void> sendMessage() async {
     final userMessage = _messageController.text;
-    final lastMessage = _messages.last as MessageWidget;
+    final lastMessage = _messages.last as AIMessageWidget;
 
     if (userMessage.isEmpty) {
       return;
@@ -216,7 +220,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   }
 
   Future<void> sendPreparedMessage(Map<String, dynamic> preparedMessage) async {
-    final lastMessage = _messages.last as MessageWidget;
+    final lastMessage = _messages.last as AIMessageWidget;
 
     if (lastMessage.isLoadingNotifier.value) {
       return;
