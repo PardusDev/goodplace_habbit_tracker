@@ -74,7 +74,7 @@ class _AiChatPageState extends State<AiChatPage> {
                     ],
                   ),
 
-                  context.sized.emptySizedHeightBoxLow3x,
+                  context.sized.emptySizedHeightBoxLow,
 
                   Expanded(
                     child: Consumer<AiChatPageViewModel>(
