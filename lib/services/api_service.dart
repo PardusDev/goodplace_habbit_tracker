@@ -1,4 +1,7 @@
 
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_dio_exception.dart';
 
@@ -123,5 +126,66 @@ class ApiService {
     } catch (e) {
       throw Exception("An error occurred: ${e.toString()}");
     }
+  }
+
+  Stream<String>? goodplaceTChatStream(String lastMessage, List<Map<String, dynamic>> conversationHistory) async* {
+    final controller = StreamController<String>();
+
+    try {
+      Map<String, String> headers = {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+      };
+
+      // Add the new user message to the conversation history
+      conversationHistory.add({
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": lastMessage,
+          }
+        ]
+      });
+
+      Map<String, dynamic> data = {
+        "messages": conversationHistory,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "max_tokens": 800,
+        "stream": true
+      };
+
+      var response = await Dio().post(
+        aiPath,
+        data: data,
+        options: Options(
+          headers: headers,
+          responseType: ResponseType.stream,
+        ),
+      );
+
+      response.data.stream.listen((chunk) {
+        final messageContent = utf8.decode(chunk);
+        print(messageContent);
+        final jsonResponse = json.decode(messageContent);
+        print(jsonResponse);
+
+        if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
+          final content = jsonResponse['choices'][0]['message']['content'];
+          print (content);
+        }
+      }, onDone: () {
+        controller.close();
+      });
+    } on DioException catch (e) {
+      controller.addError("An error occurred during the API call: $e");
+      controller.close();
+    } catch (e) {
+      controller.addError("An error occurred: ${e.toString()}");
+      controller.close();
+    }
+
+    yield* controller.stream;
   }
 }
