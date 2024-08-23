@@ -4,13 +4,13 @@ import '../constants/color_constants.dart';
 
 class SortCard extends StatelessWidget {
   final String text;
-  final bool isSelected;
+  final bool? isSelected;
   final VoidCallback onPressed;
 
   const SortCard({
     super.key,
     required this.text,
-    required this.isSelected,
+    this.isSelected,
     required this.onPressed,
   });
 
@@ -20,7 +20,9 @@ class SortCard extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all<Color>(
-          isSelected ? ColorConstants.secondaryColor : ColorConstants.transparent,
+          isSelected == null || isSelected == true
+              ? ColorConstants.secondaryColor
+              : ColorConstants.transparent,
         ),
         side: WidgetStateProperty.all<BorderSide>(
           const BorderSide(color: ColorConstants.secondaryColor, width: 2.0),

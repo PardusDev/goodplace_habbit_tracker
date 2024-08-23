@@ -101,6 +101,13 @@ class ColorConstants {
   static const Color createHabitAIIconColor = Color(0xFFFFD700);
   // endregion
 
+  // region
+  static const Color aiChatBubbleBackgroundColor = Color(0xFFEFEFEF);
+  static const Color aiChatBubbleTextColor = Color(0xFF3F414E);
+  static const Color aiChatBubbleUserBackgroundColor = Color(0xFF8E97FD);
+  static const Color aiChatBubbleUserTextColor = Color(0xFFFFFFFF);
+  // endregion
+
   // region Success Screen
 
   static const Color successScreenBackgroundColor = Color(0xFFFFFFFF);
