@@ -180,7 +180,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
         ),
       );
 
+      // _apiService.goodplaceTChatStream(message, _conversationHistory);
       final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
+
 
       addMessageToBatch(aiResponse, false);
 

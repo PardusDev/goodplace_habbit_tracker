@@ -1,4 +1,7 @@
 
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_dio_exception.dart';
 
@@ -82,6 +85,8 @@ class ApiService {
     }
   }
 
+  // This method currently out of use
+  // Please use Stream method below
   Future<String> goodplaceTChat(String lastMessage, List<Map<String, dynamic>> conversationHistory) async {
     try {
       Map<String, String> headers = {
@@ -123,5 +128,80 @@ class ApiService {
     } catch (e) {
       throw Exception("An error occurred: ${e.toString()}");
     }
+  }
+
+  Stream<String> goodplaceTChatStream(String lastMessage, List<Map<String, dynamic>> conversationHistory) async* {
+    final controller = StreamController<String>();
+
+    try {
+      Map<String, String> headers = {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+      };
+
+      conversationHistory.add({
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": lastMessage,
+          }
+        ]
+      });
+
+      Map<String, dynamic> data = {
+        "messages": conversationHistory,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "max_tokens": 800,
+        "stream": true
+      };
+
+      var response = await Dio().post(
+        aiPath,
+        data: data,
+        options: Options(
+          headers: headers,
+          responseType: ResponseType.stream,
+        ),
+      );
+
+      StringBuffer buffer = StringBuffer();
+
+      response.data.stream.listen((chunk) {
+        final chunkString = utf8.decode(chunk);
+        buffer.write(chunkString);
+
+        final lines = buffer.toString().split('\n');
+        for (var line in lines) {
+          if (line.startsWith("data: ")) {
+            final jsonString = line.substring(6).trim();
+            try {
+              final jsonResponse = json.decode(jsonString);
+              if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
+                final content = jsonResponse['choices'][0]['delta']['content'];
+                controller.add(content);
+              }
+            } catch (e) {
+              print("Error: $e");
+            }
+          }
+        }
+        buffer.clear();
+      }, onDone: () {
+        controller.close();
+      }, onError: (error) {
+        controller.addError("Stream error: $error");
+        controller.close();
+      });
+    } on DioException catch (e) {
+      controller.addError("An error occurred during the API call: $e");
+      controller.close();
+    } catch (e) {
+      controller.addError("An error occurred: ${e.toString()}");
+      controller.close();
+    }
+
+    yield* controller.stream;
   }
 }

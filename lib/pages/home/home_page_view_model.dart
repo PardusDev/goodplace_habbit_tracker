@@ -140,7 +140,6 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void _onHabitsUpdated() {
-    print("test");
     updateMaxStreak();
     updateTodayCompletedHabits();
     notifyListeners();
