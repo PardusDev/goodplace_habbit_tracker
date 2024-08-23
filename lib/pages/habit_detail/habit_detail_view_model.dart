@@ -11,6 +11,7 @@ import '../../utilities/generate_id_from_date.dart';
 import '../../utilities/normalize_date.dart';
 import '../../widgets/Snackbars.dart';
 import '../../widgets/SuccessSplashBox.dart';
+import '../ai_chat/ai_chat_page.dart';
 
 class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
   final UserHabit currentHabit;
@@ -151,7 +152,7 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
       bool confirm = await showDialog(
           context: buildContext,
           builder: (BuildContext context) {
-            return ConfirmAlertDialog(
+            return const ConfirmAlertDialog(
                 title: "Are you sure?",
                 body: "Do you want to delete this habit? This action can't be undone."
             );
@@ -168,5 +169,16 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
           )
       );
     }
+  }
+
+  void startAiChat(BuildContext buildContext) {
+    showModalBottomSheet(
+        context: buildContext,
+        useSafeArea: true,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return AiChatPage(userHabit: currentHabit);
+        }
+    ).then((value) => notifyListeners());
   }
 }

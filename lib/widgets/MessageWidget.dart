@@ -16,23 +16,26 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isUser) {
       return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           context.sized.emptySizedWidthBoxNormal,
-          Expanded(
-            child: Container(
-              padding: context.padding.low,
-              decoration: BoxDecoration(
-                color: ColorConstants.aiChatBubbleUserBackgroundColor,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Text(
-                message,
-                style: context.general.textTheme.titleMedium!
-                    .copyWith(
-                    color: ColorConstants.aiChatBubbleUserTextColor,
-                    fontWeight: FontWeight.w300
-                ),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: context.sized.dynamicWidth(0.75),
+            ),
+            padding: context.padding.low,
+            decoration: BoxDecoration(
+              color: ColorConstants.aiChatBubbleUserBackgroundColor,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Text(
+              message,
+              style: context.general.textTheme.titleMedium!
+                  .copyWith(
+                  color: ColorConstants.aiChatBubbleUserTextColor,
+                  fontWeight: FontWeight.w300
               ),
             ),
           ),
@@ -49,6 +52,8 @@ class MessageWidget extends StatelessWidget {
       );
     } else {
       return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -60,41 +65,42 @@ class MessageWidget extends StatelessWidget {
             ),
           ),
           context.sized.emptySizedWidthBoxLow3x,
-          Expanded(
-            child: ValueListenableBuilder<bool>(
-              valueListenable: isLoadingNotifier,
-              builder: (context, isLoading, child) {
-                return Container(
-                  padding: context.padding.low,
-                  decoration: BoxDecoration(
-                    color: ColorConstants.aiChatBubbleBackgroundColor,
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: isLoading
-                      ? Column(
-                          children: [
-                            const CustomShimmer(
-                              height: 10,
-                              width: double.infinity,
-                            ),
-                            context.sized.emptySizedHeightBoxLow,
-                            const CustomShimmer(
-                              height: 10,
-                              width: double.infinity,
-                            )
-                          ],
-                        )
-                      : Text(
-                          message,
-                          style: context.general.textTheme.titleMedium!
-                            .copyWith(
-                              color: ColorConstants.aiChatBubbleTextColor,
-                              fontWeight: FontWeight.w300
-                            ),
+          ValueListenableBuilder<bool>(
+            valueListenable: isLoadingNotifier,
+            builder: (context, isLoading, child) {
+              return Container(
+                constraints: BoxConstraints(
+                  maxWidth: context.sized.dynamicWidth(0.75),
+                ),
+                padding: context.padding.low,
+                decoration: BoxDecoration(
+                  color: ColorConstants.aiChatBubbleBackgroundColor,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: isLoading
+                    ? Column(
+                        children: [
+                          const CustomShimmer(
+                            height: 10,
+                            width: double.infinity,
                           ),
-                );
-              }
-            ),
+                          context.sized.emptySizedHeightBoxLow,
+                          const CustomShimmer(
+                            height: 10,
+                            width: double.infinity,
+                          )
+                        ],
+                      )
+                    : Text(
+                        message,
+                        style: context.general.textTheme.titleMedium!
+                          .copyWith(
+                            color: ColorConstants.aiChatBubbleTextColor,
+                            fontWeight: FontWeight.w300
+                          ),
+                        ),
+              );
+            }
           ),
           context.sized.emptySizedWidthBoxNormal,
         ],

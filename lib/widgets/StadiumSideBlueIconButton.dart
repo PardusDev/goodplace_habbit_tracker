@@ -5,11 +5,11 @@ import '../constants/color_constants.dart';
 
 class StadiumSideBlueIconButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final IconData icon;
+  final Widget icon;
   const StadiumSideBlueIconButton({super.key, required this.onPressed, required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return StadiumSideIconButton(onPressed: onPressed, icon: icon, backgroundColor: ColorConstants.buttonBlueBackground, iconColor: ColorConstants.buttonBlueTextColor);
+    return StadiumSideIconButton(onPressed: onPressed, icon: icon, backgroundColor: ColorConstants.buttonBlueBackground);
   }
 }

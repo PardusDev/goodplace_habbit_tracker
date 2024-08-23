@@ -94,6 +94,17 @@ class StringConstants {
   static const String onboardingPage4Subtitle = "Let's start a healthy lifestyle with us, we can determine your diet every day. healthy eating is fun";
   //endregion
 
+  // region Home Page
+  static const String homePageCardMaxStreakTitle = "Max Streak";
+  static const String homePageCardTotalHabitsTitle = "Total Habits";
+  static const String homePageCardTodayCompletedHabitsTitle = "Today Completed Habits";
+  // endregion
+
+  // region Habit Detail Page
+  static const String habitDetailPageChatWithAI = "Chat About This Habit";
+  // endregion
+
+  // region Exceptions
   //region Firebase Auth Exceptions
   static const String invalidEmail = "The email address is badly formatted.";
   static const String wrongPassword = "The password is incorrect. Please try again.";
@@ -141,6 +152,7 @@ class StringConstants {
   static const String badCertificate = "Bad SSL certificate.";
   static const String connectionError = "Connection error occurred.";
   // endregion Dio Exceptions END
+  // endregion Exceptions END
 
   //region Privacy Policy
   static const String privacyPolicy = 'Privacy Policy';
