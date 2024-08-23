@@ -140,6 +140,7 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void _onHabitsUpdated() {
+    print("test");
     updateMaxStreak();
     updateTodayCompletedHabits();
     notifyListeners();
@@ -322,7 +323,7 @@ class HomePageViewModel with ChangeNotifier {
         useSafeArea: true,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return const AiChatPage();
+          return const AiChatPage(userHabit: null);
         }
     ).then((value) => notifyListeners());
   }

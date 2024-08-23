@@ -3,10 +3,9 @@ import 'package:kartal/kartal.dart';
 
 class StadiumSideIconButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final IconData icon;
+  final Widget icon;
   final Color backgroundColor;
-  final Color iconColor;
-  const StadiumSideIconButton({super.key, required this.onPressed, required this.backgroundColor, required this.icon, required this.iconColor});
+  const StadiumSideIconButton({super.key, required this.onPressed, required this.backgroundColor, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,7 @@ class StadiumSideIconButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
           ),
         ),
-        child: Icon(
-          icon,
-          color: iconColor,
-        ),
+        child: icon,
       ),
     );
   }

@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/habit_detail/habit_detail_view_model.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/utilities/date_formatter_to_show.dart';
 import 'package:goodplace_habbit_tracker/widgets/Calendar.dart';
 import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
+import 'package:goodplace_habbit_tracker/widgets/StadiumSideBlueIconButton.dart';
+import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/string_constants.dart';
@@ -135,6 +138,37 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                       color: Colors.white,
                       fontSize: 14,
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return StadiumSideBlueIconButton(
+                          onPressed: () {
+                            viewModel.startAiChat(context);
+                          },
+                          icon: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                ImageConstants.aiAvatar,
+                                width: 24,
+                                color: Colors.white,
+                              ),
+                              context.sized.emptySizedWidthBoxLow3x,
+                              Baseline(
+                                baseline: 20,
+                                baselineType: TextBaseline.alphabetic,
+                                child: Text(StringConstants.habitDetailPageChatWithAI, style: context.general.textTheme.titleMedium!.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                ),
+                              ),
+                            ],
+                          )
+                      );
+                    }
                   ),
                   const SizedBox(height: 30),
                   Consumer<HabitDetailViewModel>(

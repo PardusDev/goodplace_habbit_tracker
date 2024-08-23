@@ -100,6 +100,10 @@ class StringConstants {
   static const String homePageCardTodayCompletedHabitsTitle = "Today Completed Habits";
   // endregion
 
+  // region Habit Detail Page
+  static const String habitDetailPageChatWithAI = "Chat About This Habit";
+  // endregion
+
   // region Exceptions
   //region Firebase Auth Exceptions
   static const String invalidEmail = "The email address is badly formatted.";
