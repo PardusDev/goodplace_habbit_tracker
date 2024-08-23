@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
-import 'package:goodplace_habbit_tracker/services/api_service.dart';
 import 'package:goodplace_habbit_tracker/widgets/AIMessageWidget.dart';
 import 'package:goodplace_habbit_tracker/widgets/UserMessageWidget.dart';
 
 import '../../constants/string_constants.dart';
 import '../../models/UserHabit.dart';
+import '../../widgets/AIMessageStreamWidget.dart';
 
 class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
-  final ApiService _apiService = ApiService();
-  
   final TextEditingController _messageController = TextEditingController();
   TextEditingController get messageController => _messageController;
 
@@ -32,6 +30,7 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
     _initializePreparedChats(userHabit);
   }
 
+  // region Initialize the chat
   void _initializeChat(UserHabit? userHabit) {
     if (userHabit == null) {
 
@@ -80,7 +79,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       lastMessage.isLoadingNotifier.value = false;
     });
   }
+  // endregion
 
+  // region Prepare some messages to prepared cards
   void _initializePreparedChats(UserHabit? userHabit) {
     if (userHabit == null) {
       _startMessages = [
@@ -122,7 +123,9 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       ];
     }
   }
+  // endregion
 
+  // region Add message to conversation history
   void addMessageToConservationHistory(String message, bool isUser) {
     // Add message to conversation history
     _conversationHistory.add({
@@ -135,120 +138,126 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
       ]
     });
   }
+  // endregion
 
-  void addMessageToWidgetList(String message, bool isUser) {
-    // Widget
-    if (isUser) {
-      _messages.add(
-        UserMessageWidget(message: message)
-      );
-    } else {
-      _messages.add(
-        AIMessageWidget(
-          message: message,
-          isLoadingNotifier: ValueNotifier<bool>(true)
-        ),
-      );
-    }
-    /*
-    if (!isUser) {
-      MessageWidget lastMessage = _messages.last as MessageWidget;
-      lastMessage.isLoadingNotifier.value = false;
-    }
-     */
+  // region Add user message to widget list
+  void addUserMessageToWidgetList(String message) {
+    _messages.add(UserMessageWidget(message: message));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollToBottom();
+    });
   }
-
-  void addMessageToBatch(String message, bool isUser) {
-    addMessageToConservationHistory(message, isUser);
-    if (isUser) {
-      addMessageToWidgetList(message, isUser);
-    } else {
-      // Edit the last message to show the AI response
-      AIMessageWidget lastMessage = _messages.last as AIMessageWidget;
-      lastMessage.message = message;
-      lastMessage.isLoadingNotifier.value = false;
-    }
-  }
+  // endregion
   
   Future<void> sendMessageToAI(String message) async {
     try {
-      // Add message to widget list
+      final isStreamingNotifier = ValueNotifier<bool>(true);
       _messages.add(
-        AIMessageWidget(
-          message: "",
-          isLoadingNotifier: ValueNotifier<bool>(true)
+        AIMessageStreamWidget(
+          message: message,
+          conversationHistory: _conversationHistory,
+          isStreamingNotifier: isStreamingNotifier,
+          onMessageCompleted: (response) {
+            // Add message to conversation history as assistant
+            addMessageToConservationHistory(response, false);
+          },
+          onMessagePartReceived: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollToBottom();
+            });
+          }
         ),
       );
-
-      // _apiService.goodplaceTChatStream(message, _conversationHistory);
-      final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
-
-
-      addMessageToBatch(aiResponse, false);
-
       notifyListeners();
     } catch (e) {
       await Future.delayed(const Duration(milliseconds: 1500));
-      AIMessageWidget lastMessage = _messages.last as AIMessageWidget;
-      lastMessage.message = StringConstants.aiErrorMessage;
-      lastMessage.isLoadingNotifier.value = false;
+      AIMessageStreamWidget lastMessage = _messages.last as AIMessageStreamWidget;
+      lastMessage.messageStream = Stream.value(StringConstants.aiErrorMessage);
+      lastMessage.isStreamingNotifier.value = false;
     }
   }
 
   Future<void> sendMessage() async {
     final userMessage = _messageController.text;
-    final lastMessage = _messages.last as AIMessageWidget;
+    var lastMessage = _messages.last;
 
     if (userMessage.isEmpty) {
       return;
     }
 
-    if (lastMessage.isLoadingNotifier.value) {
-      return;
+    // Check if the last message is still loading
+    // This code will run only first time
+    if (lastMessage == AIMessageWidget) {
+      lastMessage = lastMessage as AIMessageWidget;
+      if (lastMessage.isLoadingNotifier.value) {
+        return;
+      }
     }
 
-    // Scroll to the bottom of the list
-    scrollToBottom();
+    // Check if the last message is still streaming
+    if (lastMessage == AIMessageStreamWidget) {
+      lastMessage = lastMessage as AIMessageStreamWidget;
+      if (lastMessage.isStreamingNotifier.value) {
+        return;
+      }
+    }
     
     // Add user message to conversation history
-    addMessageToBatch(userMessage, true);
+    addUserMessageToWidgetList(userMessage);
+
+    // Add message to conversation history
+    // We dont need to add user message to conversation history
+    // addMessageToConservationHistory(userMessage, true);
     
     _messageController.clear();
-    notifyListeners();
     
     // Send the message to the AI
     await sendMessageToAI(userMessage);
+
     notifyListeners();
   }
 
   Future<void> sendPreparedMessage(Map<String, dynamic> preparedMessage) async {
-    final lastMessage = _messages.last as AIMessageWidget;
+    var lastMessage = _messages.last;
 
-    if (lastMessage.isLoadingNotifier.value) {
-      return;
+    // Check if the last message is still loading
+    // This code will run only first time
+    if (lastMessage is AIMessageWidget) {
+      lastMessage = lastMessage as AIMessageWidget;
+      if (lastMessage.isLoadingNotifier.value) {
+        return;
+      }
     }
 
-    // Scroll to the bottom of the list
-    scrollToBottom();
+    // Check if the last message is still streaming
+    if (lastMessage is AIMessageStreamWidget) {
+      lastMessage = lastMessage as AIMessageStreamWidget;
+      if (lastMessage.isStreamingNotifier.value) {
+        return;
+      }
+    }
 
     // Widget
-    addMessageToWidgetList(preparedMessage["title"], true);
+    addUserMessageToWidgetList(preparedMessage["title"]);
 
     // Add message to conversation history
-    addMessageToConservationHistory(preparedMessage["message"], true);
-
-    notifyListeners();
+    // We dont need to add user message to conversation history
+    // addMessageToConservationHistory(preparedMessage["message"], true);
 
     // Send the message to the AI
     await sendMessageToAI(preparedMessage["message"]);
+
     notifyListeners();
   }
 
   void scrollToBottom() {
-    _messagesListController.animateTo(
-      0.0,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    if (_messagesListController.hasClients) {
+      final position = _messagesListController.position.maxScrollExtent;
+      _messagesListController.animateTo(
+        position,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    }
   }
 }

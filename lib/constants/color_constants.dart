@@ -106,6 +106,10 @@ class ColorConstants {
   static const Color aiChatBubbleTextColor = Color(0xFF3F414E);
   static const Color aiChatBubbleUserBackgroundColor = Color(0xFF8E97FD);
   static const Color aiChatBubbleUserTextColor = Color(0xFFFFFFFF);
+  static const List<Color> aiChatBubbleIndicatorGradientColors = [
+    Color(0xFF9DCEFF),
+    Color(0xFF92A3FD),
+  ];
   // endregion
 
   // region Success Screen

@@ -79,15 +79,14 @@ class _AiChatPageState extends State<AiChatPage> {
                   Expanded(
                     child: Consumer<AiChatPageViewModel>(
                       builder: (context, viewModel, child) {
-                        final length = viewModel.messages.length - 1;
                         return ListView.separated(
                           controller: viewModel.messagesListController,
                           padding: EdgeInsets.zero,
-                          reverse: true,
+                          reverse: false,
                           separatorBuilder: (context, index) => context.sized.emptySizedHeightBoxLow,
                           itemCount: viewModel.messages.length,
                           itemBuilder: (context, index) {
-                            return viewModel.messages[length - index];
+                            return viewModel.messages[index];
                           },
                         );
                       }
