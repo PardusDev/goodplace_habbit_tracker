@@ -85,6 +85,8 @@ class ApiService {
     }
   }
 
+  // This method currently out of use
+  // Please use Stream method below
   Future<String> goodplaceTChat(String lastMessage, List<Map<String, dynamic>> conversationHistory) async {
     try {
       Map<String, String> headers = {
@@ -128,7 +130,7 @@ class ApiService {
     }
   }
 
-  Stream<String>? goodplaceTChatStream(String lastMessage, List<Map<String, dynamic>> conversationHistory) async* {
+  Stream<String> goodplaceTChatStream(String lastMessage, List<Map<String, dynamic>> conversationHistory) async* {
     final controller = StreamController<String>();
 
     try {
@@ -137,7 +139,6 @@ class ApiService {
         'Content-Type': 'application/json',
       };
 
-      // Add the new user message to the conversation history
       conversationHistory.add({
         "role": "user",
         "content": [
@@ -165,17 +166,32 @@ class ApiService {
         ),
       );
 
-      response.data.stream.listen((chunk) {
-        final messageContent = utf8.decode(chunk);
-        print(messageContent);
-        final jsonResponse = json.decode(messageContent);
-        print(jsonResponse);
+      StringBuffer buffer = StringBuffer();
 
-        if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
-          final content = jsonResponse['choices'][0]['message']['content'];
-          print (content);
+      response.data.stream.listen((chunk) {
+        final chunkString = utf8.decode(chunk);
+        buffer.write(chunkString);
+
+        final lines = buffer.toString().split('\n');
+        for (var line in lines) {
+          if (line.startsWith("data: ")) {
+            final jsonString = line.substring(6).trim();
+            try {
+              final jsonResponse = json.decode(jsonString);
+              if (jsonResponse['choices'] != null && jsonResponse['choices'].isNotEmpty) {
+                final content = jsonResponse['choices'][0]['delta']['content'];
+                controller.add(content);
+              }
+            } catch (e) {
+              print("Error: $e");
+            }
+          }
         }
+        buffer.clear();
       }, onDone: () {
+        controller.close();
+      }, onError: (error) {
+        controller.addError("Stream error: $error");
         controller.close();
       });
     } on DioException catch (e) {

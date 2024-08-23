@@ -180,11 +180,11 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
         ),
       );
 
-      _apiService.goodplaceTChatStream(message, _conversationHistory);
-      // final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
+      // _apiService.goodplaceTChatStream(message, _conversationHistory);
+      final aiResponse = await _apiService.goodplaceTChat(message, _conversationHistory);
 
 
-      // addMessageToBatch(aiResponse, false);
+      addMessageToBatch(aiResponse, false);
 
       notifyListeners();
     } catch (e) {
