@@ -20,6 +20,9 @@ class ImageConstants {
   static final String aiAvatar = 'ai_avatar'.iconToPng;
   static final String aiCreateIcon = 'ai_create_icon'.iconToPng;
   static final String userAvatar = 'user_avatar'.iconToPng;
+  static final String icFlame = 'ic_flame'.iconToPng;
+  static final String icStats = 'ic_stats'.iconToPng;
+  static final String icHype = 'ic_hype'.iconToPng;
 
   //region Onboarding
   static final String onboardingPage1 = 'page1'.onboardingToPng;
