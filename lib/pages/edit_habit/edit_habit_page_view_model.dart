@@ -221,7 +221,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
       ) ?? false;
       if (confirm) {
         await _habitManager.deleteHabit(firebaseUser, currentHabit);
-        _navigationService.navigateToBack();
+        _navigationService.navigateToPageClear("/home", null);
       }
     } catch (e) {
       ScaffoldMessenger.of(buildContext).showSnackBar(
