@@ -76,6 +76,8 @@ class _AiChatPageState extends State<AiChatPage> {
 
                   context.sized.emptySizedHeightBoxLow,
 
+                  /*
+                  TODO: Deprecated
                   Expanded(
                     child: Consumer<AiChatPageViewModel>(
                       builder: (context, viewModel, child) {
@@ -90,6 +92,31 @@ class _AiChatPageState extends State<AiChatPage> {
                           },
                         );
                       }
+                    ),
+                  ),
+                   */
+
+                  Expanded(
+                    child: Consumer<AiChatPageViewModel>(
+                        builder: (context, viewModel, child) {
+                          return SingleChildScrollView(
+                            controller: viewModel.messagesListController,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                for (var message in viewModel.messages)
+                                  // Add padding for each message
+                                  // TODO: If the message şs AIMessageStreamWidget, then align to left
+                                  // TODO: If the message is UserMessageWidget, then align to right
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: message,
+                                  )
+                                ,
+                              ]
+                            ),
+                          );
+                        }
                     ),
                   ),
 
