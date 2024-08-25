@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/pages/ai_chat/ai_chat_page_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/AIMessageWidget.dart';
 import 'package:goodplace_habbit_tracker/widgets/OneLineInputField.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +8,10 @@ import 'package:provider/provider.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../models/UserHabit.dart';
+import '../../widgets/AIMessageStreamWidget.dart';
 import '../../widgets/SortCard.dart';
 import '../../widgets/StadiumSideBlueIconButton.dart';
+import '../../widgets/UserMessageWidget.dart';
 
 class AiChatPage extends StatefulWidget {
   final UserHabit? userHabit;
@@ -105,14 +108,22 @@ class _AiChatPageState extends State<AiChatPage> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 for (var message in viewModel.messages)
-                                  // Add padding for each message
-                                  // TODO: If the message şs AIMessageStreamWidget, then align to left
-                                  // TODO: If the message is UserMessageWidget, then align to right
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: message,
-                                  )
-                                ,
+                                  if (message is AIMessageStreamWidget || message is AIMessageWidget)
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: message,
+                                      ),
+                                    )
+                                  else if (message is UserMessageWidget)
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: message,
+                                      ),
+                                    ),
                               ]
                             ),
                           );
