@@ -7,6 +7,7 @@ import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../widgets/CollapsableBottomSheetMultipleWidget.dart';
 import '../../widgets/CustomShimmer.dart';
+import '../../widgets/InputSection.dart';
 import '../../widgets/SelectableImageCard.dart';
 
 class CreateHabitModal extends StatelessWidget {
@@ -36,6 +37,8 @@ class CreateHabitModal extends StatelessWidget {
                 description: "Describe the subject of your habit.",
                 hintText: StringConstants.createHabitScreenSubjectHint,
                 controller: viewModel.subjectController,
+                onAutofillTap: viewModel.autoFillDescription,
+                descLoading: viewModel.descLoading,
               ),
               const SizedBox(height: 24.0),
               ImageSelectionSection(
@@ -94,57 +97,6 @@ class CreateHabitModal extends StatelessWidget {
   }
 }
 
-class InputSection extends StatelessWidget {
-  final String title;
-  final String description;
-  final String hintText;
-  final TextEditingController controller;
-  final Function(String)? onChanged;
-
-  const InputSection({
-    required this.title,
-    required this.description,
-    required this.hintText,
-    required this.controller,
-    super.key, this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-            ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            description,
-            style: const TextStyle(fontSize: 12.0, color: Colors.grey),
-          ),
-          const SizedBox(height: 8.0),
-          TextField(
-            onChanged: onChanged,
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class ImageSelectionSection extends StatelessWidget {
   final VoidCallback onPressed;

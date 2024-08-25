@@ -97,6 +97,21 @@ class ColorConstants {
   static const Color homePageHabitListShowAllTextColor = Color(0xFF4D57C8);
   // endregion
 
+  // region CreateHabit
+  static const Color createHabitAIIconColor = Color(0xFFFFD700);
+  // endregion
+
+  // region
+  static const Color aiChatBubbleBackgroundColor = Color(0xFFEFEFEF);
+  static const Color aiChatBubbleTextColor = Color(0xFF3F414E);
+  static const Color aiChatBubbleUserBackgroundColor = Color(0xFF8E97FD);
+  static const Color aiChatBubbleUserTextColor = Color(0xFFFFFFFF);
+  static const List<Color> aiChatBubbleIndicatorGradientColors = [
+    Color(0xFF9DCEFF),
+    Color(0xFF92A3FD),
+  ];
+  // endregion
+
   // region Success Screen
 
   static const Color successScreenBackgroundColor = Color(0xFFFFFFFF);
@@ -107,5 +122,8 @@ class ColorConstants {
 
   // endregion
 
+  // region Habit Details
+  static const Color habitDetailScreenEditTextColor = Color(0xFFD1DAFF);
+  // endregion
 
 }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/string_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/Drawer.dart';
+import 'package:goodplace_habbit_tracker/widgets/ExpandableFAB.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/color_constants.dart';
+import '../../constants/image_constants.dart';
 import '../../widgets/Calendar.dart';
 import '../../widgets/CustomShimmer.dart';
 import '../../widgets/HabitListTile.dart';
@@ -45,6 +47,17 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: 100,
       ),
       drawer: MyDrawer(mainModel: _homeModel, currentPage:"Home Page"),
+      floatingActionButton: ExpandableFAB(
+        message: _homeModel.aiFabMessage,
+        icon: Image.asset(
+          ImageConstants.aiAvatar,
+          color: Colors.white,
+          width: 32,
+        ),
+        onPressed: () {
+          _homeModel.showAiChatModal(context);
+        },
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -272,22 +285,31 @@ class _HomePageState extends State<HomePage> {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildImageCard(size, 'assets/icons/calendar.png', '1 Day', "Total perfect days"),
-          const SizedBox(width: 20),
-          _buildImageCard(size, 'assets/icons/check.png', '1 Day', "Total complete days"),
-        ],
+    Consumer<HomePageViewModel>(
+        builder: (context, viewModel, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildImageCard(size, ImageConstants.icFlame, viewModel.maxStreak.toString(), StringConstants.homePageCardMaxStreakTitle),
+              const SizedBox(width: 20),
+              _buildImageCard(size, ImageConstants.icStats, viewModel.habits.length.toString(), StringConstants.homePageCardTotalHabitsTitle),
+            ],
+          );
+        }
       ),
       const SizedBox(height: 20),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildImageCard(size, 'assets/icons/hype.png', '%100', "Habit completion rate"),
-          const SizedBox(width: 20),
-          _buildImageCard(size, 'assets/icons/stats.png', '1.01', "Average per daily"),
-        ],
+      Consumer<HomePageViewModel>(
+        builder: (context, viewModel, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildImageCard(size, ImageConstants.icHype, viewModel.todayCompletedHabits.toString(), StringConstants.homePageCardTodayCompletedHabitsTitle),
+              const SizedBox(width: 20),
+              // TODO: For a while we are hiding this card.
+              Opacity(opacity: 0, child: _buildImageCard(size, ImageConstants.icStats, '1.01', "Average per daily")),
+            ],
+          );
+        }
       ),
     ],
   );

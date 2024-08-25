@@ -1,21 +1,23 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
-import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
-import 'package:goodplace_habbit_tracker/services/api_service.dart';
-import 'package:goodplace_habbit_tracker/services/image_service.dart';
-import 'package:goodplace_habbit_tracker/widgets/Snackbars.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants/string_constants.dart';
 import '../../init/navigation/navigation_service.dart';
+import '../../managers/HabitManager.dart';
 import '../../models/ImageModel.dart';
 import '../../models/UserHabit.dart';
+import '../../services/api_service.dart';
 import '../../services/auth_service.dart';
+import '../../services/image_service.dart';
+import '../../widgets/ConfirmAlertDialog.dart';
+import '../../widgets/Snackbars.dart';
 
-class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
+class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   final _authService = AuthService();
   final _imageService = ImageService();
   final _habitManager = HabitManager();
@@ -43,12 +45,17 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
   bool descLoading=false;
 
+  late final _currentHabit;
+  get currentHabit => _currentHabit;
+
   set selectedImageIndex(int value) {
     _selectedImageIndex = value;
     notifyListeners();
   }
 
-  CreateHabitModalViewModel() {
+  EditHabitPageViewModel(UserHabit userHabit) {
+    _currentHabit = userHabit;
+    fillCurrentHabit();
     fetchImages();
   }
 
@@ -66,13 +73,22 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
+  void fillCurrentHabit() {
+    _titleController.text = _currentHabit.title;
+    onTitleChanged(_titleController.text);
+
+    _subjectController.text = _currentHabit.subject;
+  }
+
   // Fetch images
   Future<void> fetchImages() async {
     try {
       _imagesIsLoading = true;
       notifyListeners();
       _images = (await _imageService.fetchImages())!;
+      fetchCurrentImage();
       _imagesIsLoading = false;
+      selectCurrentImage();
       notifyListeners();
     } catch (e) {
       ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
@@ -80,6 +96,23 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
       );
       throw e;
     }
+  }
+
+  void fetchCurrentImage() {
+    // Check _images list does not contain the current habit image
+    if (_images.indexWhere((element) => element.url == _currentHabit.imagePath) == -1) {
+      _images.add(
+        ImageModel(
+          id: _currentHabit.habitId,
+          url: _currentHabit.imagePath,
+        ),
+      );
+    }
+  }
+
+  void selectCurrentImage() {
+    // Select the current habit image
+    _selectedImageIndex = _images.indexWhere((element) => element.url == _currentHabit.imagePath);
   }
 
   // Upload image
@@ -103,7 +136,7 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
-  Future<void> createHabit() async {
+  Future<void> saveHabit() async {
     if (!_titleValid) {
       setErrorText(StringConstants.createHabitScreenNameEmptyError);
       return;
@@ -120,18 +153,18 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
       // Get the text from the text controllers
       UserHabit newHabit = UserHabit(
-          habitId: '',
+          habitId: _currentHabit.habitId,
           title: titleController.text,
           subject: subjectController.text,
           imagePath: images[selectedImageIndex].url,
-          createdAt: DateTime.now(),
-          doneHabits: [],
-          maxStreak: 0,
-          currentStreakLastDate: null,
-          currentStreak: 0
+          createdAt: _currentHabit.createdAt,
+          doneHabits: _currentHabit.doneHabits,
+          maxStreak: _currentHabit.maxStreak,
+          currentStreakLastDate: _currentHabit.currentStreakLastDate,
+          currentStreak: _currentHabit.currentStreak
       );
 
-      await _habitManager.addHabit(user!, newHabit);
+      await _habitManager.updateHabit(user!, newHabit);
 
       notifyListeners();
 
@@ -152,25 +185,50 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     ].request();
   }
 
- Future<void> autoFillDescription() async {
-  if (!_titleValid) {
-    setErrorText(StringConstants.createHabitScreenNameEmptyError);
-    return;
-  }
-  try {
-    descLoading = true;
-    notifyListeners();
-    _subjectController.text = "";
-    String response = await _apiService.autoFillDescription(_titleController.text);
-    _subjectController.text = response;
-  } catch (e) {
-        _subjectController.text = "";
-    ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
+  Future<void> autoFillDescription() async {
+    if (!_titleValid) {
+      setErrorText(StringConstants.createHabitScreenNameEmptyError);
+      return;
+    }
+    try {
+      descLoading = true;
+      notifyListeners();
+      _subjectController.text = "";
+      String response = await _apiService.autoFillDescription(_titleController.text);
+      _subjectController.text = response;
+    } catch (e) {
+      _subjectController.text = "";
+      ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
         errorSnackBar(StringConstants.autoFillError),
       );
-  } finally {
-    descLoading = false;
-    notifyListeners();
+    } finally {
+      descLoading = false;
+      notifyListeners();
+    }
   }
-}
+
+  Future<void> deleteHabit(BuildContext buildContext) async {
+    try {
+      User firebaseUser = FirebaseAuth.instance.currentUser!;
+      bool confirm = await showDialog(
+          context: buildContext,
+          builder: (BuildContext context) {
+            return const ConfirmAlertDialog(
+                title: "Are you sure?",
+                body: "Do you want to delete this habit? This action can't be undone."
+            );
+          }
+      ) ?? false;
+      if (confirm) {
+        await _habitManager.deleteHabit(firebaseUser, currentHabit);
+        _navigationService.navigateToPageClear("/home", null);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(buildContext).showSnackBar(
+          errorSnackBar(
+              e.toString()
+          )
+      );
+    }
+  }
 }
