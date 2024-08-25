@@ -104,6 +104,11 @@ class StringConstants {
   static const String habitDetailPageChatWithAI = "Chat About This Habit";
   // endregion
 
+  // region Edit Habit Page
+  static const String editHabitPageTitle = "Edit Habit";
+  static const String editHabitPageSaveButton = "Save";
+  // endregion
+
   // region Exceptions
   //region Firebase Auth Exceptions
   static const String invalidEmail = "The email address is badly formatted.";
