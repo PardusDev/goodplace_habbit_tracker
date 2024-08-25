@@ -95,6 +95,8 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void updateTodayCompletedHabits() {
+    _todayCompletedHabits = 0;
+
     String todayId = generateIdFromDate(selectedDate);
 
     for (var habits in habits) {
@@ -179,6 +181,13 @@ class HomePageViewModel with ChangeNotifier {
           )
       );
     }
+  }
+
+  void reCalculateCards() {
+    updateMaxStreak();
+    updateTodayCompletedHabits();
+
+    notifyListeners();
   }
 
   void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
@@ -294,7 +303,10 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void navigateToManageMyHabits(){
-    _navigationService.navigateToPage('/manageMyHabits', null).then((_) => notifyListeners());
+    _navigationService.navigateToPage('/manageMyHabits', null).then((_) {
+      reCalculateCards();
+      notifyListeners();
+    });
   }
 
   void navigateToHome(){
@@ -302,7 +314,10 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   void navigateToHabitDetail(UserHabit habit) {
-    _navigationService.navigateToPage('/habitDetail', habit).then((_) => notifyListeners());
+    _navigationService.navigateToPage('/habitDetail', habit).then((_) {
+      reCalculateCards();
+      notifyListeners();
+    });
   }
 
   void showCreateHabitModal(BuildContext buildContext) {
