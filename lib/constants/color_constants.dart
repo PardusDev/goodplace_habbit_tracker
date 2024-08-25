@@ -122,5 +122,8 @@ class ColorConstants {
 
   // endregion
 
+  // region Habit Details
+  static const Color habitDetailScreenEditTextColor = Color(0xFFD1DAFF);
+  // endregion
 
 }

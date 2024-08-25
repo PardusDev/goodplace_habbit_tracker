@@ -97,11 +97,16 @@ class StringConstants {
   // region Home Page
   static const String homePageCardMaxStreakTitle = "Max Streak";
   static const String homePageCardTotalHabitsTitle = "Total Habits";
-  static const String homePageCardTodayCompletedHabitsTitle = "Today Completed Habits";
+  static const String homePageCardTodayCompletedHabitsTitle = "Completed Habits For Selected Day";
   // endregion
 
   // region Habit Detail Page
   static const String habitDetailPageChatWithAI = "Chat About This Habit";
+  // endregion
+
+  // region Edit Habit Page
+  static const String editHabitPageTitle = "Edit Habit";
+  static const String editHabitPageSaveButton = "Save";
   // endregion
 
   // region Exceptions

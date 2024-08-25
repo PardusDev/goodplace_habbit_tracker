@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
-import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
 
+import '../../init/navigation/navigation_service.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
 import '../../models/UserHabit.dart';
@@ -14,8 +14,9 @@ import '../../widgets/SuccessSplashBox.dart';
 import '../ai_chat/ai_chat_page.dart';
 
 class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
-  final UserHabit currentHabit;
+  UserHabit currentHabit;
   final HabitManager _habitManager = HabitManager();
+  final _navigationService = NavigationService.instance;
 
   DateTime _selectedDay = DateTime.now();
   Map<DateTime, List<DoneHabit>> _events = {};
@@ -29,9 +30,22 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
+  String _habitTitle = "";
+  get habitTitle => _habitTitle;
+
+  String _habitDescription = "";
+  get habitDescription => _habitDescription;
+
   HabitDetailViewModel({required this.currentHabit}) {
     fetchDoneHabitsForSpecificMonth(DateTime.now());
     _habitManager.addListener(_onHabitsUpdated);
+    showHabitDetails();
+  }
+
+  void showHabitDetails() {
+    _habitTitle = currentHabit.title;
+    _habitDescription = currentHabit.subject;
+    notifyListeners();
   }
 
   void _onHabitsUpdated() {
@@ -137,6 +151,10 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
+  void getUpdatedHabit() {
+    currentHabit = habits.firstWhere((element) => element.habitId == currentHabit.habitId);
+  }
+
   bool checkHabitIsCompletedForSelectedDate(UserHabit habit) {
     return _habitManager.checkHabitIsCompletedForSelectedDate(habit, _selectedDay);
   }
@@ -146,29 +164,12 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> deleteHabit(BuildContext buildContext) async {
-    try {
-      User firebaseUser = FirebaseAuth.instance.currentUser!;
-      bool confirm = await showDialog(
-          context: buildContext,
-          builder: (BuildContext context) {
-            return const ConfirmAlertDialog(
-                title: "Are you sure?",
-                body: "Do you want to delete this habit? This action can't be undone."
-            );
-          }
-      ) ?? false;
-      if (confirm) {
-        await _habitManager.deleteHabit(firebaseUser, currentHabit);
-        Navigator.pop(buildContext);
+  void navigateToEditHabit() {
+    _navigationService.navigateToPage("/editHabit", currentHabit).then((_) {
+        getUpdatedHabit();
+        notifyListeners();
       }
-    } catch (e) {
-      ScaffoldMessenger.of(buildContext).showSnackBar(
-          errorSnackBar(
-              e.toString()
-          )
-      );
-    }
+    );
   }
 
   void startAiChat(BuildContext buildContext) {

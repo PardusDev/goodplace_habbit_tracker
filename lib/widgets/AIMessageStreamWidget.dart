@@ -89,16 +89,20 @@ class _AIMessageStreamWidgetState extends State<AIMessageStreamWidget>
                   children: [
                     if (isLoading)
                       WidgetSpan(
-                          child: Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: ColorConstants.aiChatBubbleIndicatorGradientColors,
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                          child: Baseline(
+                            baseline: context.general.textTheme.titleMedium!.fontSize! * 1.2,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: ColorConstants.aiChatBubbleIndicatorGradientColors,
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
-                              borderRadius: BorderRadius.circular(15.0),
                             ),
                           ),
                       )
