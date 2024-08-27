@@ -90,10 +90,10 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 30),
               _buildCard(size, _homeModel),
               const SizedBox(height: 30),
-              _buildStreakInfo(size),
+              _buildInfoCard(size),
               const SizedBox(height: 30),
-              _buildIconCards(size),
-              const SizedBox(height: 30),
+             /* _buildIconCards(size),
+              const SizedBox(height: 30),*/
             ],
           ),
         ),
@@ -226,61 +226,93 @@ class _HomePageState extends State<HomePage> {
 
 
 
- Widget _buildStreakInfo(Size size) {
+Widget _buildInfoCard(Size size) {
   return Container(
     width: size.width * 0.9,
     height: 170,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      image: const DecorationImage(
-        image: AssetImage("assets/images/Dots.png"), // Replace with your image asset
-        fit: BoxFit.cover,
-        alignment: Alignment(0, 0.5), // Move the image slightly downwards
-      ),
     ),
-    child: const Padding(
-      padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "1 Day",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 35,
-                fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Your current streak",
-            style: TextStyle(
-                color: Color.fromARGB(255, 80, 80, 80),
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "1 Day",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Your longest streak",
-            style: TextStyle(
-                color: Color.fromARGB(255, 80, 80, 80),
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Consumer<HomePageViewModel>(
+        builder: (context, viewModel, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildInfo(size, ImageConstants.icFlame, viewModel.maxStreak.toString(), StringConstants.homePageCardMaxStreakTitle),
+            const  Padding(
+                padding:  EdgeInsets.symmetric(vertical:20.0),
+                child:  VerticalDivider(color: Colors.grey, thickness: 1, width: 20),
+              ),
+              _buildInfo(size, ImageConstants.icHype, viewModel.todayCompletedHabits.toString(), StringConstants.homePageCardTodayCompletedHabitsTitle),
+              const Padding(
+                padding:  EdgeInsets.symmetric(vertical:20.0),
+                child:  VerticalDivider(color: Colors.grey, thickness: 1, width: 20),
+              ),
+              _buildInfo(size, ImageConstants.icStats, viewModel.habits.length.toString(), StringConstants.homePageCardTotalHabitsTitle),
+            ],
+          );
+        },
       ),
     ),
   );
 }
 
+Widget _buildInfo(Size size, String imagePath, String text, String textdesc) {
+  return Expanded(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+const Spacer(), // Pushes the content down to the center
+       const SizedBox(height: 20,),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Opacity(
+              opacity: 0.4,
+              child: Image.asset(imagePath, height: 60, width: 60, fit: BoxFit.contain),
+            ),
+            Text(
+              text,
+              style: const TextStyle(
+                color: Color(0xFF4d57c8),
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      const  SizedBox(height: 10,),
+        SizedBox(
+          height: 30, // Fixed height to ensure consistent top alignment
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Text(
+              textdesc,
+              style: const TextStyle(
+                color: Color(0xFF575757),
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+     const   Spacer(), // Pushes the content down to the center
+      ],
+    ),
+  );
+}
 
+
+
+
+
+/*
  Widget _buildIconCards(Size size) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -350,5 +382,5 @@ Widget _buildImageCard(Size size, String imagePath, String text, String textdesc
       ),
     ),
   );
-}
+}*/
 }
