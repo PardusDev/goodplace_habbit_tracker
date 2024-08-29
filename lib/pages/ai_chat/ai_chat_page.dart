@@ -34,25 +34,25 @@ class _AiChatPageState extends State<AiChatPage> {
         child: Scaffold(
           body: SizedBox(
             width: double.infinity,
-            child: Padding(
-              padding: context.padding.normal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 60.0,
-                      height: 6.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 60.0,
+                    height: 6.0,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                   ),
+                ),
 
-                  const SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
-                  Column(
+                Padding(
+                  padding: context.padding.normal,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -76,34 +76,37 @@ class _AiChatPageState extends State<AiChatPage> {
                       ),
                     ],
                   ),
+                ),
 
-                  context.sized.emptySizedHeightBoxLow,
+                context.sized.emptySizedHeightBoxLow,
 
-                  /*
-                  TODO: Deprecated
-                  Expanded(
-                    child: Consumer<AiChatPageViewModel>(
-                      builder: (context, viewModel, child) {
-                        return ListView.separated(
-                          controller: viewModel.messagesListController,
-                          padding: EdgeInsets.zero,
-                          reverse: false,
-                          separatorBuilder: (context, index) => context.sized.emptySizedHeightBoxLow,
-                          itemCount: viewModel.messages.length,
-                          itemBuilder: (context, index) {
-                            return viewModel.messages[index];
-                          },
-                        );
-                      }
-                    ),
+                /*
+                TODO: Deprecated
+                Expanded(
+                  child: Consumer<AiChatPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return ListView.separated(
+                        controller: viewModel.messagesListController,
+                        padding: EdgeInsets.zero,
+                        reverse: false,
+                        separatorBuilder: (context, index) => context.sized.emptySizedHeightBoxLow,
+                        itemCount: viewModel.messages.length,
+                        itemBuilder: (context, index) {
+                          return viewModel.messages[index];
+                        },
+                      );
+                    }
                   ),
-                   */
+                ),
+                 */
 
-                  Expanded(
-                    child: Consumer<AiChatPageViewModel>(
-                        builder: (context, viewModel, child) {
-                          return SingleChildScrollView(
-                            controller: viewModel.messagesListController,
+                Expanded(
+                  child: Consumer<AiChatPageViewModel>(
+                      builder: (context, viewModel, child) {
+                        return SingleChildScrollView(
+                          controller: viewModel.messagesListController,
+                          child: Padding(
+                            padding: context.padding.normal,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -126,37 +129,42 @@ class _AiChatPageState extends State<AiChatPage> {
                                     ),
                               ]
                             ),
-                          );
-                        }
-                    ),
+                          ),
+                        );
+                      }
                   ),
+                ),
 
-                  context.sized.emptySizedHeightBoxLow,
+                context.sized.emptySizedHeightBoxLow,
 
-                  SizedBox(
-                    height: 40,
-                    child: Consumer<AiChatPageViewModel>(
-                      builder: (context, viewModel, child) {
-                        return ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) => context.sized.emptySizedWidthBoxLow3x,
-                          itemCount: viewModel.startMessages.length,
-                          itemBuilder: (context, index) {
-                            return SortCard(
+                SizedBox(
+                  height: 40,
+                  child: Consumer<AiChatPageViewModel>(
+                    builder: (context, viewModel, child) {
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: viewModel.startMessages.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: SortCard(
                                 text: viewModel.startMessages[index]["title"],
                                 onPressed: () {
                                   viewModel.sendPreparedMessage(viewModel.startMessages[index]);
                                 }
-                            );
-                          },
-                        );
-                      }
-                    ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   ),
+                ),
 
-                  context.sized.emptySizedHeightBoxLow,
+                context.sized.emptySizedHeightBoxLow,
 
-                  Consumer<AiChatPageViewModel>(
+                Padding(
+                  padding: context.padding.normal,
+                  child: Consumer<AiChatPageViewModel>(
                     builder: (context, viewModel, child) {
                       return Row(
                         children: [
@@ -183,8 +191,8 @@ class _AiChatPageState extends State<AiChatPage> {
                       );
                     }
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
