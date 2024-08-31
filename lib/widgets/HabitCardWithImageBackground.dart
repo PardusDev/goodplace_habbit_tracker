@@ -67,6 +67,8 @@ class HabitCardWithImageBackground extends StatelessWidget {
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         userHabit.subject,
