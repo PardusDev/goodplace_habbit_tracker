@@ -9,6 +9,7 @@ import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.d
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../managers/AppUserManager.dart';
@@ -86,6 +87,7 @@ class HomePageViewModel with ChangeNotifier {
   HomePageViewModel() {
     getGreetingMessage();
     showAIMessage();
+    requestPermissionForNotifications();
     _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
   }
@@ -340,5 +342,14 @@ class HomePageViewModel with ChangeNotifier {
           return const AiChatPage(userHabit: null);
         }
     ).then((value) => notifyListeners());
+  }
+
+  // Request permission for notifications
+  Future<void> requestPermissionForNotifications() async {
+    // Request permission for notifications
+    if (await Permission.notification.isGranted) return;
+    await [
+      Permission.notification,
+    ].request();
   }
 }
