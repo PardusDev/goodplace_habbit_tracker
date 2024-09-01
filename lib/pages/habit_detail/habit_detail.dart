@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../models/UserHabit.dart';
+import '../../widgets/StreakInfoCard.dart';
 
 class HabitDetailPage extends StatefulWidget {
   const HabitDetailPage({super.key});
@@ -139,19 +140,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2,),
-                  Consumer<HabitDetailViewModel>(
-                    builder: (context, viewModel, child) {
-                      return Text(
-                        "Your max streak is ${viewModel.currentHabit.maxStreak} 🔥",
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 232, 232, 232),
-                          fontSize: 16,
-                        ),
-                      );
-                    }
-                  ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   Consumer<HabitDetailViewModel>(
                     builder: (context, viewModel, child) {
                       return Text(
@@ -172,6 +161,15 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                           color: Colors.white,
                           fontSize: 14,
                         ),
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 20,),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return StreakInfoCard(
+                        currentStreak: viewModel.currentHabit.currentStreak.toString(),
+                        maxStreak: viewModel.currentHabit.maxStreak.toString(),
                       );
                     }
                   ),
