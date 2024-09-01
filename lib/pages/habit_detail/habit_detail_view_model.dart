@@ -70,6 +70,12 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
+  void removeEvent(DoneHabit doneHabit) {
+    DateTime date = DateTime(doneHabit.doneAt.year, doneHabit.doneAt.month, doneHabit.doneAt.day);
+    _events[date]!.remove(doneHabit);
+    notifyListeners();
+  }
+
   Future<void> fetchDoneHabitsForSpecificMonth(DateTime date) async {
     User? user = FirebaseAuth.instance.currentUser;
     // Before fetching the done habits, we need to reset the events
@@ -131,6 +137,9 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
                         onPressed: () async {
                           // Undo the action here
                           await _habitManager.undoDoneHabit(firebaseUser, habit, doneHabit, nonUpdatedHabit);
+
+                          // Remove the event from the calendar
+                          removeEvent(doneHabit);
 
                           // Update the state and notify listeners
                           notifyListeners();
