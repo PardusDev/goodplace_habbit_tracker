@@ -23,7 +23,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
   }
 
   void navigateToForgotPassword() {
-    navigationService.navigateToPage('/forgotPassword1', null);
+    navigationService.navigateToPage('/forgotPasswordFlow', null);
   }
 
   void navigateToRegister() {

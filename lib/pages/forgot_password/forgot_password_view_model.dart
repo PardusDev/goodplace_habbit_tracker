@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 
 import '../../constants/string_constants.dart';
 import '../../core/base/base_view_model.dart';
 
 class ForgotPasswordViewModel with ChangeNotifier, BaseViewModel {
+  final AuthService _authService = AuthService();
+
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
   final TextEditingController _emailController = TextEditingController();
   TextEditingController get emailController => _emailController;
 
@@ -13,6 +19,11 @@ class ForgotPasswordViewModel with ChangeNotifier, BaseViewModel {
   String _generalErrorText = "";
   String get generalErrorText => _generalErrorText;
 
+  ForgotPasswordViewModel(BuildContext context) {
+    this.buildContext = context;
+  }
+
+  // region Forgot Password 1
   void onEmailChanged(String value) {
     final result = _validateEmail(value);
     _isEmailValid = result['isValid'];
@@ -43,12 +54,31 @@ class ForgotPasswordViewModel with ChangeNotifier, BaseViewModel {
     navigationService.navigateToBack();
   }
 
-  void navigateToForgotPassword2() {
+  Future<void> navigateToForgotPassword2() async {
     if (_isEmailValid == true) {
-      navigationService.navigateToPage('/forgot_password_2', null);
+      try {
+        await _authService.sendPasswordResetEmail(email: _emailController.text);
+        navigatorKey.currentState?.pushNamed('/forgotPasswordPage2');
+      } catch (e) {
+        setGeneralErrorText(e.toString());
+      }
     }
     else {
       setGeneralErrorText(StringConstants.registerScreenEmailNotValid);
     }
+  }
+  // endregion Forgot Password 1
+
+  // region Forgot Password 2
+  void navigateToLogin() {
+    navigationService.navigateToPageClear("/welcome", null);
+    navigationService.navigateToPage('/login', null);
+  }
+  // endregion Forgot Password 2
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 }

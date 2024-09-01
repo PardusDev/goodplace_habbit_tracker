@@ -177,4 +177,14 @@ class AuthService {
       print("FCM Token ERROR: $e");
     }
   }
+
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      handleFirebaseAuthException(e);
+    } catch (e) {
+      throw StringConstants.anErrorOccured;
+    }
+  }
 }
