@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
 
+import '../../constants/string_constants.dart';
 import '../../init/navigation/navigation_service.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
@@ -81,25 +82,12 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
   void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
       User firebaseUser = FirebaseAuth.instance.currentUser!;
+      UserHabit nonUpdatedHabit = habit.copyWith();
       DoneHabit doneHabit = DoneHabit(
           id: generateIdFromDate(selectedDay),
           habitId: habit.habitId,
           doneAt: selectedDay
       );
-
-      /*
-      TODO: We are not blocking the user from marking habits for the future.
-            We will implement this feature in the future.
-      // Block if the selected date is not today
-      if (_selectedDate != DateTime.now()) {
-        ScaffoldMessenger.of(buildContext).showSnackBar(
-            errorSnackBar(
-                "You can only mark habits for today."
-            )
-        );
-        return;
-      }
-      */
 
       // Block if the selected date is past
       DateTime normalizedToday = normalizeDate(DateTime.now());
@@ -122,37 +110,38 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
         return;
       }
 
-      if (isCompleted) {
-        /*
-        TODO: This function currently out of use. It will be used in the future.
-                The out of use reason is that the function is not working properly with Streak.
-        showDialog(
-            context: buildContext,
-            builder: (BuildContext context) {
-              return const ConfirmAlertDialog(
-                  title: StringConstants.habitAlertDialogTitle,
-                  body: StringConstants.habitAlertDialogBody
-              );
-            }
-        ) .then((value) async {
-          if (value == true) {
-            await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
-          }
-        });
-         */
-      } else {
-        showDialog(
-            context: buildContext,
-            builder: (BuildContext context) {
-              return const SuccessSplashBox(
-
-              );
-            }
-        );
+      if (!isCompleted) {
         await _habitManager.addDoneHabit(firebaseUser, habit, doneHabit);
 
         // Add the event to the calendar
         prepareAndAddEvent(doneHabit);
+
+        // Show success splash box
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return SuccessSplashBox(
+                onPressed: () {
+                  // Show snackbar for undo
+                  ScaffoldMessenger.of(buildContext).showSnackBar(
+                    SnackBar(
+                      content: const Text(StringConstants.successUndoText),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () async {
+                          // Undo the action here
+                          await _habitManager.undoDoneHabit(firebaseUser, habit, doneHabit, nonUpdatedHabit);
+
+                          // Update the state and notify listeners
+                          notifyListeners();
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+        );
       }
       notifyListeners();
     } catch (e) {

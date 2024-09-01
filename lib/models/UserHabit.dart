@@ -30,6 +30,30 @@ class UserHabit {
     );
   }
 
+  UserHabit copyWith({
+    String? habitId,
+    String? title,
+    String? subject,
+    String? imagePath,
+    DateTime? createdAt,
+    List<DoneHabit>? doneHabits,
+    int? maxStreak,
+    DateTime? currentStreakLastDate,
+    int? currentStreak,
+  }) {
+    return UserHabit(
+      habitId: habitId ?? this.habitId,
+      title: title ?? this.title,
+      subject: subject ?? this.subject,
+      imagePath: imagePath ?? this.imagePath,
+      createdAt: createdAt ?? this.createdAt,
+      doneHabits: doneHabits ?? this.doneHabits,
+      maxStreak: maxStreak ?? this.maxStreak,
+      currentStreakLastDate: currentStreakLastDate ?? this.currentStreakLastDate,
+      currentStreak: currentStreak ?? this.currentStreak,
+    );
+  }
+
   Map<String, dynamic> toDocument() {
     return {
       'title': title,

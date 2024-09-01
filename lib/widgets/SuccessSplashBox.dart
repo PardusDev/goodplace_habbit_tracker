@@ -9,7 +9,8 @@ import '../init/navigation/navigation_service.dart';
 import 'StadiumSideBlueButton.dart';
 
 class SuccessSplashBox extends StatefulWidget {
-  const SuccessSplashBox({super.key});
+  final VoidCallback onPressed;
+  const SuccessSplashBox({super.key, required this.onPressed});
 
   @override
   State<SuccessSplashBox> createState() => _SuccessSplashBoxState();
@@ -111,6 +112,7 @@ class _SuccessSplashBoxState extends State<SuccessSplashBox> with TickerProvider
                 child: StadiumSideBlueButton(
                     onPressed: () {
                       NavigationService.instance.navigateToBack();
+                      widget.onPressed();
                     },
                     text: StringConstants.successScreenButton
                 ),

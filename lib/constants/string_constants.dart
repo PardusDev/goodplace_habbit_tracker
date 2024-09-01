@@ -224,6 +224,7 @@ class StringConstants {
   static get successScreenSubtitleRandom => successScreenSubtitles[Random().nextInt(successScreenSubtitles.length)];
 
   static const String successScreenButton = "Done";
+  static const String successUndoText = "Did you make a mistake?";
   // endregion
 
   // region Ai Chat
