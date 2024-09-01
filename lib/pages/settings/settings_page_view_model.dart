@@ -62,6 +62,10 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
     }
   }
 
+  void showPrivacyPolicy() {
+    _navigationService.navigateToPage("/privacy-policy", null);
+  }
+
   void navigateToBack() {
     _navigationService.navigateToBack();
   }

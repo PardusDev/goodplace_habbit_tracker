@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../constants/icon_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../widgets/BackButtonWithBorder.dart';
+import '../../widgets/PrivacyPolicyCollapsableBottomSheet.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -132,6 +133,32 @@ class SettingsPage extends StatelessWidget {
                             },
                           ),
                           //endregion */*/*/* Delete Account End */*/*/*
+
+                          // region */*/*/* Privacy Policy */*/*/*
+                          ListTile(
+                            title: Center(
+                              child: Text(
+                                StringConstants.privacyPolicy,
+                                style: context.general.textTheme.titleMedium!.copyWith(
+                                  color: ColorConstants.secondaryColor,
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  useSafeArea: true,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return const PrivacyPolicyCollapsableBottomSheet(
+                                      title: StringConstants.privacyPolicy,
+                                    );
+                                  }
+                              );
+                            },
+                          ),
+
+                          // endregion */*/*/* Privacy Policy End */*/*/*
 
                           //region */*/*/* Sign Out */*/*/*
                           ListTile(
