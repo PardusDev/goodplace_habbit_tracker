@@ -8,8 +8,33 @@ import '../constants/string_constants.dart';
 import '../init/navigation/navigation_service.dart';
 import 'StadiumSideBlueButton.dart';
 
-class SuccessSplashBox extends StatelessWidget {
+class SuccessSplashBox extends StatefulWidget {
   const SuccessSplashBox({super.key});
+
+  @override
+  State<SuccessSplashBox> createState() => _SuccessSplashBoxState();
+}
+
+class _SuccessSplashBoxState extends State<SuccessSplashBox> with TickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.stop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +77,16 @@ class SuccessSplashBox extends StatelessWidget {
               const Spacer(),
 
               Expanded(
-                flex: 20,
-                child: Lottie.asset(
-                  LottieConstants.successLottie,
-                )
+                  flex: 20,
+                  child: Lottie.asset(
+                    controller: _controller,
+                    LottieConstants.congratulationLottiesRandom,
+                    onLoaded: (composition) {
+                      _controller
+                        ..duration = composition.duration
+                        ..forward().whenComplete(() => _controller.stop());
+                    },
+                  )
               ),
 
               const Spacer(flex: 1,),
