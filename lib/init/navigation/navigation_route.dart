@@ -11,6 +11,7 @@ import 'package:goodplace_habbit_tracker/pages/error_pages/not_found/not_found_p
 
 import '../../animations/right_transition.dart';
 import '../../constants/navigator_constants.dart';
+import '../../pages/forgot_password/forgot_password_page_1.dart';
 import '../../pages/register/register_page.dart';
 import '../../pages/settings/settings_page.dart';
 import '../../pages/welcome/welcome_page.dart';
@@ -44,6 +45,8 @@ class NavigationRoute {
         return slideAnimatedRoute(const HabitDetailPage(), args.arguments);
       case NavigatorConstants.EDIT_HABIT_PAGE:
         return slideAnimatedRoute(const EditHabitPage(), args.arguments);
+      case NavigatorConstants.FORGOT_PASSWORD_1:
+        return slideAnimatedRoute(const ForgotPasswordPage1(), args.arguments);
       case NavigatorConstants.NOT_FOUND:
         return slideAnimatedRoute(const NotFound(), args.arguments);
       case NavigatorConstants.NO_NETWORK:

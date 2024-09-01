@@ -18,4 +18,5 @@ class NavigatorConstants {
   static const MANAGEMYHABITS_PAGE = "/manageMyHabits";
   static const HABITDETAIL_PAGE = "/habitDetail";
   static const EDIT_HABIT_PAGE = "/editHabit";
+  static const FORGOT_PASSWORD_1 = "/forgotPassword1";
 }
