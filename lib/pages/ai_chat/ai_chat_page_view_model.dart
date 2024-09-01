@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:goodplace_habbit_tracker/core/base/base_view_model.dart';
+import 'package:goodplace_habbit_tracker/managers/AppUserManager.dart';
 import 'package:goodplace_habbit_tracker/widgets/AIMessageWidget.dart';
 import 'package:goodplace_habbit_tracker/widgets/UserMessageWidget.dart';
 
@@ -14,6 +15,8 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   final ScrollController _messagesListController = ScrollController();
   ScrollController get messagesListController => _messagesListController;
 
+  final AppUserManager _appUserManager = AppUserManager.instance;
+
   final List<Widget> _messages = [];
   List<Widget> get messages => _messages;
 
@@ -25,7 +28,12 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
   String _status = "";
   String get status => _status;
 
+  late final _appUser;
+  get appUser => _appUser;
+
   AiChatPageViewModel(UserHabit? userHabit) {
+    _appUser = _appUserManager.appUser;
+
     _initializeChat(userHabit);
     _initializePreparedChats(userHabit);
   }
@@ -39,14 +47,14 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
         "content": [
           {
             "type": "text",
-            "text": "You are a conversational assistant named GoodPlaceT, part of the GoodPlace app. Your role is to provide information and guidance to users as they develop new habits. You can suggest new habits, offer motivation, and help users stay on track if they lose motivation. Always respond with concise answers, no longer than 40 words. If a user asks about topics unrelated to habits or motivation, respond with: 'I'm GoodPlaceT, your habit assistant. I can only assist with habits and motivation-related questions."
+            "text": "You are a conversational assistant named GoodPlaceT, part of the GoodPlace app. Your role is to provide information and guidance to users as they develop new habits. You can suggest new habits, offer motivation, and help users stay on track if they lose motivation. Always respond with concise answers, no longer than 40 words. If a user asks about topics unrelated to habits or motivation, respond with: 'I'm GoodPlaceT, your habit assistant. I can only assist with habits and motivation-related questions. Also, don't forget that the name of the person you're talking to is ${_appUser.name}. You can address them by their name when speaking."
           }
         ]
       });
 
       _messages.add(
           AIMessageWidget(
-              message: StringConstants.aiWelcomeMessage,
+              message: "Hello, ${_appUser.name}. I'm GoodPlaceT. How can I help you today?",
               isLoadingNotifier: ValueNotifier<bool>(true)
           )
       );
@@ -59,14 +67,14 @@ class AiChatPageViewModel with ChangeNotifier, BaseViewModel {
         "content": [
           {
             "type": "text",
-            "text": "You are a conversational assistant named GoodPlaceT, part of the GoodPlace app. You will engage in a discussion about a specific habit provided by the user. The details you have are as follows: Habit title is ${userHabit.title}, the subject is ${userHabit.subject}, the maximum streak achieved is ${userHabit.maxStreak} days, and the current streak is ${userHabit.currentStreak} days. You will only use this information to provide motivational and supportive responses. Your answers should always be concise, no longer than 40 words. If the user asks about topics unrelated to habits or motivation, respond with: 'I'm GoodPlaceT, your habit assistant. I can only assist with habits and motivation-related questions."
+            "text": "You are a conversational assistant named GoodPlaceT, part of the GoodPlace app. You will engage in a discussion about a specific habit provided by the user. The details you have are as follows: Habit title is ${userHabit.title}, the subject is ${userHabit.subject}, the maximum streak achieved is ${userHabit.maxStreak} days, and the current streak is ${userHabit.currentStreak} days. You will only use this information to provide motivational and supportive responses. Your answers should always be concise, no longer than 40 words. If the user asks about topics unrelated to habits or motivation, respond with: 'I'm GoodPlaceT, your habit assistant. I can only assist with habits and motivation-related questions. Also, don't forget that the name of the person you're talking to is ${_appUser.name}. You can address them by their name when speaking."
           }
         ]
       });
 
       _messages.add(
         AIMessageWidget(
-          message: "Let's talk about your habit: ${userHabit.title}",
+          message: "Hello, ${_appUser.name}. Let's talk about your habit: ${userHabit.title}",
           isLoadingNotifier: ValueNotifier<bool>(true),
         ),
       );

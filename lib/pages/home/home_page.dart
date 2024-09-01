@@ -165,6 +165,8 @@ class _HomePageState extends State<HomePage> {
                       return context.sized.emptySizedHeightBoxLow;
                     },
                     itemBuilder: (BuildContext context, int index) {
+                      homePageViewModel.habits.sort((a, b) => a.title.toUpperCase().compareTo(b.title.toUpperCase()));
+
                       if (!homePageViewModel.showAll && index == 3) {
                         return TextButton(
                           onPressed: () {
