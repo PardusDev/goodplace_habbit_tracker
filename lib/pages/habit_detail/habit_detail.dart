@@ -126,7 +126,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                           Consumer<HabitDetailViewModel>(
                             builder: (context, viewModel, child) {
                               return Text(
-                                viewModel.currentHabit.maxStreak.toString(),
+                                viewModel.currentHabit.currentStreak.toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -139,7 +139,19 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 2,),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return Text(
+                        "Your max streak is ${viewModel.currentHabit.maxStreak} 🔥",
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 232, 232, 232),
+                          fontSize: 16,
+                        ),
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 12),
                   Consumer<HabitDetailViewModel>(
                     builder: (context, viewModel, child) {
                       return Text(
