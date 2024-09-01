@@ -53,14 +53,6 @@ class MyDrawer extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 36),
-          _buildListItem(
-            icon: Icons.logout,
-            title: 'Logout',
-            onTap: () {
-              _mainModel.signOut(context);
-            },
-          ),
         ],
       ),
     );

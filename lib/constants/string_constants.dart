@@ -176,6 +176,7 @@ class StringConstants {
   // region Settings screen strings
   static const String settingsScreenTitle = "Settings";
   static const String deleteAccount = "Delete Account";
+  static const String signOut = "Sign Out";
   // endregion
 
   // region Delete Account Confirmation

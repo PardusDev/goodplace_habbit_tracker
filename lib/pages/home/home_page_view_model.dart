@@ -30,7 +30,7 @@ class HomePageViewModel with ChangeNotifier {
   String greeting = "";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
-  final AppUserManager _appUserManager = AppUserManager();
+  final AppUserManager _appUserManager = AppUserManager.instance;
   final HabitManager _habitManager = HabitManager();
   bool _aiFabExpanded = false;
   String _aiFabMessage = "";

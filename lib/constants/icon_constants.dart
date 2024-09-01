@@ -12,6 +12,7 @@ class IconConstants {
   static const IconData continueButtonIcon = Icons.chevron_right;
 
   static const IconData deleteAccountIcon = Icons.delete;
+  static const IconData logoutIcon = Icons.logout;
 
   static const IconData snackErrorIcon = Icons.error;
   static const IconData snackWarningIcon = Icons.warning;
