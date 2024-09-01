@@ -113,6 +113,15 @@ class HabitDetailViewModel extends ChangeNotifier with BaseViewModel {
         return;
       }
 
+      if (normalizedSelectedDate.isAfter(normalizedToday)) {
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                "You can't mark habits for the future."
+            )
+        );
+        return;
+      }
+
       if (isCompleted) {
         /*
         TODO: This function currently out of use. It will be used in the future.

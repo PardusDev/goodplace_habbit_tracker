@@ -218,10 +218,20 @@ class HomePageViewModel with ChangeNotifier {
       // Block if the selected date is past
       DateTime normalizedToday = normalizeDate(DateTime.now());
       DateTime normalizedSelectedDate = normalizeDate(_selectedDate);
+
       if (normalizedSelectedDate.isBefore(normalizedToday)) {
         ScaffoldMessenger.of(buildContext).showSnackBar(
             errorSnackBar(
                 "You can't mark habits for the past."
+            )
+        );
+        return;
+      }
+
+      if (normalizedSelectedDate.isAfter(normalizedToday)) {
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                "You can't mark habits for the future."
             )
         );
         return;
