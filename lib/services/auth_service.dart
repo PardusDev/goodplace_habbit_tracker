@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_firebase_auth_exception.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_firebase_exception.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,6 +32,7 @@ class AuthService {
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _saveFcmToken(userCredential.user!.uid);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
@@ -104,6 +106,7 @@ class AuthService {
   Future<void> registerUserToDocuments(AppUser newUser) async {
     try {
       await _firestore.collection('users').doc(newUser.uid).set(newUser.toDocument());
+      await _saveFcmToken(newUser.uid);
     } on FirebaseException catch (e) {
       handleFirebaseException(e);
     } catch (e) {
@@ -159,6 +162,19 @@ class AuthService {
       handleFirebaseException(e);
     } catch (e) {
       throw StringConstants.anErrorOccured;
+    }
+  }
+
+  Future<void> _saveFcmToken(String userId) async {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+            await FirebaseFirestore.instance.collection('users').doc(userId).update({
+              'fcmToken': token,
+            });
+          }
+    } catch (e) {
+      print("FCM Token ERROR: $e");
     }
   }
 }

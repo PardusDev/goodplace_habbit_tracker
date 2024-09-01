@@ -105,6 +105,24 @@ class HabitManager with ChangeNotifier {
     }
   }
 
+  Future<void> undoDoneHabit(User user, UserHabit habit, DoneHabit doneHabit, UserHabit nonUpdatedHabit) async {
+    try {
+      final result = await _habitService.deleteDoneHabit(user, doneHabit);
+      if (!result) {
+        throw Exception(StringConstants.anErrorOccured);
+      }
+      habit.doneHabits.remove(doneHabit);
+      print("Current Streak: ${nonUpdatedHabit.currentStreak}");
+      habit.currentStreak = nonUpdatedHabit.currentStreak;
+      habit.maxStreak = nonUpdatedHabit.maxStreak;
+      habit.currentStreakLastDate = nonUpdatedHabit.currentStreakLastDate;
+      await updateHabit(user, habit);
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> updateHabit(User user, UserHabit habit) async {
     try {
       final result = await _habitService.updateHabit(user, habit);

@@ -65,6 +65,7 @@ class ColorConstants {
   static const Color settingsScreenItemTextColor = Color(0xFF3F414E);
   static const Color settingsScreenItemIconColor = Color(0xFFA1A4B2);
   static const Color deleteAccountButtonColor = Color(0xFFE57373);
+  static const Color signOutButtonColor = Color(0xFFE57373);
   // endregion
 
   // region Snackbar colors

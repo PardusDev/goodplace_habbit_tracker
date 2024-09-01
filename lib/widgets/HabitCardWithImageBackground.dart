@@ -48,7 +48,7 @@ class HabitCardWithImageBackground extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        userHabit.maxStreak.toString(),
+                        userHabit.currentStreak.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
