@@ -206,6 +206,7 @@ class RegisterPage extends StatelessWidget {
                       child: Consumer<RegisterPageViewModel>(
                         builder: (context, viewModel, child) {
                           return CheckboxWithWidget(
+                            isChecked: viewModel.privacyPolicyChecked,
                             onChanged: (bool value) {
                               viewModel.updatePrivacyPolicyChecked(value);
                             },
