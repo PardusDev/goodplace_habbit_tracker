@@ -35,6 +35,9 @@ To get a local copy up and running follow these simple steps.
 - [permission_handler](https://pub.dev/packages/permission_handler) for handling permissions
 - [cached_network_image](https://pub.dev/packages/cached_network_image) for caching network images
 - [flutter_widget_from_html_core](https://pub.dev/packages/flutter_widget_from_html_core) for rendering HTML content
+- [firebase_messaging](https://pub.dev/packages/firebase_messaging) for push notifications
+- [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) for remind me notifications
+- [timezone](https://pub.dev/packages/timezone) for timezone tasks
 
 ## Screenshots
 
@@ -49,6 +52,12 @@ To get a local copy up and running follow these simple steps.
 <img src="/screenshots/LoginPageScreenshot.png" alt="Screenshot from App" width="300" />
 <br><br>
 
+### Forgot Password Page
+<div style="display: flex; justify-content: space-between;">
+    <img src="/screenshots/ForgotPasswordPageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/ForgotPasswordPage2Screenshot.png" alt="Screenshot from App" width="300" />
+</div>
+
 ### Register Page
 <img src="/screenshots/RegisterPageScreenshot.png" alt="Screenshot from App" width="300" />
 <br><br>
@@ -62,16 +71,34 @@ To get a local copy up and running follow these simple steps.
 </div>
 
 ### Home Page
-<img src="/screenshots/HomePageScreenshot.png" alt="Screenshot from App" width="300" />
+<div style="display: flex; justify-content: space-between;">
+    <img src="/screenshots/HomePageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/HomePage2Screenshot.png" alt="Screenshot from App" width="300" />
+</div>
+
+### Create Habit
+<img src="/screenshots/CreateHabitModalScreenshot.png" alt="Screenshot from App" width="300" />
+
+### GoodplaceT Habit Guide
+<img src="/screenshots/AIChatGeneralScreenshot.png" alt="Screenshot from App" width="300" />
 
 ### Manage My Habits
 <img src="/screenshots/ManageMyHabitsPageScreenshot.png" alt="Screenshot from App" width="300" />
 
-### Habit Details
-<img src="/screenshots/HabitDetailsPageScreenshot.png" alt="Screenshot from App" width="300" />
+### Settings
+<img src="/screenshots/SettingsPageScreenshot.png" alt="Screenshot from App" width="300" />
 
-### Create Habit
-<img src="/screenshots/CreateHabitModalScreenshot.png" alt="Screenshot from App" width="300" />
+### Habit Details
+<div style="display: flex; justify-content: space-between;">
+    <img src="/screenshots/HabitDetailsPageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/HabitDetailsPage2Screenshot.png" alt="Screenshot from App" width="300" />
+</div>
+
+### GoodplaceT Focused on Habit
+<img src="/screenshots/AIChatHabitScreenshot.png" alt="Screenshot from App" width="300" />
+
+### Edit Habit
+<img src="/screenshots/EditHabitPageScreenshot.png" alt="Screenshot from App" width="300" />
 
 ### Success Splash
 <img src="/screenshots/SuccessSplashScreenshot.png" alt="Screenshot from App" width="300" />
@@ -82,6 +109,7 @@ To get a local copy up and running follow these simple steps.
     <img src="/screenshots/BottomModalScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/NoNetworkPageScreenshot.png" alt="Screenshot from App" width="300" />
     <img src="/screenshots/NeedUpdatePageScreenshot.png" alt="Screenshot from App" width="300" />
+    <img src="/screenshots/NotificationScreenshot.png" alt="Screenshot from App" width="300" />
 </div>
 
 ## Contributors
