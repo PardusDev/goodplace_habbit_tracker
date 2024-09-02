@@ -34,6 +34,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             const SizedBox(height: 16.0),
 
             Expanded(
+              flex: 2,
               child: Text(
                 title,
                 style: context.general.textTheme.headlineMedium!.copyWith(
@@ -44,7 +45,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             ),
 
             Expanded(
-              flex: 14,
+              flex: 26,
               child: SingleChildScrollView(
                 child: Column(
                   children: children,
@@ -55,6 +56,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             const Spacer(),
 
             Expanded(
+              flex: 2,
               child: StadiumSideBlueButton(
                   onPressed: onPressed,
                   text: buttonText

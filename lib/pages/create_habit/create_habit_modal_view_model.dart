@@ -28,12 +28,16 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
   String _errorText = '';
   bool _titleValid = false;
+  bool _remindMeCheckbox = false;
+  TimeOfDay? _selectedTime = TimeOfDay.now();
 
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
 
   String get errorText => _errorText;
   bool get titleValid => _titleValid;
+  bool get remindMeCheckbox => _remindMeCheckbox;
+  TimeOfDay? get selectedTime => _selectedTime;
   List<ImageModel> get images => _images;
   bool get imagesIsLoading => _imagesIsLoading;
   int get selectedImageIndex => _selectedImageIndex;
@@ -51,6 +55,25 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
   CreateHabitModalViewModel() {
     fetchImages();
   }
+
+  // region Remind Me
+  void toggleRemindMeCheckbox(bool value) {
+    _remindMeCheckbox = value;
+    notifyListeners();
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (time != null && time != selectedTime) {
+      _selectedTime = time;
+      notifyListeners();
+    }
+  }
+  // endregion
 
   void onTitleChanged(String title) {
     if (title.isNotEmpty) {
@@ -128,7 +151,8 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
           doneHabits: [],
           maxStreak: 0,
           currentStreakLastDate: null,
-          currentStreak: 0
+          currentStreak: 0,
+          reminderTime: remindMeCheckbox ? selectedTime : null
       );
 
       await _habitManager.addHabit(user!, newHabit);

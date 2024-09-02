@@ -86,6 +86,8 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
     notifyListeners();
   }
 
+  // TODO: When the login, setup reminders
+
   @override
   void dispose() {
     emailController.dispose();

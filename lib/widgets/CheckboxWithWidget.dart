@@ -43,6 +43,7 @@ class _CheckboxWithWidgetState extends State<CheckboxWithWidget> {
             ),
             checkColor: ColorConstants.checkboxCheckedColor,
             fillColor: WidgetStateProperty.all(ColorConstants.checkboxBackgroundColor),
+            visualDensity: VisualDensity.compact,
         )
       ],
     );

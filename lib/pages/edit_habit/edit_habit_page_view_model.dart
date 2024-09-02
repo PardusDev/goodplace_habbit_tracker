@@ -30,6 +30,8 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   String _errorText = '';
   bool _titleValid = false;
+  bool _remindMeCheckbox = false;
+  TimeOfDay? _selectedTime = TimeOfDay.now();
 
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
@@ -39,6 +41,8 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   List<ImageModel> get images => _images;
   bool get imagesIsLoading => _imagesIsLoading;
   int get selectedImageIndex => _selectedImageIndex;
+  bool get remindMeCheckbox => _remindMeCheckbox;
+  TimeOfDay? get selectedTime => _selectedTime;
 
   TextEditingController get titleController => _titleController;
   TextEditingController get subjectController => _subjectController;
@@ -58,6 +62,25 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
     fillCurrentHabit();
     fetchImages();
   }
+
+  // region Remind Me
+  void toggleRemindMeCheckbox(bool value) {
+    _remindMeCheckbox = value;
+    notifyListeners();
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (time != null && time != selectedTime) {
+      _selectedTime = time;
+      notifyListeners();
+    }
+  }
+  // endregion
 
   void onTitleChanged(String title) {
     if (title.isNotEmpty) {
@@ -161,7 +184,8 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
           doneHabits: _currentHabit.doneHabits,
           maxStreak: _currentHabit.maxStreak,
           currentStreakLastDate: _currentHabit.currentStreakLastDate,
-          currentStreak: _currentHabit.currentStreak
+          currentStreak: _currentHabit.currentStreak,
+          reminderTime: remindMeCheckbox ? selectedTime : null,
       );
 
       await _habitManager.updateHabit(user!, newHabit);
