@@ -88,9 +88,9 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   HomePageViewModel() {
+    _showNotificationPermissionDialog();
     getGreetingMessage();
     showAIMessage();
-    _showNotificationPermissionDialog();
     _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
   }
@@ -175,7 +175,8 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
-      _notificationService.cancelAllNotifications();
+      await _showNotificationPermissionDialog();
+      await _notificationService.cancelAllNotifications();
       for (var element in _habitManager.habits) {
         if (element.reminderTime != null) {
           await _notificationService.scheduleDailyNotification(element);
@@ -358,6 +359,14 @@ class HomePageViewModel with ChangeNotifier {
     ].request();
   }
 
+  Future<void> requestAlarmPermission() async {
+    // Request permission for alarm
+    if (await Permission.scheduleExactAlarm.isGranted) return;
+    await [
+      Permission.scheduleExactAlarm,
+    ].request();
+  }
+
   Future<void> _showNotificationPermissionDialog() async {
     if (await Permission.notification.isGranted) return;
     showDialog(
@@ -383,6 +392,7 @@ class HomePageViewModel with ChangeNotifier {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await requestPermissionForNotifications();
+                await requestAlarmPermission();
               },
             ),
           ],
