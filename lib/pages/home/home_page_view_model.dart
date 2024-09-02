@@ -88,7 +88,6 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   HomePageViewModel() {
-    _showNotificationPermissionDialog();
     getGreetingMessage();
     showAIMessage();
     _appUserManager.addListener(_onUserUpdated);
@@ -175,11 +174,13 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
-      await _showNotificationPermissionDialog();
-      await _notificationService.cancelAllNotifications();
-      for (var element in _habitManager.habits) {
-        if (element.reminderTime != null) {
-          await _notificationService.scheduleDailyNotification(element);
+      bool permissionGranted = await _showNotificationPermissionDialog();
+      if (permissionGranted) {
+        await _notificationService.cancelAllNotifications();
+        for (var element in _habitManager.habits) {
+          if (element.reminderTime != null) {
+            await _notificationService.scheduleDailyNotification(element);
+          }
         }
       }
       _habitsIsLoading = false;
@@ -367,9 +368,9 @@ class HomePageViewModel with ChangeNotifier {
     ].request();
   }
 
-  Future<void> _showNotificationPermissionDialog() async {
-    if (await Permission.notification.isGranted) return;
-    showDialog(
+  Future<bool> _showNotificationPermissionDialog() async {
+    if (await Permission.notification.isGranted) return true;
+    bool? result = await showDialog<bool>(
       context: _navigationService.navigatorKey.currentContext!,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -384,20 +385,21 @@ class HomePageViewModel with ChangeNotifier {
             TextButton(
               child: Text('Reject', style: TextStyle(color: Colors.red)),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
             TextButton(
               child: Text('Approve'),
               onPressed: () async {
-                Navigator.of(context).pop();
                 await requestPermissionForNotifications();
                 await requestAlarmPermission();
+                Navigator.of(context).pop(true);
               },
             ),
           ],
         );
       },
     );
+    return result ?? false;
   }
 }

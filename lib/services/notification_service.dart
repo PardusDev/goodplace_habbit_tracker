@@ -54,6 +54,7 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
+      icon: '@mipmap/ic_launcher'
     );
 
     const NotificationDetails platformChannelSpecifics =
