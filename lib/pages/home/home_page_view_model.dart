@@ -18,6 +18,7 @@ import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
+import '../../services/notification_service.dart';
 import '../../utilities/normalize_date.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -33,6 +34,7 @@ class HomePageViewModel with ChangeNotifier {
   final AuthService _authService = AuthService();
   final AppUserManager _appUserManager = AppUserManager.instance;
   final HabitManager _habitManager = HabitManager();
+  final NotificationService _notificationService = NotificationService();
   bool _aiFabExpanded = false;
   String _aiFabMessage = "";
   int _maxStreak = 0;
@@ -173,6 +175,12 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
+      _notificationService.cancelAllNotifications();
+      for (var element in _habitManager.habits) {
+        if (element.reminderTime != null) {
+          _notificationService.scheduleDailyNotification(element);
+        }
+      }
       _habitsIsLoading = false;
       notifyListeners();
     } catch (e) {

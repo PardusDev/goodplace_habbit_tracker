@@ -36,6 +36,8 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
 
+  final _scrollController = ScrollController();
+
   String get errorText => _errorText;
   bool get titleValid => _titleValid;
   List<ImageModel> get images => _images;
@@ -44,6 +46,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   bool get remindMeCheckbox => _remindMeCheckbox;
   TimeOfDay? get selectedTime => _selectedTime;
 
+  ScrollController get scrollController => _scrollController;
   TextEditingController get titleController => _titleController;
   TextEditingController get subjectController => _subjectController;
 
@@ -59,6 +62,11 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   EditHabitPageViewModel(UserHabit userHabit) {
     _currentHabit = userHabit;
+    if (_currentHabit.reminderTime != null) {
+      _remindMeCheckbox = true;
+      _selectedTime = _currentHabit.reminderTime!;
+      toggleRemindMeCheckbox(_remindMeCheckbox);
+    }
     fillCurrentHabit();
     fetchImages();
   }
@@ -93,6 +101,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   void setErrorText(String errorText) {
     _errorText = errorText;
+    scrollToBottom();
     notifyListeners();
   }
 
@@ -254,5 +263,13 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
           )
       );
     }
+  }
+
+  void scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }

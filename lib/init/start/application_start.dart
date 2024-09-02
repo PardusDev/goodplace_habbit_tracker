@@ -7,12 +7,16 @@ import '../../firebase_options.dart';
 import '../../locator.dart';
 import '../../services/firebase_messaging_service.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+
 @immutable
 class ApplicationStart {
   // Can't create an instance of this class
   const ApplicationStart._();
 
   static Future<void> init() async {
+    tz.initializeTimeZones();
+
     WidgetsFlutterBinding.ensureInitialized();
     // Set portrait orientation
     await SystemChrome.setPreferredOrientations(

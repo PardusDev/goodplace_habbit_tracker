@@ -6,9 +6,11 @@ import 'package:goodplace_habbit_tracker/services/auth_service.dart';
 import 'package:goodplace_habbit_tracker/widgets/Snackbars.dart';
 
 import '../../core/base/base_view_model.dart';
+import '../../services/notification_service.dart';
 
 class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
   final _navigationService = NavigationService.instance;
+  final _notificationService = NotificationService();
   final _authService = AuthService();
 
   bool _isDeleteAccountLoading = false;
@@ -52,6 +54,7 @@ class SettingsPageViewModel extends ChangeNotifier with BaseViewModel {
     try {
       await _authService.signOut();
       _appUserManager.clearUser();
+      _notificationService.cancelAllNotifications();
       _navigationService.navigateToPageClear("/welcome", null);
     } catch (e) {
       ScaffoldMessenger.of(buildContext).showSnackBar(

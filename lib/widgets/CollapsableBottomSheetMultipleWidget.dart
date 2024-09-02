@@ -9,7 +9,8 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
   final List<Widget> children;
   final String buttonText;
   final VoidCallback onPressed;
-  const CollapsableBottomSheetMultipleWidget({super.key, required this.title, required this.children, required this.buttonText, required this.onPressed});
+  final ScrollController scrollController;
+  const CollapsableBottomSheetMultipleWidget({super.key, required this.title, required this.children, required this.buttonText, required this.onPressed, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             Expanded(
               flex: 26,
               child: SingleChildScrollView(
+                controller: scrollController,
                 child: Column(
                   children: children,
                 )

@@ -24,6 +24,7 @@ class CreateHabitModal extends StatelessWidget {
           return CollapsableBottomSheetMultipleWidget(
             title: StringConstants.createHabitScreenTitle,
             buttonText: StringConstants.createHabitScreenCreateButton,
+            scrollController: viewModel.scrollController,
             onPressed: viewModel.createHabit,
             children: [
               InputSection(
@@ -72,7 +73,7 @@ class CreateHabitModal extends StatelessWidget {
                           Icon(Icons.access_alarm, color: Colors.blueAccent),
                           context.sized.emptySizedWidthBoxLow3x,
                           Text(
-                              '${viewModel.selectedTime?.hour}:${viewModel.selectedTime?.minute}',
+                              '${viewModel.selectedTime?.hour.toString().padLeft(2, '0')}:${viewModel.selectedTime?.minute.toString().padLeft(2, '0')}',
                               style: context.general.textTheme.headlineMedium!.copyWith(
                                   color: Colors.blueAccent,
                                   fontWeight: FontWeight.bold
