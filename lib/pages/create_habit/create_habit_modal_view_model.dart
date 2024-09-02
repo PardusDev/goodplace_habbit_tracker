@@ -216,10 +216,10 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
 
   Future<void> requestAlarmPermission() async {
     // Request permission for alarm
-    if (await Permission.scheduleExactAlarm.isGranted) return;
-    await [
-      Permission.scheduleExactAlarm,
-    ].request();
+    // if (await Permission.scheduleExactAlarm.isGranted) return;
+    // await [
+      // Permission.scheduleExactAlarm,
+    // ].request();
   }
 
   void scrollToBottom() {
