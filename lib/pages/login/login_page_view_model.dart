@@ -23,7 +23,7 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
   }
 
   void navigateToForgotPassword() {
-    navigationService.navigateToPage('/not-found', null);
+    navigationService.navigateToPage('/forgotPasswordFlow', null);
   }
 
   void navigateToRegister() {
@@ -85,6 +85,8 @@ class LoginPageViewModel extends ChangeNotifier with BaseViewModel {
     _errorText = error;
     notifyListeners();
   }
+
+  // TODO: When the login, setup reminders
 
   @override
   void dispose() {

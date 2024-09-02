@@ -38,6 +38,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 return isSameDay(_selectedDay, day);
               },
               onDaySelected: (selectedDay, focusedDay) {
+                final today = DateTime.now();
+
+                if (selectedDay.isAfter(today)) {
+                  return;
+                }
+
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
@@ -74,6 +80,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               daysOfWeekStyle: const DaysOfWeekStyle(
                 weekdayStyle: TextStyle(color: Color(0xFF4d57c8)),
                 weekendStyle: TextStyle(color: Color(0xFF4d57c8)),
+              ),
+              calendarBuilders: CalendarBuilders(
+                defaultBuilder: (context, day, focusedDay) {
+                  final today = DateTime.now();
+
+                  if (day.isAfter(DateTime(today.year, today.month, today.day))) {
+                    return Center(
+                      child: Text(
+                        '${day.day}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+
+                  return null;
+                },
               ),
             ),
             const Row(

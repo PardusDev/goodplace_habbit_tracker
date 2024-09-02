@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/constants/color_constants.dart';
+import 'package:goodplace_habbit_tracker/constants/image_constants.dart';
 import 'package:goodplace_habbit_tracker/pages/settings/settings_page_view_model.dart';
 import 'package:goodplace_habbit_tracker/widgets/ConfirmAlertDialog.dart';
 import 'package:kartal/kartal.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../constants/icon_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../widgets/BackButtonWithBorder.dart';
+import '../../widgets/PrivacyPolicyCollapsableBottomSheet.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -52,6 +54,59 @@ class SettingsPage extends StatelessWidget {
                 ),
                 //endregion Back Button End
 
+                context.sized.emptySizedHeightBoxLow,
+
+                // region Profile Picture and Name
+                Consumer<SettingsPageViewModel>(
+                  builder: (context, viewModel, child) {
+                    return Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24.0,
+                          backgroundImage: (viewModel.appUser == null)
+                              ? NetworkImage(viewModel.user.photoURL)
+                              : null,
+                          child: (viewModel.appUser != null)
+                              ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              ColorConstants.secondaryColor,
+                              BlendMode.srcIn,
+                            ),
+                            child: Image.asset(
+                              ImageConstants.userAvatar,
+                              fit: BoxFit.cover,
+                              width: 24.0,
+                              height: 24.0,
+                            ),
+                          )
+                              : null,
+                        ),
+                        context.sized.emptySizedWidthBoxLow3x,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              viewModel.appUser.name,
+                              style: context.general.textTheme.titleMedium!.copyWith(
+                                color: ColorConstants.settingsScreenItemTextColor,
+                              ),
+                            ),
+                            Text(
+                              viewModel.appUser.email,
+                              style: context.general.textTheme.titleSmall!.copyWith(
+                                color: ColorConstants.settingsScreenItemTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                // endregion
+
+                context.sized.emptySizedHeightBoxLow3x,
+
                 Expanded(
                   flex: 8,
                   child: Consumer<SettingsPageViewModel>(
@@ -79,7 +134,49 @@ class SettingsPage extends StatelessWidget {
                           ),
                           //endregion */*/*/* Delete Account End */*/*/*
 
-                          //region */*
+                          // region */*/*/* Privacy Policy */*/*/*
+                          ListTile(
+                            title: Center(
+                              child: Text(
+                                StringConstants.privacyPolicy,
+                                style: context.general.textTheme.titleMedium!.copyWith(
+                                  color: ColorConstants.secondaryColor,
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  useSafeArea: true,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return const PrivacyPolicyCollapsableBottomSheet(
+                                      title: StringConstants.privacyPolicy,
+                                    );
+                                  }
+                              );
+                            },
+                          ),
+
+                          // endregion */*/*/* Privacy Policy End */*/*/*
+
+                          //region */*/*/* Sign Out */*/*/*
+                          ListTile(
+                            leading: const Icon(
+                              IconConstants.logoutIcon,
+                              color: ColorConstants.signOutButtonColor,
+                            ),
+                            title: Text(
+                              StringConstants.signOut,
+                              style: context.general.textTheme.titleMedium!.copyWith(
+                                color: ColorConstants.settingsScreenItemTextColor,
+                              ),
+                            ),
+                            onTap: () async {
+                              viewModel.signOut(context);
+                            },
+                          ),
+                          //endregion */*/*/* Sign Out End */*/*/*
                         ]
                       );
                     }

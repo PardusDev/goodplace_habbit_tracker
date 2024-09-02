@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../models/UserHabit.dart';
+import '../../utilities/time_of_day_to_string.dart';
+import '../../widgets/StreakInfoCard.dart';
 
 class HabitDetailPage extends StatefulWidget {
   const HabitDetailPage({super.key});
@@ -126,7 +128,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                           Consumer<HabitDetailViewModel>(
                             builder: (context, viewModel, child) {
                               return Text(
-                                viewModel.currentHabit.maxStreak.toString(),
+                                viewModel.currentHabit.currentStreak.toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -139,7 +141,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 8),
                   Consumer<HabitDetailViewModel>(
                     builder: (context, viewModel, child) {
                       return Text(
@@ -155,11 +157,32 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                   Consumer<HabitDetailViewModel>(
                     builder: (context, viewModel, child) {
                       return Text(
+                        'Reminder at: ${viewModel.currentHabit.reminderTime != null ? timeOfDayToString(viewModel.currentHabit.reminderTime!) : 'No reminder'}',
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 200, 200, 200),
+                          fontSize: 16,
+                        ),
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 8),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return Text(
                         'Creation Time: ${dateFormatterToShow(viewModel.currentHabit.createdAt)}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                         ),
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 20,),
+                  Consumer<HabitDetailViewModel>(
+                    builder: (context, viewModel, child) {
+                      return StreakInfoCard(
+                        currentStreak: viewModel.currentHabit.currentStreak.toString(),
+                        maxStreak: viewModel.currentHabit.maxStreak.toString(),
                       );
                     }
                   ),

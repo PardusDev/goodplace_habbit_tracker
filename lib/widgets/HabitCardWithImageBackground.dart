@@ -48,7 +48,7 @@ class HabitCardWithImageBackground extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        userHabit.maxStreak.toString(),
+                        userHabit.currentStreak.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -67,6 +67,8 @@ class HabitCardWithImageBackground extends StatelessWidget {
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         userHabit.subject,

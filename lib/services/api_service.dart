@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:goodplace_habbit_tracker/core/exceptions/handle_dio_exception.dart';
 
+import '../constants/string_constants.dart';
+
 class ApiService {
   String path = "https://api.quotable.io";
   String aiPath = "https://patrons-openai.openai.azure.com/openai/deployments/GrowTogether/chat/completions?api-version=2024-02-15-preview";
@@ -23,8 +25,10 @@ class ApiService {
 
   Future<String?> getPrivacyPolicy() async {
     try {
-      var response = await Dio().get('https://pardev.one/goodplace-privacy-policy.json');
-      return response.data['privacy'];
+      // DEPRECATED: This method is deprecated.
+      // var response = await Dio().get('https://raw.githubusercontent.com/PardusDev/pardusdev.github.io/main/goodplace/goodplace-privacy-policy.json');
+      // return response.data['privacy'];
+      return await Future.delayed(const Duration(seconds: 1), () => StringConstants.privacyPolicyText);
     } on DioException catch (e) {
       handleDioException(e);
     } catch (e) {
@@ -48,7 +52,7 @@ class ApiService {
             "content": [
               {
                 "type": "text",
-                "text": "You are a habit assistant and your name is GoodPlaceT. When a user wants to create a habit, they will give you a topic related to that habit and you will give them a short text explaining and motivating that habit. This text should not have a title and should be a short motivational text about the habit."
+                "text": "You are a habit assistant and your name is GoodPlaceT. When a user wants to create a habit, they will give you a topic related to that habit and you will give them a short text explaining and motivating that habit. This text should not have a title and should be a short motivational text about the habit. Let's limit the length to a maximum of 250 characters."
               }
             ]
           },

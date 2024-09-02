@@ -1,4 +1,3 @@
-import 'package:goodplace_habbit_tracker/managers/AppUserManager.dart';
 import 'package:goodplace_habbit_tracker/managers/HabitManager.dart';
 import 'package:goodplace_habbit_tracker/pages/home/home_page_view_model.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +11,6 @@ class ProviderList {
   ProviderList._();
 
   List<SingleChildWidget> dependItems = [
-    ChangeNotifierProvider(create: (_) => AppUserManager()),
     ChangeNotifierProvider(create: (_) => HabitManager()),
     ChangeNotifierProvider(create: (_) => HomePageViewModel()),
   ];

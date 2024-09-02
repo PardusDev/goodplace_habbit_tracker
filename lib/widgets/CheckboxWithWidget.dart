@@ -6,21 +6,27 @@ class CheckboxWithWidget extends StatefulWidget {
   final MainAxisAlignment mainAxisAlignment;
   final Widget child;
   final ValueChanged<bool> onChanged;
-  const CheckboxWithWidget({super.key, this.mainAxisAlignment = MainAxisAlignment.spaceBetween, required this.child, required this.onChanged});
+  final bool isChecked;
+  const CheckboxWithWidget({super.key, this.mainAxisAlignment = MainAxisAlignment.spaceBetween, required this.child, required this.onChanged, required this.isChecked});
 
   @override
   State<CheckboxWithWidget> createState() => _CheckboxWithWidgetState();
 }
 
 class _CheckboxWithWidgetState extends State<CheckboxWithWidget> {
-  bool? isChecked = false;
+  late bool _isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = widget.isChecked;
+  }
 
   void _onChanged(bool? value) {
     setState(() {
-      isChecked = value ?? false;
+      _isChecked = value ?? false;
     });
-
-    widget.onChanged(isChecked!);
+    widget.onChanged(_isChecked);
   }
 
   @override
@@ -30,7 +36,7 @@ class _CheckboxWithWidgetState extends State<CheckboxWithWidget> {
       children: [
         widget.child,
         Checkbox(
-            value: isChecked,
+            value: widget.isChecked,
             onChanged: _onChanged,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
@@ -43,6 +49,7 @@ class _CheckboxWithWidgetState extends State<CheckboxWithWidget> {
             ),
             checkColor: ColorConstants.checkboxCheckedColor,
             fillColor: WidgetStateProperty.all(ColorConstants.checkboxBackgroundColor),
+            visualDensity: VisualDensity.compact,
         )
       ],
     );

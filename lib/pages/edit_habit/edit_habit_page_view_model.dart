@@ -14,6 +14,7 @@ import '../../models/UserHabit.dart';
 import '../../services/api_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/image_service.dart';
+import '../../services/notification_service.dart';
 import '../../widgets/ConfirmAlertDialog.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -23,6 +24,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   final _habitManager = HabitManager();
   final _navigationService = NavigationService.instance;
   final _apiService = ApiService();
+  final _notificationService = NotificationService();
 
   List<ImageModel> _images = [];
   bool _imagesIsLoading = false;
@@ -30,16 +32,23 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   String _errorText = '';
   bool _titleValid = false;
+  bool _remindMeCheckbox = false;
+  TimeOfDay? _selectedTime = TimeOfDay.now();
 
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
+
+  final _scrollController = ScrollController();
 
   String get errorText => _errorText;
   bool get titleValid => _titleValid;
   List<ImageModel> get images => _images;
   bool get imagesIsLoading => _imagesIsLoading;
   int get selectedImageIndex => _selectedImageIndex;
+  bool get remindMeCheckbox => _remindMeCheckbox;
+  TimeOfDay? get selectedTime => _selectedTime;
 
+  ScrollController get scrollController => _scrollController;
   TextEditingController get titleController => _titleController;
   TextEditingController get subjectController => _subjectController;
 
@@ -55,9 +64,33 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   EditHabitPageViewModel(UserHabit userHabit) {
     _currentHabit = userHabit;
+    if (_currentHabit.reminderTime != null) {
+      _remindMeCheckbox = true;
+      _selectedTime = _currentHabit.reminderTime!;
+      toggleRemindMeCheckbox(_remindMeCheckbox);
+    }
     fillCurrentHabit();
     fetchImages();
   }
+
+  // region Remind Me
+  void toggleRemindMeCheckbox(bool value) {
+    _remindMeCheckbox = value;
+    notifyListeners();
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (time != null && time != selectedTime) {
+      _selectedTime = time;
+      notifyListeners();
+    }
+  }
+  // endregion
 
   void onTitleChanged(String title) {
     if (title.isNotEmpty) {
@@ -70,6 +103,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
 
   void setErrorText(String errorText) {
     _errorText = errorText;
+    scrollToBottom();
     notifyListeners();
   }
 
@@ -161,8 +195,13 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
           doneHabits: _currentHabit.doneHabits,
           maxStreak: _currentHabit.maxStreak,
           currentStreakLastDate: _currentHabit.currentStreakLastDate,
-          currentStreak: _currentHabit.currentStreak
+          currentStreak: _currentHabit.currentStreak,
+          reminderTime: remindMeCheckbox ? selectedTime : null,
       );
+
+      if (remindMeCheckbox) {
+        await _notificationService.scheduleDailyNotification(newHabit);
+      }
 
       await _habitManager.updateHabit(user!, newHabit);
 
@@ -230,5 +269,13 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
           )
       );
     }
+  }
+
+  void scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }

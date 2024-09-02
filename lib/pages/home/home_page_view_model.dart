@@ -9,13 +9,16 @@ import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal.d
 import 'package:goodplace_habbit_tracker/repository/repository.dart';
 import 'package:goodplace_habbit_tracker/utilities/generate_id_from_date.dart';
 import 'package:goodplace_habbit_tracker/widgets/SuccessSplashBox.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/string_constants.dart';
 import '../../managers/AppUserManager.dart';
 import '../../managers/HabitManager.dart';
 import '../../models/DoneHabit.dart';
 import '../../models/UserHabit.dart';
 import '../../services/auth_service.dart';
+import '../../services/notification_service.dart';
 import '../../utilities/normalize_date.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -29,8 +32,9 @@ class HomePageViewModel with ChangeNotifier {
   String greeting = "";
   final NavigationService _navigationService = NavigationService.instance;
   final AuthService _authService = AuthService();
-  final AppUserManager _appUserManager = AppUserManager();
+  final AppUserManager _appUserManager = AppUserManager.instance;
   final HabitManager _habitManager = HabitManager();
+  final NotificationService _notificationService = NotificationService();
   bool _aiFabExpanded = false;
   String _aiFabMessage = "";
   int _maxStreak = 0;
@@ -170,6 +174,15 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
+      bool permissionGranted = await _showNotificationPermissionDialog();
+      if (permissionGranted) {
+        await _notificationService.cancelAllNotifications();
+        for (var element in _habitManager.habits) {
+          if (element.reminderTime != null) {
+            await _notificationService.scheduleDailyNotification(element);
+          }
+        }
+      }
       _habitsIsLoading = false;
       notifyListeners();
     } catch (e) {
@@ -193,29 +206,17 @@ class HomePageViewModel with ChangeNotifier {
   void toggleHabit(BuildContext buildContext, UserHabit habit, bool isCompleted) async {
     try {
       final firebaseUser = _authService.getCurrentUser();
+      UserHabit nonUpdatedHabit = habit.copyWith();
       DoneHabit doneHabit = DoneHabit(
           id: generateIdFromDate(_selectedDate),
           habitId: habit.habitId,
           doneAt: _selectedDate
       );
 
-      /*
-      TODO: We are not blocking the user from marking habits for the future.
-            We will implement this feature in the future.
-      // Block if the selected date is not today
-      if (_selectedDate != DateTime.now()) {
-        ScaffoldMessenger.of(buildContext).showSnackBar(
-            errorSnackBar(
-                "You can only mark habits for today."
-            )
-        );
-        return;
-      }
-      */
-
       // Block if the selected date is past
       DateTime normalizedToday = normalizeDate(DateTime.now());
       DateTime normalizedSelectedDate = normalizeDate(_selectedDate);
+
       if (normalizedSelectedDate.isBefore(normalizedToday)) {
         ScaffoldMessenger.of(buildContext).showSnackBar(
             errorSnackBar(
@@ -225,35 +226,43 @@ class HomePageViewModel with ChangeNotifier {
         return;
       }
 
-      if (isCompleted) {
-        /*
-        TODO: This function currently out of use. It will be used in the future.
-                The out of use reason is that the function is not working properly with Streak.
-        showDialog(
-            context: buildContext,
-            builder: (BuildContext context) {
-              return const ConfirmAlertDialog(
-                  title: StringConstants.habitAlertDialogTitle,
-                  body: StringConstants.habitAlertDialogBody
-              );
-            }
-        ) .then((value) async {
-          if (value == true) {
-            await _habitManager.removeDoneHabit(firebaseUser!, doneHabit);
-          }
-        });
-         */
-      } else {
-        showDialog(
-            context: buildContext,
-            builder: (BuildContext context) {
-              return const SuccessSplashBox(
+      if (normalizedSelectedDate.isAfter(normalizedToday)) {
+        ScaffoldMessenger.of(buildContext).showSnackBar(
+            errorSnackBar(
+                "You can't mark habits for the future."
+            )
+        );
+        return;
+      }
 
+      if (!isCompleted) {
+        await _habitManager.addDoneHabit(firebaseUser!, habit, doneHabit);
+        showDialog(
+            context: buildContext,
+            builder: (BuildContext context) {
+              return SuccessSplashBox(
+                onPressed: () {
+                  ScaffoldMessenger.of(buildContext).showSnackBar(
+                    SnackBar(
+                      content: const Text(StringConstants.successUndoText),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () async {
+                          // Undo the action here
+                          await _habitManager.undoDoneHabit(firebaseUser, habit, doneHabit, nonUpdatedHabit);
+
+                          // Update the state and notify listeners
+                          notifyListeners();
+                        },
+                      ),
+                    ),
+                  );
+                },
               );
             }
         );
-        await _habitManager.addDoneHabit(firebaseUser!, habit, doneHabit);
       }
+
       notifyListeners();
     } catch (e) {
       ScaffoldMessenger.of(_navigationService.navigatorKey.currentContext!).showSnackBar(
@@ -340,5 +349,57 @@ class HomePageViewModel with ChangeNotifier {
           return const AiChatPage(userHabit: null);
         }
     ).then((value) => notifyListeners());
+  }
+
+  // Request permission for notifications
+  Future<void> requestPermissionForNotifications() async {
+    // Request permission for notifications
+    if (await Permission.notification.isGranted) return;
+    await [
+      Permission.notification,
+    ].request();
+  }
+
+  Future<void> requestAlarmPermission() async {
+    // Request permission for alarm
+    if (await Permission.scheduleExactAlarm.isGranted) return;
+    await [
+      Permission.scheduleExactAlarm,
+    ].request();
+  }
+
+  Future<bool> _showNotificationPermissionDialog() async {
+    if (await Permission.notification.isGranted) return true;
+    bool? result = await showDialog<bool>(
+      context: _navigationService.navigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Text('Need Notification Permission'),
+          content: Text(
+            'To ensure full functionality of the application, notification permission is required. By enabling notifications, you won\'t miss important reminders.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Reject', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () async {
+                await requestPermissionForNotifications();
+                await requestAlarmPermission();
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
   }
 }
