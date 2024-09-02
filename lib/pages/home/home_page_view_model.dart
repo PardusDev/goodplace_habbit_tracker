@@ -90,7 +90,6 @@ class HomePageViewModel with ChangeNotifier {
   HomePageViewModel() {
     getGreetingMessage();
     showAIMessage();
-    requestPermissionForNotifications();
     _appUserManager.addListener(_onUserUpdated);
     _habitManager.addListener(_onHabitsUpdated);
   }
@@ -175,10 +174,13 @@ class HomePageViewModel with ChangeNotifier {
       notifyListeners();
       final firebaseUser = _authService.getCurrentUser();
       await _habitManager.loadUserHabits(firebaseUser!.uid, selectedDate);
-      _notificationService.cancelAllNotifications();
-      for (var element in _habitManager.habits) {
-        if (element.reminderTime != null) {
-          _notificationService.scheduleDailyNotification(element);
+      bool permissionGranted = await _showNotificationPermissionDialog();
+      if (permissionGranted) {
+        await _notificationService.cancelAllNotifications();
+        for (var element in _habitManager.habits) {
+          if (element.reminderTime != null) {
+            await _notificationService.scheduleDailyNotification(element);
+          }
         }
       }
       _habitsIsLoading = false;
@@ -356,5 +358,48 @@ class HomePageViewModel with ChangeNotifier {
     await [
       Permission.notification,
     ].request();
+  }
+
+  Future<void> requestAlarmPermission() async {
+    // Request permission for alarm
+    if (await Permission.scheduleExactAlarm.isGranted) return;
+    await [
+      Permission.scheduleExactAlarm,
+    ].request();
+  }
+
+  Future<bool> _showNotificationPermissionDialog() async {
+    if (await Permission.notification.isGranted) return true;
+    bool? result = await showDialog<bool>(
+      context: _navigationService.navigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Text('Need Notification Permission'),
+          content: Text(
+            'To ensure full functionality of the application, notification permission is required. By enabling notifications, you won\'t miss important reminders.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Reject', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () async {
+                await requestPermissionForNotifications();
+                await requestAlarmPermission();
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
   }
 }

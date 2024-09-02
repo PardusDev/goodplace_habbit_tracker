@@ -49,6 +49,7 @@ class CreateHabitModal extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CheckboxWithWidget(
+                      isChecked: viewModel.remindMeCheckbox,
                       onChanged: viewModel.toggleRemindMeCheckbox,
                       child: const Text(
                         "Remind Me Every Day - Optional",

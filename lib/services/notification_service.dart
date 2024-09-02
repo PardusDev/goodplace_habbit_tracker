@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -18,8 +19,8 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> init() async {
-    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+  Future<void> init(BuildContext context) async {
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -53,6 +54,7 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
+      icon: '@mipmap/ic_launcher'
     );
 
     const NotificationDetails platformChannelSpecifics =

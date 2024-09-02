@@ -14,6 +14,7 @@ import '../../models/UserHabit.dart';
 import '../../services/api_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/image_service.dart';
+import '../../services/notification_service.dart';
 import '../../widgets/ConfirmAlertDialog.dart';
 import '../../widgets/Snackbars.dart';
 
@@ -23,6 +24,7 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
   final _habitManager = HabitManager();
   final _navigationService = NavigationService.instance;
   final _apiService = ApiService();
+  final _notificationService = NotificationService();
 
   List<ImageModel> _images = [];
   bool _imagesIsLoading = false;
@@ -196,6 +198,10 @@ class EditHabitPageViewModel with ChangeNotifier, BaseViewModel {
           currentStreak: _currentHabit.currentStreak,
           reminderTime: remindMeCheckbox ? selectedTime : null,
       );
+
+      if (remindMeCheckbox) {
+        await _notificationService.scheduleDailyNotification(newHabit);
+      }
 
       await _habitManager.updateHabit(user!, newHabit);
 

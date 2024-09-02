@@ -218,7 +218,7 @@ class CreateHabitModalViewModel extends ChangeNotifier with BaseViewModel {
     // Request permission for alarm
     if (await Permission.scheduleExactAlarm.isGranted) return;
     await [
-      Permission.scheduleExactAlarm,
+       Permission.scheduleExactAlarm,
     ].request();
   }
 
