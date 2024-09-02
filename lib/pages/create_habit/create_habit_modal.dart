@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodplace_habbit_tracker/pages/create_habit/create_habit_modal_view_model.dart';
+import 'package:goodplace_habbit_tracker/widgets/CheckboxWithWidget.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,7 @@ import '../../widgets/CollapsableBottomSheetMultipleWidget.dart';
 import '../../widgets/CustomShimmer.dart';
 import '../../widgets/InputSection.dart';
 import '../../widgets/SelectableImageCard.dart';
+import '../../widgets/TappableWidget.dart';
 
 class CreateHabitModal extends StatelessWidget {
   const CreateHabitModal({super.key});
@@ -22,6 +24,7 @@ class CreateHabitModal extends StatelessWidget {
           return CollapsableBottomSheetMultipleWidget(
             title: StringConstants.createHabitScreenTitle,
             buttonText: StringConstants.createHabitScreenCreateButton,
+            scrollController: viewModel.scrollController,
             onPressed: viewModel.createHabit,
             children: [
               InputSection(
@@ -40,7 +43,49 @@ class CreateHabitModal extends StatelessWidget {
                 onAutofillTap: viewModel.autoFillDescription,
                 descLoading: viewModel.descLoading,
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
+              // region Remind Me
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CheckboxWithWidget(
+                      onChanged: viewModel.toggleRemindMeCheckbox,
+                      child: const Text(
+                        "Remind Me Every Day - Optional",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      )
+                  ),
+                  const Text(
+                    "Select a time for the reminder.",
+                    style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TappableWidget(
+                      onPressed: () {
+                        viewModel.selectTime(context);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.access_alarm, color: Colors.blueAccent),
+                          context.sized.emptySizedWidthBoxLow3x,
+                          Text(
+                              '${viewModel.selectedTime?.hour.toString().padLeft(2, '0')}:${viewModel.selectedTime?.minute.toString().padLeft(2, '0')}',
+                              style: context.general.textTheme.headlineMedium!.copyWith(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.bold
+                              )
+                          )
+                        ],
+                      )
+                  ),
+                ],
+              ),
+              // endregion
+              const SizedBox(height: 20.0),
               ImageSelectionSection(
                 onPressed: () async {
                   viewModel.uploadImage();

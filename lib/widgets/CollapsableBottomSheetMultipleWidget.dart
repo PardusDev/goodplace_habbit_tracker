@@ -9,7 +9,8 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
   final List<Widget> children;
   final String buttonText;
   final VoidCallback onPressed;
-  const CollapsableBottomSheetMultipleWidget({super.key, required this.title, required this.children, required this.buttonText, required this.onPressed});
+  final ScrollController scrollController;
+  const CollapsableBottomSheetMultipleWidget({super.key, required this.title, required this.children, required this.buttonText, required this.onPressed, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             const SizedBox(height: 16.0),
 
             Expanded(
+              flex: 2,
               child: Text(
                 title,
                 style: context.general.textTheme.headlineMedium!.copyWith(
@@ -44,8 +46,9 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             ),
 
             Expanded(
-              flex: 14,
+              flex: 26,
               child: SingleChildScrollView(
+                controller: scrollController,
                 child: Column(
                   children: children,
                 )
@@ -55,6 +58,7 @@ class CollapsableBottomSheetMultipleWidget extends StatelessWidget {
             const Spacer(),
 
             Expanded(
+              flex: 2,
               child: StadiumSideBlueButton(
                   onPressed: onPressed,
                   text: buttonText
